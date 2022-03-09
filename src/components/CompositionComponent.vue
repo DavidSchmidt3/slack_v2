@@ -9,6 +9,10 @@
     <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
     <p>Active: {{ active ? 'yes' : 'no' }}</p>
     <p>Clicks on todos: {{ clickCount }}</p>
+    <button @click="incrementButton">
+      {{ title }} {{ buttonClickCount }}-krát.
+    </button>
+    <input type="number" v-bind="buttonClickCount" />
   </div>
 </template>
 
@@ -24,6 +28,16 @@ function useClickCount() {
   }
 
   return { clickCount, increment };
+}
+
+function useButtonClickCount() {
+  const buttonClickCount = ref(0);
+  function incrementButton() {
+    buttonClickCount.value += 1;
+    return buttonClickCount.value;
+  }
+
+  return { buttonClickCount, incrementButton };
 }
 
 function useDisplayTodo(todos: Ref<Todo[]>) {
@@ -49,9 +63,16 @@ export default defineComponent({
     active: {
       type: Boolean,
     },
+    count: {
+      type: Number,
+    },
   },
   setup(props) {
-    return { ...useClickCount(), ...useDisplayTodo(toRef(props, 'todos')) };
+    return {
+      ...useClickCount(),
+      ...useDisplayTodo(toRef(props, 'todos')),
+      ...useButtonClickCount(),
+    };
   },
 });
 </script>

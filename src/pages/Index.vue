@@ -18,6 +18,7 @@ export default defineComponent({
   name: 'PageIndex',
   components: { ExampleComponent },
   setup() {
+    const count = 0;
     const todos = ref<Todo[]>([
       {
         id: 1,
@@ -43,7 +44,7 @@ export default defineComponent({
     const meta = ref<Meta>({
       totalCount: 1200,
     });
-    return { todos, meta };
+    return { todos, meta, count };
   },
 });
 </script>
