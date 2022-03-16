@@ -21,7 +21,7 @@ export default defineComponent({
     const todos = ref<Todo[]>([
       {
         id: 1,
-        content: 'ct1',
+        content: 'cs',
       },
       {
         id: 2,
@@ -37,11 +37,15 @@ export default defineComponent({
       },
       {
         id: 5,
-        content: 'ct5',
+        content: 'ct7',
+      },
+      {
+        id: 6,
+        content: 'boha mariji',
       },
     ]);
     const meta = ref<Meta>({
-      totalCount: 1200,
+      totalCount: 1500,
     });
     return { todos, meta };
   },
