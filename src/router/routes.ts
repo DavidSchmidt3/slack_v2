@@ -8,9 +8,9 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
-    path: '/kok',
-    component: () => import('layouts/KokLayout.vue'),
-    children: [{ path: '', component: () => import('pages/MyPage.vue') }],
+    path: '/login',
+    component: () => import('layouts/LoginLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/Login.vue') }],
   },
 
   //
