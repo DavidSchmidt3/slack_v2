@@ -14,33 +14,92 @@
             Register
           </h5>
           <q-form class="q-gutter-md">
-            <q-input
-              rounded
-              outlined
-              class="custom_input"
-              label="Email"
-              v-model="email"
-            >
-              <template v-slot:append>
-                <q-avatar>
-                  <img src="../assets/images/user.svg" />
-                </q-avatar>
-              </template>
-            </q-input>
-            <q-input
-              outlined
-              class="custom_input text-center"
-              rounded
-              type="password"
-              label="Password"
-              v-model="password"
-            >
-              <template v-slot:append>
-                <q-avatar>
-                  <img src="../assets/images/lock.svg" />
-                </q-avatar>
-              </template>
-            </q-input>
+            <div class="row flex-center">
+              <q-input
+                rounded
+                outlined
+                class="custom_input col-6"
+                label="Email"
+                v-model="email"
+              >
+                <template v-slot:append>
+                  <q-avatar>
+                    <img src="../assets/images/user.svg" />
+                  </q-avatar>
+                </template>
+              </q-input>
+            </div>
+
+            <div class="row">
+              <div class="text-center col q-mx-md">
+                <q-input
+                  outlined
+                  class="custom_input text-center"
+                  rounded
+                  type="text"
+                  label="Namsse"
+                  v-model="name"
+                >
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="../assets/images/user.svg" />
+                    </q-avatar>
+                  </template>
+                </q-input>
+              </div>
+              <div class="text-center col">
+                <q-input
+                  outlined
+                  class="custom_input text-center"
+                  rounded
+                  type="text"
+                  label="Surname"
+                  v-model="surname"
+                >
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="../assets/images/user.svg" />
+                    </q-avatar>
+                  </template>
+                </q-input>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="text-center col q-mx-md">
+                <q-input
+                  outlined
+                  class="custom_input text-center"
+                  rounded
+                  type="password"
+                  label="Password"
+                  v-model="password"
+                >
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="../assets/images/lock.svg" />
+                    </q-avatar>
+                  </template>
+                </q-input>
+              </div>
+
+              <div class="text-center col q-mx-md">
+                <q-input
+                  outlined
+                  class="custom_input text-center"
+                  rounded
+                  type="password"
+                  label="Password again"
+                  v-model="password2"
+                >
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="../assets/images/lock.svg" />
+                    </q-avatar>
+                  </template>
+                </q-input>
+              </div>
+            </div>
           </q-form>
         </q-card-section>
         <q-card-actions class="q-px-lg q-py-none q-pb-xl">
@@ -53,6 +112,7 @@
             label="Register"
           />
         </q-card-actions>
+
         <q-card-section class="text-center q-pa-none q-mt-xl">
           <p class="text-black-6 text-h6">Already registered?</p>
         </q-card-section>
@@ -64,6 +124,7 @@
             color="primary"
             size="lg"
             label="Login"
+            to="/login"
           />
         </q-card-actions>
       </q-card>
@@ -78,6 +139,9 @@ export default {
     return {
       email: '',
       password: '',
+      name: '',
+      surname: '',
+      password2: '',
     };
   },
 };
