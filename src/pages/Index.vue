@@ -42,7 +42,7 @@ export default defineComponent({
       },
       {
         id: 6,
-        content: 'boha mariji',
+        content: '',
       },
     ]);
     const meta = ref<Meta>({

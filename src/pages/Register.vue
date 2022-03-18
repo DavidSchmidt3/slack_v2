@@ -1,11 +1,11 @@
 <template>
   <q-page
-    class="bg-grey-4 window-height window-width row justify-center items-center"
+    class="bg-grey-4 q-pa-md window-width row justify-center items-center"
   >
     <div class="">
       <q-card
         bordered
-        class="q-px-xs-none q-px-sm-xl q-pb-lg shadow-2 login_card"
+        class="q-px-xs-none q-px-sm-xl q-pb-lg shadow-2 register_card"
       >
         <q-card-section class="q-pb-lg">
           <h5
@@ -13,12 +13,12 @@
           >
             Register
           </h5>
-          <q-form class="q-gutter-md">
+          <q-form class="q-gutter-y-md">
             <div class="row flex-center">
               <q-input
                 rounded
                 outlined
-                class="custom_input col-6"
+                class="custom_input col-md-6 col-xs-12 q-pr-xs-sm q-pr-md-none"
                 label="Email"
                 v-model="email"
               >
@@ -30,14 +30,16 @@
               </q-input>
             </div>
 
-            <div class="row">
-              <div class="text-center col q-mx-md">
+            <div class="row justify-between">
+              <div
+                class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
+              >
                 <q-input
                   outlined
                   class="custom_input text-center"
                   rounded
                   type="text"
-                  label="Namsse"
+                  label="Name"
                   v-model="name"
                 >
                   <template v-slot:append>
@@ -47,7 +49,7 @@
                   </template>
                 </q-input>
               </div>
-              <div class="text-center col">
+              <div class="text-center col-xs-12 col-md-6 q-gutter-x-sm">
                 <q-input
                   outlined
                   class="custom_input text-center"
@@ -65,8 +67,10 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="text-center col q-mx-md">
+            <div class="row justify-between">
+              <div
+                class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
+              >
                 <q-input
                   outlined
                   class="custom_input text-center"
@@ -83,7 +87,9 @@
                 </q-input>
               </div>
 
-              <div class="text-center col q-mx-md">
+              <div
+                class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-gutter-y-md"
+              >
                 <q-input
                   outlined
                   class="custom_input text-center"
@@ -148,7 +154,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login_card {
+.register_card {
+  @media (min-width: $breakpoint-sm) {
+    width: 65vw;
+  }
+  @media (min-width: $breakpoint-md) {
+    width: 50vw;
+  }
+  @media (min-width: $breakpoint-lg) {
+    width: 40vw;
+  }
   border-radius: 15px;
 }
 
@@ -160,11 +175,5 @@ export default {
 .register_button {
   width: 180px;
   margin: 0 auto;
-}
-
-.custom_input {
-  @media (min-width: $breakpoint-xs) {
-    width: 300px;
-  }
 }
 </style>
