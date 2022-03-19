@@ -5,12 +5,34 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>Slack_v2</q-toolbar-title>
-        <q-btn flat round dense icon="person" />
+
+        <q-btn flat round dense icon="person">
+          <q-menu class="homepage_menu" style="width: 150px">
+            <div class="row no-wrap q-pa-md homepage_menu">
+              <div class="column items-center">
+                <q-avatar size="72px" color="blue"> </q-avatar>
+
+                <div class="text-subtitle1 q-mt-md q-mb-xs q-p-lg">
+                  David Schmidt
+                </div>
+
+                <q-btn
+                  color="primary"
+                  label="Logout"
+                  push
+                  size="sm"
+                  v-close-popup
+                  to="/login"
+                />
+              </div>
+            </div>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
     <div class="col-12 text-center center">
-      <h2>Vitaj David Schimdt</h2>
+      <h2>Welcome David Schmidt</h2>
     </div>
 
     <div class="col-12 text-center center"><h5>Channels</h5></div>
@@ -80,6 +102,10 @@
 
 .avatar {
   margin: 5rem;
+}
+
+.homepage_menu {
+  max-width: fit-content;
 }
 </style>
 
