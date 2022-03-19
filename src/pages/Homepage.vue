@@ -1,92 +1,65 @@
 <template>
-  <q-page
-    class="bg-grey-4 window-height window-width row justify-center items-center"
-  >
-    <q-header elevated>
-      <q-toolbar>
-        <q-toolbar-title>Slack_v2</q-toolbar-title>
-
-        <q-btn flat round dense icon="person">
-          <q-menu class="homepage_menu" style="width: 150px">
-            <div class="row no-wrap q-pa-md homepage_menu">
-              <div class="column items-center">
-                <q-avatar size="72px" color="blue"> </q-avatar>
-
-                <div class="text-subtitle1 q-mt-md q-mb-xs q-p-lg">
-                  David Schmidt
-                </div>
-
-                <q-btn
-                  color="primary"
-                  label="Logout"
-                  push
-                  size="sm"
-                  v-close-popup
-                  to="/login"
-                />
-              </div>
-            </div>
-          </q-menu>
-        </q-btn>
-      </q-toolbar>
-    </q-header>
-
+  <q-page class="bg-grey-4 row justify-center items-center">
     <div class="col-12 text-center center">
       <h2>Welcome David Schmidt</h2>
     </div>
+    <q-separator />
+    <h5>Channels</h5>
 
-    <div class="col-12 text-center center"><h5>Channels</h5></div>
-
-    <div class="row q-gutter-xl text-center center">
+    <div class="row text-center center full-width justify-evenly">
       <div class="avatar lt-gt-xs">
-        <q-btn round>
+        <q-btn round to="/channel">
           <q-avatar
             class="q-p-lg"
-            size="140px"
+            size="120px"
             font-size="40px"
             color="blue"
             text-color="white"
             icon="groups"
           />
         </q-btn>
+        <div class="row justify-center q-mt-sm">PSI</div>
       </div>
 
       <div class="avatar gt-xs">
-        <q-btn round>
+        <q-btn round to="/channel">
           <q-avatar
-            class="q-p-lg"
-            size="140px"
+            class="q-p-lg q-shadow-4"
+            size="120px"
             font-size="40px"
             color="blue"
             text-color="white"
             icon="groups"
           />
         </q-btn>
+        <div class="row justify-center q-mt-sm">DBS2022</div>
       </div>
 
       <div class="avatar gt-sm">
-        <q-btn round>
+        <q-btn round to="/channel">
           <q-avatar
             class="q-p-lg"
-            size="140px"
+            size="120px"
             font-size="40px"
             color="blue"
             text-color="white"
             icon="groups"
           />
         </q-btn>
+        <div class="row justify-center q-mt-sm">MTAA</div>
       </div>
       <div class="avatar gt-md">
-        <q-btn round>
+        <q-btn round to="/channel">
           <q-avatar
             class="q-p-lg"
-            size="140px"
+            size="120px"
             font-size="40px"
             color="blue"
             text-color="white"
             icon="groups"
           />
         </q-btn>
+        <div class="row justify-center q-mt-sm">VPWA</div>
       </div>
     </div>
   </q-page>
@@ -118,20 +91,5 @@ export default {
       password: '',
     };
   },
-  setup() {
-    return {
-      heavyList,
-    };
-  },
 };
-
-const maxSize = 20;
-const heavyList = [];
-
-for (let i = 0; i < maxSize; i++) {
-  heavyList.push({
-    label: i + 1,
-    avatar: i % 5 === 0,
-  });
-}
 </script>
