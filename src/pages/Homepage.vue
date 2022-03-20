@@ -2,7 +2,7 @@
   <q-page class="bg-grey-4 row justify-center items-center">
     <div class="col-12 text-center center">
       <h2 class="title">Welcome Dávid Schmidt</h2>
-      <h3 class="title date-title">Todays date:</h3>
+      <h3 class="title date-title">Today's date:</h3>
       <h3 class="title date-title">{{ date }}</h3>
     </div>
     <div class="col-12 text-center center channels_section">

@@ -3,7 +3,9 @@
     <q-page-container>
       <q-header elevated>
         <q-toolbar>
-          <q-toolbar-title>Slack_v2</q-toolbar-title>
+          <q-toolbar-title class="q-ml-xs-xs q-ml-md-md"
+            >Slack_v2</q-toolbar-title
+          >
           <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
           </q-avatar>
 
