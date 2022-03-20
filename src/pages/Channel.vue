@@ -1,29 +1,42 @@
 <template>
   <q-page>
     <header class="text-center q-my-sm">
-      <q-avatar icon="expand_more" font-size="40px" color="primary"> </q-avatar>
+      <q-avatar
+        icon="expand_more"
+        font-size="25px"
+        color="primary"
+        text-color="white"
+        size="30px"
+      />
     </header>
 
     <div class="row">
       <div class="col-4">
         <q-card flat bordered square class="window-height">
-          <q-card-section class="q-pa-md">
-            <div class="row q-pb-md q-pl-md">
+          <q-card-section class="server_name_section">
+            <div class="row">
               <q-avatar
                 class="q-p-lg q-mr-md"
                 size="50px"
                 font-size="30px"
-                color="blue"
+                color="primary"
                 text-color="white"
                 icon="groups"
               />
-              <p class="col" style="justify-content: center">VPWA</p>
+              <div class="col server_name">FIIT</div>
             </div>
           </q-card-section>
+          <q-separator size="1px" color="black" />
 
-          <q-card-section>
-            <h6 class="q-ma-sm">CHANNELS</h6>
-            <q-separator size="2px" color="black" />
+          <q-card-section class="flex justify-start items-center">
+            <q-avatar
+              icon="expand_more"
+              font-size="22px"
+              color="primary"
+              text-color="white"
+              size="26px"
+            />
+            <h6 class="q-ma-sm">Channels</h6>
           </q-card-section>
           <q-card-section>
             <ul
@@ -48,20 +61,35 @@
 
       <div class="col-8">
         <q-card flat square bordered class="window-height">
-          <q-card-section>
-            <q-avatar
+          <q-card-section class="channel_header">
+            <!-- <q-avatar
               class="q-p-lg q-mr-md"
               size="40px"
               font-size="20px"
               color=""
               text-color="white"
               icon=""
-            /># Channel 1</q-card-section
-          >
-          <q-separator size="2px" color="black" />
+            /># Channel 1 -->
+            #VPWA
+          </q-card-section>
+          <q-separator size="1px" color="black" />
           <q-card-section> </q-card-section>
         </q-card>
       </div>
     </div>
   </q-page>
 </template>
+
+<style scoped lang="scss">
+.server_name {
+  align-self: center;
+}
+
+.server_name_section {
+  padding: 5px 15px;
+}
+
+.channel_header {
+  padding: 20px 20px 19px 15px;
+}
+</style>
