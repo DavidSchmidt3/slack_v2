@@ -27,7 +27,6 @@
             </div>
           </q-card-section>
           <q-separator size="1px" color="black" />
-
           <q-card-section class="flex justify-start items-center">
             <q-avatar
               icon="expand_more"
@@ -44,15 +43,10 @@
               style="list-style-type: none; padding-left: 1rem"
             >
               <li><q-btn flat> # Channel 1</q-btn></li>
-
               <li># Channel 2</li>
-
               <li># Channel 3</li>
-
               <li># Channel 4</li>
-
               <li>2</li>
-
               <li>2</li>
             </ul>
           </q-card-section>
@@ -70,7 +64,7 @@
               text-color="white"
               icon=""
             /># Channel 1 -->
-            #VPWA
+            <div class="">#VPWA</div>
           </q-card-section>
           <q-separator size="1px" color="black" />
           <q-card-section> </q-card-section>
@@ -86,10 +80,14 @@
 }
 
 .server_name_section {
-  padding: 5px 15px;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .channel_header {
-  padding: 20px 20px 19px 15px;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
 }
 </style>
