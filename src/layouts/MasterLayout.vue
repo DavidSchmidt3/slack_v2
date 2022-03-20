@@ -23,3 +23,11 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<style scoped lang="scss">
+.text-subtitle1 {
+  @media (max-width: $breakpoint-xs) {
+    display: none;
+  }
+}
+</style>
