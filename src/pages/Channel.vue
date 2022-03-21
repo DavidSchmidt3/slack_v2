@@ -12,7 +12,7 @@
 
     <div class="row">
       <div class="col-xs-4 col-lg-2">
-        <q-card flat bordered square class="window-height">
+        <q-card flat bordered square class="">
           <q-card-section class="server_name_section">
             <div class="row">
               <q-avatar
@@ -59,7 +59,7 @@
       </div>
 
       <div class="col-xs-8 col-lg-10">
-        <q-card flat square bordered class="window-height">
+        <q-card flat square bordered class="">
           <q-card-section class="channel_header">
             <!-- <q-avatar
               class="q-p-lg q-mr-md"
@@ -72,7 +72,36 @@
             <h5><b>#VPWA</b></h5>
           </q-card-section>
           <q-separator size="1px" color="black" />
-          <q-card-section> </q-card-section>
+
+          <q-page class="flex column">
+            <div class="q-pa-md column col justify-end">
+              <div style="width: 100%">
+                <q-chat-message
+                  v-for="message in messages"
+                  :key="message.text"
+                  :name="message.from"
+                  :text="[message.text]"
+                />
+              </div>
+            </div>
+
+            <q-card-section class="q-pa-md">
+              <q-form @submit="sendMessage">
+                <q-input
+                  rounded
+                  outlined
+                  v-model="newMessage"
+                  label="Label"
+                  dense
+                  class="full-width"
+                >
+                  <template v-slot:after>
+                    <q-btn type="submit" round dense flat icon="send" />
+                  </template>
+                </q-input>
+              </q-form>
+            </q-card-section>
+          </q-page>
         </q-card>
       </div>
     </div>
@@ -100,3 +129,31 @@
 .channel_list {
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      newMessage: '',
+      messages: [
+        {
+          text: 'Hey How are you ?',
+          from: 'Haaaaary',
+        },
+        {
+          text: 'I am good,  you ?',
+          from: 'Marffff',
+        },
+        {
+          text: 'Okay',
+          from: 'Haaaaary',
+        },
+        {
+          text: 'dovidenia ok',
+          from: 'Marfffff',
+        },
+      ],
+    };
+  },
+};
+</script>
