@@ -86,7 +86,7 @@
   </q-page>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .line {
   width: 800px;
   height: 47px;

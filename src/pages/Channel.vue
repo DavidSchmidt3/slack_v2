@@ -1,14 +1,139 @@
 <template>
   <q-page>
     <header class="text-center q-my-sm">
-      <q-avatar
-        icon="expand_more"
-        font-size="25px"
-        color="primary"
-        text-color="white"
-        size="30px"
-      />
+      <q-btn round flat v-on:click="toggleServersView">
+        <q-avatar
+          icon="expand_more"
+          :style="serversIconRotation"
+          font-size="17px"
+          color="primary"
+          text-color="white"
+          size="30px"
+        />
+      </q-btn>
     </header>
+
+    <div
+      v-show="serversExpanded"
+      class="flex column text-center center justify-evenly channels q-mb-md"
+      style="height: 100%"
+    >
+      <q-scroll-area style="height: 12rem; width: 100%">
+        <div class="row no-wrap text-center flex justify-center">
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">FIIT</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">DBS 2022</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">MTAA</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">VPWA</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">FIIT</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">DBS 2022</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">MTAA</div>
+          </div>
+
+          <div class="avatar lt-gt-xs">
+            <q-btn round to="/channel">
+              <q-avatar
+                class="q-p-md"
+                size="120px"
+                font-size="40px"
+                color="blue"
+                text-color="white"
+                icon="groups"
+              />
+            </q-btn>
+            <div class="row justify-center q-mt-sm">VPWA</div>
+          </div>
+        </div>
+      </q-scroll-area>
+    </div>
 
     <div class="row channel_page">
       <div class="col-xs-4 col-lg-2">
@@ -162,6 +287,9 @@
   align-items: center;
 }
 
+.avatar {
+  margin: 1rem 2rem;
+}
 .channel_header {
   height: 4.5rem;
   display: flex;
@@ -181,6 +309,7 @@
 export default {
   data() {
     return {
+      serversExpanded: true,
       channelsExpanded: true,
       messagesExpanded: true,
       newMessage: '',
@@ -237,6 +366,9 @@ export default {
     };
   },
   methods: {
+    toggleServersView() {
+      this.serversExpanded = !this.serversExpanded;
+    },
     toggleChannels() {
       this.channelsExpanded = !this.channelsExpanded;
     },
@@ -245,6 +377,11 @@ export default {
     },
   },
   computed: {
+    serversIconRotation() {
+      return this.serversExpanded
+        ? 'transform: rotate(180deg);'
+        : 'transform: rotate(0deg);';
+    },
     channelsIconRotation() {
       return this.channelsExpanded
         ? 'transform: rotate(180deg);'
