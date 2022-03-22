@@ -10,9 +10,15 @@
       />
     </header>
 
-    <div class="row">
+    <div class="row channel_page">
       <div class="col-xs-4 col-lg-2">
-        <q-card flat bordered square class="">
+        <q-card
+          flat
+          bordered
+          square
+          class="height-full"
+          style="max-height: 100%; height: 100%"
+        >
           <q-card-section class="server_name_section">
             <div class="row">
               <q-avatar
@@ -31,35 +37,69 @@
           <q-separator size="1px" color="black" />
           <q-card-section
             style="padding-bottom: 0"
-            class="flex justify-start items-center channel_list"
+            class="flex justify-start items-center channel_list q-mb-sm"
           >
-            <q-avatar
-              icon="expand_more"
-              font-size="22px"
-              color="primary"
-              text-color="white"
-              size="26px"
-            />
+            <q-btn round flat v-on:click="toggleChannels">
+              <q-avatar
+                :style="channelsIconRotation"
+                icon="expand_more"
+                font-size="14px"
+                color="primary"
+                text-color="white"
+                size="28px"
+              />
+            </q-btn>
             <h6 class="q-ma-sm">Channels</h6>
           </q-card-section>
-          <q-card-section style="padding-top: 5px">
+          <q-card-section style="padding-top: 5px; padding-bottom: 0">
             <ul
               class="q-gutter-md"
               style="list-style-type: none; padding-left: 1rem"
+              v-show="channelsExpanded"
             >
-              <li><q-btn flat># Channel 1</q-btn></li>
-              <li># Channel 2</li>
-              <li># Channel 3</li>
-              <li># Channel 4</li>
-              <li># Channel 5</li>
-              <li># Channel 6</li>
+              <li class="list-item"><q-btn flat># Channel 1</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 2</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 3</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 4</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 5</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 6</q-btn></li>
+            </ul>
+          </q-card-section>
+          <q-card-section
+            style="padding-bottom: 0; padding-top: 0"
+            class="flex justify-start items-center channel_list q-mb-sm"
+          >
+            <q-btn round flat v-on:click="toggleMessages">
+              <q-avatar
+                :style="messagesIconRotation"
+                icon="expand_more"
+                font-size="14px"
+                color="primary"
+                text-color="white"
+                size="28px"
+              />
+            </q-btn>
+            <h6 class="q-ma-sm">Direct messages</h6>
+          </q-card-section>
+          <q-card-section style="padding-top: 5px">
+            <ul
+              v-show="messagesExpanded"
+              class="q-gutter-md"
+              style="list-style-type: none; padding-left: 1rem"
+            >
+              <li class="list-item">
+                <q-btn no-caps flat>Ctibor Kovalčík</q-btn>
+              </li>
+              <li class="list-item">
+                <q-btn no-caps flat>Dávid Schmidt</q-btn>
+              </li>
             </ul>
           </q-card-section>
         </q-card>
       </div>
 
       <div class="col-xs-8 col-lg-10">
-        <q-card flat square bordered class="">
+        <q-card flat square bordered style="height: 100%">
           <q-card-section class="channel_header">
             <!-- <q-avatar
               class="q-p-lg q-mr-md"
@@ -73,25 +113,27 @@
           </q-card-section>
           <q-separator size="1px" color="black" />
 
-          <q-page class="flex column">
-            <div class="q-pa-md column col justify-end">
-              <div style="width: 100%">
-                <q-chat-message
-                  v-for="message in messages"
-                  :key="message.text"
-                  :name="message.from"
-                  :text="[message.text]"
-                />
-              </div>
-            </div>
+          <div style="height: 100%" class="flex column">
+            <q-card-section class="col-10">
+              <q-scroll-area style="width: 100%; height: 100%">
+                <div style="width: 100%">
+                  <q-chat-message
+                    v-for="message in messages"
+                    :key="message.text"
+                    :name="message.from"
+                    :text="[message.text]"
+                  />
+                </div>
+              </q-scroll-area>
+            </q-card-section>
 
-            <q-card-section class="q-pa-md">
+            <q-card-section class="q-pa-md col-1">
               <q-form @submit="sendMessage">
                 <q-input
                   rounded
                   outlined
                   v-model="newMessage"
-                  label="Label"
+                  placeholder="Enter your message"
                   dense
                   class="full-width"
                 >
@@ -101,7 +143,7 @@
                 </q-input>
               </q-form>
             </q-card-section>
-          </q-page>
+          </div>
         </q-card>
       </div>
     </div>
@@ -126,7 +168,12 @@
   align-items: center;
 }
 
-.channel_list {
+.list-item {
+  margin: 0;
+}
+
+.channel_page {
+  height: calc(100vh - 120px);
 }
 </style>
 
@@ -134,6 +181,8 @@
 export default {
   data() {
     return {
+      channelsExpanded: true,
+      messagesExpanded: true,
       newMessage: '',
       messages: [
         {
@@ -152,8 +201,60 @@ export default {
           text: 'dovidenia ok',
           from: 'Marfffff',
         },
+        {
+          text: 'Okay',
+          from: 'Haaaaary',
+        },
+        {
+          text: 'dovidenia ok',
+          from: 'Marfffff',
+        },
+        {
+          text: 'Okay',
+          from: 'Haaaaary',
+        },
+        {
+          text: 'dovidenia ok',
+          from: 'Marfffff',
+        },
+        {
+          text: 'Okay',
+          from: 'Haaaaary',
+        },
+        {
+          text: 'dovidenia ok',
+          from: 'Marfffff',
+        },
+        {
+          text: 'Okay',
+          from: 'Haaaaary',
+        },
+        {
+          text: 'dovidenia ok',
+          from: 'Marfffff',
+        },
       ],
     };
+  },
+  methods: {
+    toggleChannels() {
+      this.channelsExpanded = !this.channelsExpanded;
+    },
+    toggleMessages() {
+      this.messagesExpanded = !this.messagesExpanded;
+    },
+  },
+  computed: {
+    channelsIconRotation() {
+      return this.channelsExpanded
+        ? 'transform: rotate(180deg);'
+        : 'transform: rotate(0deg);';
+    },
+    messagesIconRotation() {
+      return this.messagesExpanded
+        ? 'transform: rotate(180deg);'
+        : 'transform: rotate(0deg);';
+    },
   },
 };
 </script>
