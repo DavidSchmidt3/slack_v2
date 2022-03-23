@@ -136,7 +136,7 @@
     </div>
 
     <div class="row channel_page">
-      <div class="col-xs-4 col-lg-2">
+      <div class="col-xs-4 col-lg-3 col-xl-2">
         <q-card
           flat
           bordered
@@ -223,7 +223,7 @@
         </q-card>
       </div>
 
-      <div class="col-xs-8 col-lg-10">
+      <div class="col-xs-8 col-lg-9 col-xl-10">
         <q-card flat square bordered style="height: 100%">
           <q-card-section class="channel_header">
             <!-- <q-avatar
@@ -238,8 +238,8 @@
           </q-card-section>
           <q-separator size="1px" color="black" />
 
-          <div style="height: 100%" class="flex column">
-            <q-card-section class="col-10">
+          <div class="flex column" style="height: calc(100% - 4.5rem)">
+            <q-card-section class="message_section">
               <q-scroll-area style="width: 100%; height: 100%">
                 <div style="width: 100%">
                   <q-chat-message
@@ -252,7 +252,7 @@
               </q-scroll-area>
             </q-card-section>
 
-            <q-card-section class="q-pa-md col-1">
+            <q-card-section class="q-py-xs q-px-md col-3 send_section">
               <q-form @submit="sendMessage">
                 <q-input
                   rounded
@@ -303,13 +303,21 @@
 .channel_page {
   height: calc(100vh - 120px);
 }
+
+.message_section {
+  height: calc(100% - 3.5rem);
+  padding-bottom: 0;
+}
+.send_section {
+  height: 3.5rem;
+}
 </style>
 
 <script>
 export default {
   data() {
     return {
-      serversExpanded: true,
+      serversExpanded: false,
       channelsExpanded: true,
       messagesExpanded: true,
       newMessage: '',
