@@ -263,7 +263,14 @@
                   class="full-width"
                 >
                   <template v-slot:after>
-                    <q-btn type="submit" round dense flat icon="send" />
+                    <q-btn
+                      type="submit"
+                      round
+                      dense
+                      flat
+                      icon="send"
+                      @click="sendMessage"
+                    />
                   </template>
                 </q-input>
               </q-form>
@@ -313,9 +320,20 @@
 }
 </style>
 
-<script>
-export default {
-  data() {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+interface State {
+  newMessage: string;
+  serversExpanded: boolean;
+  channelsExpanded: boolean;
+  messagesExpanded: boolean;
+  messages: { text: string; from: string }[];
+}
+
+export default defineComponent({
+  name: 'ChannelLayout',
+  data: (): State => {
     return {
       serversExpanded: false,
       channelsExpanded: true,
@@ -330,46 +348,6 @@ export default {
           text: 'I am good,  you ?',
           from: 'Marffff',
         },
-        {
-          text: 'Okay',
-          from: 'Haaaaary',
-        },
-        {
-          text: 'dovidenia ok',
-          from: 'Marfffff',
-        },
-        {
-          text: 'Okay',
-          from: 'Haaaaary',
-        },
-        {
-          text: 'dovidenia ok',
-          from: 'Marfffff',
-        },
-        {
-          text: 'Okay',
-          from: 'Haaaaary',
-        },
-        {
-          text: 'dovidenia ok',
-          from: 'Marfffff',
-        },
-        {
-          text: 'Okay',
-          from: 'Haaaaary',
-        },
-        {
-          text: 'dovidenia ok',
-          from: 'Marfffff',
-        },
-        {
-          text: 'Okay',
-          from: 'Haaaaary',
-        },
-        {
-          text: 'dovidenia ok',
-          from: 'Marfffff',
-        },
       ],
     };
   },
@@ -382,6 +360,13 @@ export default {
     },
     toggleMessages() {
       this.messagesExpanded = !this.messagesExpanded;
+    },
+    sendMessage() {
+      this.messages.push({
+        text: this.newMessage,
+        from: 'me',
+      });
+      this.newMessage = '';
     },
   },
   computed: {
@@ -401,5 +386,5 @@ export default {
         : 'transform: rotate(0deg);';
     },
   },
-};
+});
 </script>
