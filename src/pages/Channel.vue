@@ -20,7 +20,7 @@
     >
       <q-scroll-area style="height: 12rem; width: 100%">
         <div class="row no-wrap text-center flex justify-center">
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -34,7 +34,7 @@
             <div class="row justify-center q-mt-sm">FIIT</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -48,7 +48,7 @@
             <div class="row justify-center q-mt-sm">DBS 2022</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -62,7 +62,7 @@
             <div class="row justify-center q-mt-sm">MTAA</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -76,7 +76,7 @@
             <div class="row justify-center q-mt-sm">VPWA</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -90,7 +90,7 @@
             <div class="row justify-center q-mt-sm">FIIT</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -104,7 +104,7 @@
             <div class="row justify-center q-mt-sm">DBS 2022</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -118,7 +118,7 @@
             <div class="row justify-center q-mt-sm">MTAA</div>
           </div>
 
-          <div class="avatar lt-gt-xs">
+          <div class="avatar gt-xs">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -135,8 +135,9 @@
       </q-scroll-area>
     </div>
 
-    <div class="row channel_page">
-      <div class="col-xs-4 col-lg-3 col-xl-2">
+    <!-- TODO:  -->
+    <div v-show="!drawerLeft" class="row channel_page">
+      <div class="col-xs-4 col-lg-3 col-xl-2 gt-xs">
         <q-card
           flat
           bordered
@@ -159,9 +160,10 @@
               </div>
             </div>
           </q-card-section>
+
           <q-separator size="1px" color="black" />
           <q-card-section
-            style="padding-bottom: 0"
+            style="padding-bottom: 0; padding-left: 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
           >
             <q-btn round flat v-on:click="toggleChannels">
@@ -174,7 +176,7 @@
                 size="28px"
               />
             </q-btn>
-            <h6 class="q-ma-sm">Channels</h6>
+            <h6 class="q-my-sm q-mx-xs section_title">Channels</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px; padding-bottom: 0">
             <ul
@@ -191,7 +193,7 @@
             </ul>
           </q-card-section>
           <q-card-section
-            style="padding-bottom: 0; padding-top: 0"
+            style="padding-bottom: 0; padding-top: 0; padding-left: 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
           >
             <q-btn round flat v-on:click="toggleMessages">
@@ -204,7 +206,7 @@
                 size="28px"
               />
             </q-btn>
-            <h6 class="q-ma-sm">Direct messages</h6>
+            <h6 class="q-my-sm q-mx-xs section_title">Direct messages</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px">
             <ul
@@ -223,18 +225,20 @@
         </q-card>
       </div>
 
-      <div class="col-xs-8 col-lg-9 col-xl-10">
+      <div class="col-xs-12 col-sm-8 col-xl-10">
         <q-card flat square bordered style="height: 100%">
-          <q-card-section class="channel_header">
-            <!-- <q-avatar
-              class="q-p-lg q-mr-md"
-              size="40px"
-              font-size="20px"
-              color=""
-              text-color="white"
-              icon=""
-            /># Channel 1 -->
-            <h5><b>#VPWA</b></h5>
+          <q-card-section class="flex items-center" style="height: 72px">
+            <div class="lt-sm">
+              <q-btn
+                style="font-size: 20px; size: 30px"
+                icon="chevron_right"
+                class="self-center"
+                round
+                flat
+                @click="handleDrawer"
+              />
+            </div>
+            <h5 style="margin: 0"><b>#VPWA</b></h5>
           </q-card-section>
           <q-separator size="1px" color="black" />
 
@@ -279,6 +283,91 @@
         </q-card>
       </div>
     </div>
+
+    <div v-show="drawerLeft" class="lt-sm">
+      <div class="full-width">
+        <q-card
+          flat
+          bordered
+          square
+          class="height-full"
+          style="max-height: 100%; height: 100%"
+        >
+          <q-card-section class="server_name_section">
+            <div class="row">
+              <q-btn round flat @click="handleDrawer">
+                <q-avatar icon="chevron_left" font-size="20px" size="30px" />
+              </q-btn>
+              <div class="col server_name">
+                <b>FIIT</b>
+              </div>
+            </div>
+          </q-card-section>
+
+          <q-separator size="1px" color="black" />
+          <q-card-section
+            style="padding-bottom: 0; padding-left: 5px"
+            class="flex justify-start items-center channel_list q-mb-sm"
+          >
+            <q-btn round flat v-on:click="toggleChannels">
+              <q-avatar
+                :style="channelsIconRotation"
+                icon="expand_more"
+                font-size="14px"
+                color="primary"
+                text-color="white"
+                size="28px"
+              />
+            </q-btn>
+            <h6 class="q-my-sm q-mx-xs section_title">Channels</h6>
+          </q-card-section>
+          <q-card-section style="padding-top: 5px; padding-bottom: 0">
+            <ul
+              class="q-gutter-md"
+              style="list-style-type: none; padding-left: 1rem"
+              v-show="channelsExpanded"
+            >
+              <li class="list-item"><q-btn flat># Channel 1</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 2</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 3</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 4</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 5</q-btn></li>
+              <li class="list-item"><q-btn flat># Channel 6</q-btn></li>
+            </ul>
+          </q-card-section>
+          <q-card-section
+            style="padding-bottom: 0; padding-top: 0; padding-left: 5px"
+            class="flex justify-start items-center channel_list q-mb-sm"
+          >
+            <q-btn round flat v-on:click="toggleMessages">
+              <q-avatar
+                :style="messagesIconRotation"
+                icon="expand_more"
+                font-size="14px"
+                color="primary"
+                text-color="white"
+                size="28px"
+              />
+            </q-btn>
+            <h6 class="q-my-sm q-mx-xs section_title">Direct messages</h6>
+          </q-card-section>
+          <q-card-section style="padding-top: 5px">
+            <ul
+              v-show="messagesExpanded"
+              class="q-gutter-md"
+              style="list-style-type: none; padding-left: 1rem"
+            >
+              <li class="list-item">
+                <q-btn no-caps flat>Ctibor Kovalčík</q-btn>
+              </li>
+              <li class="list-item">
+                <q-btn no-caps flat>Dávid Schmidt</q-btn>
+              </li>
+            </ul>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </q-page>
 </template>
 
@@ -307,6 +396,15 @@
   margin: 0;
 }
 
+.section_title {
+  @media (max-width: 1000px) {
+    font-size: 18px;
+  }
+  @media (max-width: 800px) {
+    font-size: 15px;
+  }
+}
+
 .channel_page {
   height: calc(100vh - 120px);
 }
@@ -322,12 +420,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { ref } from 'vue';
 interface State {
   newMessage: string;
   serversExpanded: boolean;
   channelsExpanded: boolean;
   messagesExpanded: boolean;
+  drawerLeft: boolean;
   messages: { text: string; from: string }[];
 }
 
@@ -339,6 +438,7 @@ export default defineComponent({
       channelsExpanded: true,
       messagesExpanded: true,
       newMessage: '',
+      drawerLeft: false,
       messages: [
         {
           text: 'Hey How are you ?',
@@ -351,6 +451,7 @@ export default defineComponent({
       ],
     };
   },
+
   methods: {
     toggleServersView() {
       this.serversExpanded = !this.serversExpanded;
@@ -367,6 +468,10 @@ export default defineComponent({
         from: 'me',
       });
       this.newMessage = '';
+    },
+    handleDrawer() {
+      console.log(this.drawerLeft);
+      this.drawerLeft = !this.drawerLeft;
     },
   },
   computed: {
