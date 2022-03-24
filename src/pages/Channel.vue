@@ -20,7 +20,7 @@
     >
       <q-scroll-area style="height: 12rem; width: 100%">
         <div class="row no-wrap text-center flex justify-center">
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -31,10 +31,10 @@
                 icon="groups"
               />
             </q-btn>
-            <div class="row justify-center q-mt-sm">FIIT</div>
+            <div class="row justify-center q-mt-sm">FIIT-server</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -48,7 +48,7 @@
             <div class="row justify-center q-mt-sm">DBS 2022</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -62,7 +62,7 @@
             <div class="row justify-center q-mt-sm">MTAA</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -76,7 +76,7 @@
             <div class="row justify-center q-mt-sm">VPWA</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -87,10 +87,10 @@
                 icon="groups"
               />
             </q-btn>
-            <div class="row justify-center q-mt-sm">FIIT</div>
+            <div class="row justify-center q-mt-sm">FIIT-server_2</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -104,7 +104,7 @@
             <div class="row justify-center q-mt-sm">DBS 2022</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -118,7 +118,7 @@
             <div class="row justify-center q-mt-sm">MTAA</div>
           </div>
 
-          <div class="avatar gt-xs">
+          <div class="avatar">
             <q-btn round to="/channel">
               <q-avatar
                 class="q-p-md"
@@ -156,7 +156,7 @@
                 icon="groups"
               />
               <div class="col server_name">
-                <b>FIIT</b>
+                <b>FIIT-big</b>
               </div>
             </div>
           </q-card-section>
@@ -227,7 +227,10 @@
 
       <div class="col-xs-12 col-sm-8 col-xl-10">
         <q-card flat square bordered style="height: 100%">
-          <q-card-section class="flex items-center" style="height: 72px">
+          <q-card-section
+            class="flex items-center"
+            style="height: 72px; align-content: center"
+          >
             <div class="lt-sm">
               <q-btn
                 style="font-size: 20px; size: 30px"
@@ -293,15 +296,21 @@
           class="height-full"
           style="max-height: 100%; height: 100%"
         >
-          <q-card-section class="server_name_section">
-            <div class="row">
-              <q-btn round flat @click="handleDrawer">
-                <q-avatar icon="chevron_left" font-size="20px" size="30px" />
-              </q-btn>
-              <div class="col server_name">
-                <b>FIIT</b>
-              </div>
+          <q-card-section
+            class="flex items-center"
+            style="height: 72px; align-content: center"
+          >
+            <div class="lt-sm">
+              <q-btn
+                style="font-size: 20px; size: 30px"
+                icon="chevron_left"
+                class="self-center"
+                round
+                flat
+                @click="handleDrawer"
+              />
             </div>
+            <h5 style="margin: 0"><b>FIIT</b></h5>
           </q-card-section>
 
           <q-separator size="1px" color="black" />
