@@ -30,6 +30,12 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('src/pages/Channel.vue') }],
   },
 
+  {
+    path: '/profile',
+    component: () => import('layouts/MasterLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/Profile.vue') }],
+  },
+
   //
   // Always leave this as last one,
   // but you can also remove it
