@@ -3,13 +3,17 @@
     <q-page-container>
       <q-header elevated>
         <q-toolbar>
-          <q-toolbar-title class="q-ml-xs-xs q-ml-md-md"
-            >Slack_v2</q-toolbar-title
-          >
-          <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
-          </q-avatar>
+          <q-toolbar-title class="q-ml-xs-xs q-ml-md-md">
+            <q-btn flat to="/homepage">
+              <q-toolbar-title>Slack_v2</q-toolbar-title></q-btn
+            >
+          </q-toolbar-title>
+          <q-btn class="q-pa-xs" flat to="/profile">
+            <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
+            </q-avatar>
 
-          <div class="text-subtitle1 q-mr-md">Dávid Schmidt</div>
+            <div class="text-subtitle1 q-mr-md">Dávid Schmidt</div>
+          </q-btn>
 
           <q-btn
             class="position-right"
