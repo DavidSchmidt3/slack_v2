@@ -429,7 +429,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { ref } from 'vue';
+
 interface State {
   newMessage: string;
   serversExpanded: boolean;

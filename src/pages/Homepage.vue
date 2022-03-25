@@ -118,9 +118,6 @@
   margin: 15px;
 }
 
-.title {
-}
-
 .date-title {
   @media (min-width: $breakpoint-xs) {
     display: inline-block;
