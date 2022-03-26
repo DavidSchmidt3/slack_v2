@@ -14,20 +14,41 @@
             Register
           </h5>
           <q-form class="q-gutter-y-md">
-            <div class="row flex-center">
-              <q-input
-                rounded
-                outlined
-                class="custom_input col-md-6 col-xs-12 q-pr-xs-sm q-pr-md-none"
-                label="Email"
-                v-model="email"
+            <div class="row justify-between">
+              <div
+                class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
               >
-                <template v-slot:append>
-                  <q-avatar>
-                    <img src="../assets/images/user.svg" />
-                  </q-avatar>
-                </template>
-              </q-input>
+                <q-input
+                  outlined
+                  class="custom_input text-center"
+                  rounded
+                  type="text"
+                  label="Email"
+                  v-model="email"
+                >
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="../assets/images/email.svg" />
+                    </q-avatar>
+                  </template>
+                </q-input>
+              </div>
+              <div class="text-center col-xs-12 col-md-6 q-gutter-x-sm">
+                <q-input
+                  outlined
+                  class="custom_input text-center"
+                  rounded
+                  type="text"
+                  label="Nickname"
+                  v-model="nickName"
+                >
+                  <template v-slot:append>
+                    <q-avatar>
+                      <img src="../assets/images/user.svg" />
+                    </q-avatar>
+                  </template>
+                </q-input>
+              </div>
             </div>
 
             <div class="row justify-between">
@@ -116,6 +137,7 @@
             class="register_button"
             size="lg"
             label="Register"
+            to="/login"
           />
         </q-card-actions>
 
@@ -144,6 +166,7 @@ export default {
   data() {
     return {
       email: '',
+      nickName: '',
       password: '',
       name: '',
       surname: '',

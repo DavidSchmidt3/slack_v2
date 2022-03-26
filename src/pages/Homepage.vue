@@ -1,88 +1,193 @@
 <template>
   <q-page class="bg-grey-4 row justify-center items-center">
-    <div class="col-12 text-center center">
-      <h2 class="title">Welcome Dávid Schmidt</h2>
-      <h3 class="title date-title">Today's date:</h3>
-      <h3 class="title date-title">{{ date }}</h3>
-    </div>
-    <div class="col-12 text-center center channels_section">
+    <q-page-section class="col-12 text-center center">
+      <h3 style="margin: 2rem">Welcome Dávid Schmidt</h3>
+      <h4 class="date-title">Today's date:</h4>
+      <h4 class="date-title">{{ date }}</h4>
+    </q-page-section>
+
+    <q-page-section class="col-12 text-center center channels_section">
+      <div class="separator"></div>
+      <h2 class="channels_title">#Invites</h2>
+      <div class="separator"></div>
+    </q-page-section>
+
+    <q-page-section class="row text-center center justify-evenly channels">
+      <div
+        class="flex column text-center center justify-evenly channels"
+        style="height: 100%"
+      >
+        <q-scroll-area style="height: 14rem; width: 100vw; display: flex">
+          <div
+            class="row no-wrap text-center flex justify-center items-center"
+            style="height: 9rem; margin-top: 3rem"
+          >
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md shadow-15"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm"><b>FIIT</b></h6>
+            </div>
+
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md shadow-15"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm"><b>DBS 2022</b></h6>
+            </div>
+          </div>
+        </q-scroll-area>
+      </div>
+    </q-page-section>
+
+    <q-page-section
+      class="col-12 text-center center channels_section"
+      style="margin-top: -1rem"
+    >
       <div class="separator"></div>
       <h2 class="channels_title">#Channels</h2>
       <div class="separator"></div>
-    </div>
+    </q-page-section>
 
-    <div class="row text-center center justify-evenly channels">
-      <div class="col-xs-12 col-sm-6 col-xl-3">
-        <div class="avatar lt-gt-xs">
-          <q-btn round to="/channel">
-            <q-avatar
-              class="q-p-lg"
-              size="120px"
-              font-size="40px"
-              color="blue"
-              text-color="white"
-              icon="groups"
-            />
-          </q-btn>
-          <div class="row justify-center q-mt-sm">PSI</div>
-        </div>
-      </div>
+    <q-page-section class="row text-center center justify-evenly channels">
+      <div
+        class="flex column text-center center justify-evenly channels q-mb-md"
+        style="height: 100%"
+      >
+        <q-scroll-area style="height: 14rem; width: 100vw; display: flex">
+          <div
+            class="row no-wrap text-center flex justify-center items-center"
+            style="height: 9rem; margin-top: 3rem"
+          >
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">PKS</h6>
+            </div>
 
-      <div class="col-xs-12 col-sm-6 col-xl-3">
-        <div class="avatar lt-gt-xs">
-          <q-btn round to="/channel">
-            <q-avatar
-              class="q-p-lg"
-              size="120px"
-              font-size="40px"
-              color="blue"
-              text-color="white"
-              icon="groups"
-            />
-          </q-btn>
-          <div class="row justify-center q-mt-sm">DBS 2022</div>
-        </div>
-      </div>
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">PAP</h6>
+            </div>
 
-      <div class="col-xs-12 col-sm-6 col-xl-3">
-        <div class="avatar lt-gt-xs">
-          <q-btn round to="/channel">
-            <q-avatar
-              class="q-p-lg"
-              size="120px"
-              font-size="40px"
-              color="blue"
-              text-color="white"
-              icon="groups"
-            />
-          </q-btn>
-          <div class="row justify-center q-mt-sm">MTAA</div>
-        </div>
-      </div>
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">VAVA</h6>
+            </div>
 
-      <div class="col-xs-12 col-sm-6 col-xl-3">
-        <div class="avatar lt-gt-xs">
-          <q-btn round to="/channel">
-            <q-avatar
-              class="q-p-lg"
-              size="120px"
-              font-size="40px"
-              color="blue"
-              text-color="white"
-              icon="groups"
-            />
-          </q-btn>
-          <div class="row justify-center q-mt-sm">VPWA</div>
-        </div>
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">WTECH</h6>
+            </div>
+
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">PIS</h6>
+            </div>
+
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">PSI</h6>
+            </div>
+
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">VPWA</h6>
+            </div>
+
+            <div class="avatar">
+              <q-btn round to="/channel">
+                <q-avatar
+                  class="q-p-md"
+                  size="120px"
+                  font-size="40px"
+                  color="blue"
+                  text-color="white"
+                  icon="groups"
+                />
+              </q-btn>
+              <h6 class="row justify-center q-mt-sm">MTAA</h6>
+            </div>
+          </div>
+        </q-scroll-area>
       </div>
-    </div>
-    <q-page-scroller
-      position="bottom-right"
-      :scroll-offset="150"
-      :offset="[18, 18]"
-    >
-      <q-btn fab icon="keyboard_arrow_up" color="accent" />
-    </q-page-scroller>
+    </q-page-section>
   </q-page>
 </template>
 
@@ -95,9 +200,9 @@
 }
 
 .avatar {
-  margin: 5rem;
+  margin: 0 2rem;
   @media (max-width: $breakpoint-xs) {
-    margin: 1rem;
+    margin: 0 1rem;
   }
 }
 
@@ -113,23 +218,26 @@
 
 .channels_title {
   @media (max-width: $breakpoint-sm) {
-    font-size: 3rem;
+    font-size: 2rem;
   }
-  margin: 15px;
+  margin: 0;
+  @media (min-width: $breakpoint-sm) {
+    margin: 10px;
+  }
 }
 
 .date-title {
   @media (min-width: $breakpoint-xs) {
     display: inline-block;
     font-size: 3rem;
-    margin: 1rem;
+    margin: 0.5rem;
   }
   font-size: 2rem;
   margin: 0px;
 }
 
 .channels_section {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 </style>
 
