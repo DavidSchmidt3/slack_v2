@@ -225,7 +225,7 @@
         </q-card>
       </div>
 
-      <div class="col-xs-12 col-sm-8 col-xl-10">
+      <div class="col-xs-12 col-sm-8 col-lg-9 col-xl-10">
         <q-card flat square bordered style="height: 100%">
           <q-card-section
             class="flex items-center"
@@ -413,7 +413,6 @@
     font-size: 15px;
   }
 }
-
 .channel_page {
   height: calc(100vh - 120px);
 }
@@ -472,11 +471,13 @@ export default defineComponent({
       this.messagesExpanded = !this.messagesExpanded;
     },
     sendMessage() {
-      this.messages.push({
-        text: this.newMessage,
-        from: 'me',
-      });
-      this.newMessage = '';
+      if (this.newMessage) {
+        this.messages.push({
+          text: this.newMessage,
+          from: 'Me',
+        });
+        this.newMessage = '';
+      }
     },
     handleDrawer() {
       console.log(this.drawerLeft);
