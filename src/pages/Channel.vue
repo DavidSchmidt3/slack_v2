@@ -1,141 +1,5 @@
 <template>
   <q-page>
-    <header class="text-center q-my-sm">
-      <q-btn round flat v-on:click="toggleServersView">
-        <q-avatar
-          icon="expand_more"
-          :style="serversIconRotation"
-          font-size="17px"
-          color="primary"
-          text-color="white"
-          size="30px"
-        />
-      </q-btn>
-    </header>
-
-    <div
-      v-show="serversExpanded"
-      class="flex column text-center center justify-evenly channels q-mb-md"
-      style="height: 100%"
-    >
-      <q-scroll-area style="height: 12rem; width: 100%">
-        <div class="row no-wrap text-center flex justify-center">
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">FIIT-server</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">DBS 2022</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">MTAA</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">VPWA</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">FIIT-server_2</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">DBS 2022</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">MTAA</div>
-          </div>
-
-          <div class="avatar">
-            <q-btn round to="/channel">
-              <q-avatar
-                class="q-p-md"
-                size="120px"
-                font-size="40px"
-                color="blue"
-                text-color="white"
-                icon="groups"
-              />
-            </q-btn>
-            <div class="row justify-center q-mt-sm">VPWA</div>
-          </div>
-        </div>
-      </q-scroll-area>
-    </div>
-
-    <!-- TODO:  -->
     <div v-show="!drawerLeft" class="row channel_page">
       <div class="col-xs-4 col-lg-3 col-xl-2 gt-xs">
         <q-card
@@ -155,15 +19,43 @@
                 text-color="white"
                 icon="groups"
               />
-              <div class="col server_name">
-                <b>FIIT-big</b>
-              </div>
+              <div class="col server_name text-weight-bold">FIIT-big</div>
             </div>
           </q-card-section>
 
           <q-separator size="1px" color="black" />
           <q-card-section
             style="padding-bottom: 0; padding-left: 5px"
+            class="flex justify-start items-center channel_list q-mb-sm"
+          >
+            <q-btn round flat v-on:click="toggleInvites">
+              <q-avatar
+                :style="invitesIconRotation"
+                icon="expand_more"
+                font-size="14px"
+                color="primary"
+                text-color="white"
+                size="28px"
+              />
+            </q-btn>
+            <h6 class="q-my-sm q-mx-xs section_title">Invites</h6>
+          </q-card-section>
+          <q-card-section style="padding-top: 5px; padding-bottom: 0">
+            <ul
+              class="q-gutter-md"
+              style="list-style-type: none; padding-left: 1rem"
+              v-show="invitesExpanded"
+            >
+              <li class="list-item">
+                <q-btn class="text-weight-bolder" flat># FIIT</q-btn>
+              </li>
+              <li class="list-item">
+                <q-btn class="text-weight-bolder" flat># DBS 2022</q-btn>
+              </li>
+            </ul>
+          </q-card-section>
+          <q-card-section
+            style="padding: 0 0 0 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
           >
             <q-btn round flat v-on:click="toggleChannels">
@@ -184,42 +76,13 @@
               style="list-style-type: none; padding-left: 1rem"
               v-show="channelsExpanded"
             >
-              <li class="list-item"><q-btn flat># Channel 1</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 2</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 3</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 4</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 5</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 6</q-btn></li>
-            </ul>
-          </q-card-section>
-          <q-card-section
-            style="padding-bottom: 0; padding-top: 0; padding-left: 5px"
-            class="flex justify-start items-center channel_list q-mb-sm"
-          >
-            <q-btn round flat v-on:click="toggleMessages">
-              <q-avatar
-                :style="messagesIconRotation"
-                icon="expand_more"
-                font-size="14px"
-                color="primary"
-                text-color="white"
-                size="28px"
-              />
-            </q-btn>
-            <h6 class="q-my-sm q-mx-xs section_title">Direct messages</h6>
-          </q-card-section>
-          <q-card-section style="padding-top: 5px">
-            <ul
-              v-show="messagesExpanded"
-              class="q-gutter-md"
-              style="list-style-type: none; padding-left: 1rem"
-            >
-              <li class="list-item">
-                <q-btn no-caps flat>Ctibor Kovalčík</q-btn>
-              </li>
-              <li class="list-item">
-                <q-btn no-caps flat>Dávid Schmidt</q-btn>
-              </li>
+              <li class="list-item"><q-btn flat># MTAA</q-btn></li>
+              <li class="list-item"><q-btn flat># VPWA</q-btn></li>
+              <li class="list-item"><q-btn flat># PIS</q-btn></li>
+              <li class="list-item"><q-btn flat># PSI</q-btn></li>
+              <li class="list-item"><q-btn flat># WTECH</q-btn></li>
+              <li class="list-item"><q-btn flat># MA</q-btn></li>
+              <li class="list-item"><q-btn flat># ADM</q-btn></li>
             </ul>
           </q-card-section>
         </q-card>
@@ -241,7 +104,7 @@
                 @click="handleDrawer"
               />
             </div>
-            <h5 style="margin: 0"><b>#VPWA</b></h5>
+            <h5 style="margin: 0" class="font-weight-bold">#VPWA</h5>
           </q-card-section>
           <q-separator size="1px" color="black" />
 
@@ -259,7 +122,7 @@
               </q-scroll-area>
             </q-card-section>
 
-            <q-card-section class="q-py-xs q-px-md col-3 send_section">
+            <q-card-section class="q-py-xs q-px-md col-4 send_section">
               <q-form @submit="sendMessage">
                 <q-input
                   rounded
@@ -310,12 +173,42 @@
                 @click="handleDrawer"
               />
             </div>
-            <h5 style="margin: 0"><b>FIIT</b></h5>
+            <h5 style="margin: 0" class="text-weight-bold">FIIT</h5>
           </q-card-section>
 
           <q-separator size="1px" color="black" />
           <q-card-section
             style="padding-bottom: 0; padding-left: 5px"
+            class="flex justify-start items-center channel_list q-mb-sm"
+          >
+            <q-btn round flat v-on:click="toggleInvites">
+              <q-avatar
+                :style="invitesIconRotation"
+                icon="expand_more"
+                font-size="14px"
+                color="primary"
+                text-color="white"
+                size="28px"
+              />
+            </q-btn>
+            <h6 class="q-my-sm q-mx-xs section_title">Invites</h6>
+          </q-card-section>
+          <q-card-section style="padding-top: 5px; padding-bottom: 0">
+            <ul
+              class="q-gutter-md"
+              style="list-style-type: none; padding-left: 1rem"
+              v-show="invitesExpanded"
+            >
+              <li class="list-item">
+                <q-btn class="text-weight-bolder" flat># FIIT</q-btn>
+              </li>
+              <li class="list-item">
+                <q-btn class="text-weight-bolder" flat># DBS 2022</q-btn>
+              </li>
+            </ul>
+          </q-card-section>
+          <q-card-section
+            style="padding: 0 0 0 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
           >
             <q-btn round flat v-on:click="toggleChannels">
@@ -336,42 +229,13 @@
               style="list-style-type: none; padding-left: 1rem"
               v-show="channelsExpanded"
             >
-              <li class="list-item"><q-btn flat># Channel 1</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 2</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 3</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 4</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 5</q-btn></li>
-              <li class="list-item"><q-btn flat># Channel 6</q-btn></li>
-            </ul>
-          </q-card-section>
-          <q-card-section
-            style="padding-bottom: 0; padding-top: 0; padding-left: 5px"
-            class="flex justify-start items-center channel_list q-mb-sm"
-          >
-            <q-btn round flat v-on:click="toggleMessages">
-              <q-avatar
-                :style="messagesIconRotation"
-                icon="expand_more"
-                font-size="14px"
-                color="primary"
-                text-color="white"
-                size="28px"
-              />
-            </q-btn>
-            <h6 class="q-my-sm q-mx-xs section_title">Direct messages</h6>
-          </q-card-section>
-          <q-card-section style="padding-top: 5px">
-            <ul
-              v-show="messagesExpanded"
-              class="q-gutter-md"
-              style="list-style-type: none; padding-left: 1rem"
-            >
-              <li class="list-item">
-                <q-btn no-caps flat>Ctibor Kovalčík</q-btn>
-              </li>
-              <li class="list-item">
-                <q-btn no-caps flat>Dávid Schmidt</q-btn>
-              </li>
+              <li class="list-item"><q-btn flat># MTAA</q-btn></li>
+              <li class="list-item"><q-btn flat># VPWA</q-btn></li>
+              <li class="list-item"><q-btn flat># PIS</q-btn></li>
+              <li class="list-item"><q-btn flat># PSI</q-btn></li>
+              <li class="list-item"><q-btn flat># WTECH</q-btn></li>
+              <li class="list-item"><q-btn flat># MA</q-btn></li>
+              <li class="list-item"><q-btn flat># ADM</q-btn></li>
             </ul>
           </q-card-section>
         </q-card>
@@ -431,9 +295,8 @@ import { defineComponent } from 'vue';
 
 interface State {
   newMessage: string;
-  serversExpanded: boolean;
+  invitesExpanded: boolean;
   channelsExpanded: boolean;
-  messagesExpanded: boolean;
   drawerLeft: boolean;
   messages: { text: string; from: string }[];
 }
@@ -442,9 +305,8 @@ export default defineComponent({
   name: 'ChannelLayout',
   data: (): State => {
     return {
-      serversExpanded: false,
       channelsExpanded: true,
-      messagesExpanded: true,
+      invitesExpanded: true,
       newMessage: '',
       drawerLeft: false,
       messages: [
@@ -461,14 +323,11 @@ export default defineComponent({
   },
 
   methods: {
-    toggleServersView() {
-      this.serversExpanded = !this.serversExpanded;
-    },
     toggleChannels() {
       this.channelsExpanded = !this.channelsExpanded;
     },
-    toggleMessages() {
-      this.messagesExpanded = !this.messagesExpanded;
+    toggleInvites() {
+      this.invitesExpanded = !this.invitesExpanded;
     },
     sendMessage() {
       if (this.newMessage) {
@@ -485,18 +344,13 @@ export default defineComponent({
     },
   },
   computed: {
-    serversIconRotation() {
-      return this.serversExpanded
-        ? 'transform: rotate(180deg);'
-        : 'transform: rotate(0deg);';
-    },
     channelsIconRotation() {
       return this.channelsExpanded
         ? 'transform: rotate(180deg);'
         : 'transform: rotate(0deg);';
     },
-    messagesIconRotation() {
-      return this.messagesExpanded
+    invitesIconRotation() {
+      return this.invitesExpanded
         ? 'transform: rotate(180deg);'
         : 'transform: rotate(0deg);';
     },

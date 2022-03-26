@@ -20,6 +20,12 @@
             <q-btn color="primary" class="q-ma-md"> Change username</q-btn>
             <q-btn color="primary" class="q-ma-md"> Change Password</q-btn>
             <q-btn color="red" class="q-ma-md"> Delete account </q-btn>
+            <div>
+              <q-checkbox
+                v-model="mentionedNotifications"
+                label="Recieve notifications only when mentioned"
+              />
+            </div>
           </div>
         </div>
       </q-card>
@@ -272,3 +278,20 @@
     </div>
   </q-page>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+interface State {
+  mentionedNotifications: boolean;
+}
+
+export default defineComponent({
+  name: 'ProfileLayout',
+  data: (): State => {
+    return {
+      mentionedNotifications: false,
+    };
+  },
+});
+</script>

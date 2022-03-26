@@ -33,7 +33,7 @@
                   icon="groups"
                 />
               </q-btn>
-              <h6 class="row justify-center q-mt-sm"><b>FIIT</b></h6>
+              <h6 class="row justify-center q-mt-sm text-weight-bold">FIIT</h6>
             </div>
 
             <div class="avatar">
@@ -47,7 +47,9 @@
                   icon="groups"
                 />
               </q-btn>
-              <h6 class="row justify-center q-mt-sm"><b>DBS 2022</b></h6>
+              <h6 class="row justify-center q-mt-sm text-weight-bold">
+                DBS 2022
+              </h6>
             </div>
           </div>
         </q-scroll-area>
