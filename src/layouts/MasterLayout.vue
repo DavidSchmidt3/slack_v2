@@ -12,7 +12,7 @@
             <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
             </q-avatar>
 
-            <div class="text-subtitle1 q-mr-md">Dávid Schmidt</div>
+            <div class="text-subtitle1 q-mr-md">David</div>
           </q-btn>
 
           <q-btn

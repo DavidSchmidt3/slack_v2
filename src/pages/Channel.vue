@@ -112,11 +112,18 @@
             <q-card-section class="message_section">
               <q-scroll-area style="width: 100%; height: 100%">
                 <div style="width: 100%">
+                  <!-- highlight message if it contains name  -->
                   <q-chat-message
-                    v-for="message in messages"
-                    :key="message.text"
-                    :name="message.from"
+                    v-for="(message, index) in messages"
+                    :key="index"
+                    :style="{
+                      fontWeight: message.text.includes(`@${userName}`)
+                        ? 800
+                        : 400,
+                    }"
                     :text="[message.text]"
+                    :name="message.from"
+                    class="q-px-md q-py-sm q-my-md"
                   />
                 </div>
               </q-scroll-area>
@@ -297,6 +304,7 @@ interface State {
   newMessage: string;
   invitesExpanded: boolean;
   channelsExpanded: boolean;
+  userName: string;
   drawerLeft: boolean;
   messages: { text: string; from: string }[];
 }
@@ -305,6 +313,7 @@ export default defineComponent({
   name: 'ChannelLayout',
   data: (): State => {
     return {
+      userName: 'David',
       channelsExpanded: true,
       invitesExpanded: true,
       newMessage: '',
@@ -312,11 +321,15 @@ export default defineComponent({
       messages: [
         {
           text: 'Hey How are you ?',
-          from: 'Haaaaary',
+          from: 'Alice',
         },
         {
           text: 'I am good,  you ?',
-          from: 'Marffff',
+          from: 'Bob',
+        },
+        {
+          text: 'I am fine, and what about you @David?',
+          from: 'Alice',
         },
       ],
     };
