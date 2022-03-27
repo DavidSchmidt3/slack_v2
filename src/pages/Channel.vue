@@ -9,7 +9,7 @@
           class="height-full"
           style="max-height: 100%; height: 100%"
         >
-          <q-card-section class="server_name_section">
+          <!-- <q-card-section class="server_name_section">
             <div class="row">
               <q-avatar
                 class="q-p-lg q-mr-md"
@@ -23,7 +23,7 @@
             </div>
           </q-card-section>
 
-          <q-separator size="1px" color="black" />
+          <q-separator size="1px" color="black" /> -->
           <q-card-section
             style="padding-bottom: 0; padding-left: 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
@@ -47,7 +47,16 @@
               v-show="invitesExpanded"
             >
               <li class="list-item">
-                <q-btn class="text-weight-bolder" flat># FIIT</q-btn>
+                <q-btn style="padding-right: 30px" flat
+                  ># FIIT<q-icon
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                /></q-btn>
               </li>
               <li class="list-item">
                 <q-btn class="text-weight-bolder" flat># DBS 2022</q-btn>
@@ -76,10 +85,32 @@
               style="list-style-type: none; padding-left: 1rem"
               v-show="channelsExpanded"
             >
-              <li class="list-item"><q-btn flat># MTAA</q-btn></li>
+              <li class="list-item">
+                <q-btn style="padding-right: 30px" flat
+                  ># PKS<q-icon
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                /></q-btn>
+              </li>
               <li class="list-item"><q-btn flat># VPWA</q-btn></li>
               <li class="list-item"><q-btn flat># PIS</q-btn></li>
-              <li class="list-item"><q-btn flat># PSI</q-btn></li>
+              <li class="list-item">
+                <q-btn style="padding-right: 30px" flat
+                  ># PSI<q-icon
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                /></q-btn>
+              </li>
               <li class="list-item"><q-btn flat># WTECH</q-btn></li>
               <li class="list-item"><q-btn flat># MA</q-btn></li>
               <li class="list-item"><q-btn flat># ADM</q-btn></li>
@@ -112,7 +143,6 @@
             <q-card-section class="message_section">
               <q-scroll-area style="width: 100%; height: 100%">
                 <div style="width: 100%">
-                  <!-- highlight message if it contains name  -->
                   <q-chat-message
                     v-for="(message, index) in messages"
                     :key="index"
@@ -123,7 +153,6 @@
                     }"
                     :text="[message.text]"
                     :name="message.from"
-                    class="q-px-md q-py-sm q-my-md"
                   />
                 </div>
               </q-scroll-area>
@@ -207,7 +236,16 @@
               v-show="invitesExpanded"
             >
               <li class="list-item">
-                <q-btn class="text-weight-bolder" flat># FIIT</q-btn>
+                <q-btn style="padding-right: 30px" flat
+                  ># FIIT<q-icon
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                /></q-btn>
               </li>
               <li class="list-item">
                 <q-btn class="text-weight-bolder" flat># DBS 2022</q-btn>
@@ -236,10 +274,32 @@
               style="list-style-type: none; padding-left: 1rem"
               v-show="channelsExpanded"
             >
-              <li class="list-item"><q-btn flat># MTAA</q-btn></li>
+              <li class="list-item">
+                <q-btn style="padding-right: 30px" flat
+                  ># PKS<q-icon
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                /></q-btn>
+              </li>
               <li class="list-item"><q-btn flat># VPWA</q-btn></li>
               <li class="list-item"><q-btn flat># PIS</q-btn></li>
-              <li class="list-item"><q-btn flat># PSI</q-btn></li>
+              <li class="list-item">
+                <q-btn style="padding-right: 30px" flat
+                  ># PSI<q-icon
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                /></q-btn>
+              </li>
               <li class="list-item"><q-btn flat># WTECH</q-btn></li>
               <li class="list-item"><q-btn flat># MA</q-btn></li>
               <li class="list-item"><q-btn flat># ADM</q-btn></li>

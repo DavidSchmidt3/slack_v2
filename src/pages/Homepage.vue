@@ -32,6 +32,10 @@
                   text-color="white"
                   icon="groups"
                 />
+                <q-icon
+                  name="lock"
+                  style="position: absolute; top: -10px; right: -10px"
+                />
               </q-btn>
               <h6 class="row justify-center q-mt-sm text-weight-bold">FIIT</h6>
             </div>
@@ -85,7 +89,12 @@
                   text-color="white"
                   icon="groups"
                 />
+                <q-icon
+                  name="lock"
+                  style="position: absolute; top: -10px; right: -10px"
+                />
               </q-btn>
+
               <h6 class="row justify-center q-mt-sm">PKS</h6>
             </div>
 
@@ -154,6 +163,10 @@
                   color="blue"
                   text-color="white"
                   icon="groups"
+                />
+                <q-icon
+                  name="lock"
+                  style="position: absolute; top: -10px; right: -10px"
                 />
               </q-btn>
               <h6 class="row justify-center q-mt-sm">PSI</h6>

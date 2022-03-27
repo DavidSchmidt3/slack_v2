@@ -23,7 +23,7 @@
             >
               <template v-slot:append>
                 <q-avatar>
-                  <img src="../assets/images/user.svg" />
+                  <img src="images/user.svg" />
                 </q-avatar>
               </template>
             </q-input>
@@ -37,7 +37,7 @@
             >
               <template v-slot:append>
                 <q-avatar>
-                  <img src="../assets/images/lock.svg" />
+                  <img src="images/lock.svg" />
                 </q-avatar>
               </template>
             </q-input>
