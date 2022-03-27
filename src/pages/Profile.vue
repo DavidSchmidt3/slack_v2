@@ -311,7 +311,7 @@
             ></div>
 
             <q-btn
-              class="col-xs-2 col-sm-2"
+              class="col-xs-1 col-sm-2 col-md-1"
               flat
               rounded
               color="red"
@@ -359,7 +359,7 @@
             ></div>
 
             <q-btn
-              class="col-xs-2 col-sm-2"
+              class="col-xs-1 col-sm-2 col-md-1"
               flat
               rounded
               color="red"
