@@ -13,7 +13,7 @@
           >
             Login
           </h5>
-          <q-form class="q-gutter-md">
+          <q-form class="q-gutter-md" @submit.stop="onSubmit">
             <q-input
               rounded
               outlined
@@ -41,12 +41,30 @@
                 </q-avatar>
               </template>
             </q-input>
+            <q-card-actions class="q-px-lg q-py-none q-pb-xl">
+              <q-btn
+                type="submit"
+                value="Submit"
+                rounded
+                unelevated
+                color="primary"
+                class="login_button"
+                size="lg"
+                label="Login"
+              />
+            </q-card-actions>
+            <q-card-section style="padding: 0; margin: 0">
+              <p
+                class="text-center q-m-none q-p-none"
+                v-for="error of v$.$errors"
+                :key="error.$uid"
+              >
+                <strong>{{ error.$message }}</strong>
+              </p>
+            </q-card-section>
           </q-form>
         </q-card-section>
-        <q-card-actions class="q-px-lg q-py-none q-pb-xl">
-          <q-btn rounded unelevated color="primary" class="login_button"
-          size="lg" label="Login" to = /homepage />
-        </q-card-actions>
+
         <q-card-section class="text-center q-pa-none q-mt-xl">
           <p class="text-black-6 text-h6">New to Slack_v2?</p>
         </q-card-section>
@@ -59,16 +77,50 @@
   </q-page>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import useVuelidate from '@vuelidate/core';
+import { defineComponent } from 'vue';
+import { minLength, required, email, helpers } from '@vuelidate/validators';
+
+interface State {
+  email: string;
+  password: string;
+}
+
+export default defineComponent({
   name: 'Login',
-  data() {
+  setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
+  data: (): State => {
     return {
       email: '',
       password: '',
     };
   },
-};
+  validations() {
+    return {
+      email: {
+        required: helpers.withMessage('Email is required', required),
+        email: helpers.withMessage('Email is not valid', email),
+      },
+      password: {
+        required: helpers.withMessage('Password is required', required),
+        minLength: helpers.withMessage(
+          'Password must be at least 8 characters long',
+          minLength(8)
+        ),
+      },
+    };
+  },
+  methods: {
+    async onSubmit() {
+      console.log('fsfds');
+      const isFormCorrect = await this.v$.$validate();
+      if (isFormCorrect) {
+        await this.$router.push('/homepage');
+      }
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
