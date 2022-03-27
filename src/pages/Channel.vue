@@ -156,12 +156,13 @@
                     <template v-slot:name
                       ><q-btn
                         @click="pop_up"
+                        class="button_popup"
                         no-caps
                         flat
                         dense
                         style="padding: 0"
                       >
-                        <label>{{ message.from }}</label>
+                        <label class="label_name">{{ message.from }}</label>
                       </q-btn>
                       <q-dialog v-model="user_pop">
                         <q-card
@@ -182,7 +183,7 @@
                             <h4 class="q-mb-md">{{ message.from }}</h4>
                             <q-separator> </q-separator>
                             <h5>Currently typing :</h5>
-                            <p>Hello, ,, s</p>
+                            <p>I was thinking about lunch with you guys</p>
                           </div>
                         </q-card>
                       </q-dialog>
@@ -353,6 +354,11 @@
 </template>
 
 <style scoped lang="scss">
+.label_name {
+  &:hover {
+    cursor: pointer;
+  }
+}
 .server_name {
   font-size: 25px;
   align-self: center;
