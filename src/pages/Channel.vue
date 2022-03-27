@@ -152,8 +152,42 @@
                         : 400,
                     }"
                     :text="[message.text]"
-                    :name="message.from"
-                  />
+                  >
+                    <template v-slot:name
+                      ><q-btn
+                        @click="pop_up"
+                        no-caps
+                        flat
+                        dense
+                        style="padding: 0"
+                      >
+                        <label>{{ message.from }}</label>
+                      </q-btn>
+                      <q-dialog v-model="user_pop">
+                        <q-card
+                          flat
+                          bordered
+                          square
+                          class="q-pa-lg col-xs-12 col-sm-4 col-lg-3"
+                        >
+                          <div class="text-center q-mt-md">
+                            <q-avatar
+                              class="q-p-lg"
+                              size="120px"
+                              font-size="40px"
+                              color="blue"
+                              text-color="white"
+                              icon="person"
+                            />
+                            <h4 class="q-mb-md">{{ message.from }}</h4>
+                            <q-separator> </q-separator>
+                            <h5>Currently typing :</h5>
+                            <p>Hello, ,, s</p>
+                          </div>
+                        </q-card>
+                      </q-dialog>
+                    </template>
+                  </q-chat-message>
                 </div>
               </q-scroll-area>
             </q-card-section>
@@ -379,6 +413,7 @@ interface State {
   channelsExpanded: boolean;
   userName: string;
   drawerLeft: boolean;
+  user_pop: boolean;
   messages: { text: string; from: string }[];
 }
 
@@ -386,6 +421,7 @@ export default defineComponent({
   name: 'ChannelLayout',
   data: (): State => {
     return {
+      user_pop: false,
       userName: 'David',
       channelsExpanded: true,
       invitesExpanded: true,
@@ -409,6 +445,10 @@ export default defineComponent({
   },
 
   methods: {
+    pop_up() {
+      this.user_pop = true;
+    },
+
     toggleChannels() {
       this.channelsExpanded = !this.channelsExpanded;
     },
