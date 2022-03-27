@@ -158,7 +158,14 @@
               </q-scroll-area>
             </q-card-section>
 
-            <q-card-section class="q-py-xs q-px-md col-4 send_section">
+            <q-card-section class="q-py-xs q-ml-md" style="padding-bottom: 0">
+              <label class="typing_label">David is typing ...</label>
+            </q-card-section>
+
+            <q-card-section
+              class="q-py-xs q-px-md col-4 send_section"
+              style="padding-top: 0"
+            >
               <q-form @submit="sendMessage">
                 <q-input
                   rounded
@@ -349,9 +356,15 @@
 }
 
 .message_section {
-  height: calc(100% - 3.5rem);
+  height: calc(100% - 5.4rem);
   padding-bottom: 0;
 }
+
+.typing_label {
+  font-size: 11px;
+  font-weight: 100;
+}
+
 .send_section {
   height: 3.5rem;
 }
