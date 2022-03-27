@@ -298,7 +298,7 @@
                 />
               </div>
             </q-btn>
-            <label class="col-xs-3 col-sm-3 self-center text-center"
+            <label class="col-xs-4 col-sm-4 self-center text-center"
               >Alice</label
             >
             <div>
@@ -306,7 +306,7 @@
             </div>
 
             <div
-              class="col-xs-3 col-sm-3 text-center self-center"
+              class="col-xs-2 col-sm-2 text-center self-center"
               style="margin: 0%"
             ></div>
 
@@ -346,7 +346,7 @@
                 />
               </div>
             </q-btn>
-            <label class="col-xs-3 col-sm-3 self-center text-center"
+            <label class="col-xs-4 col-sm-4 self-center text-center"
               >Ctibor Kovalčík</label
             >
             <div>
@@ -354,7 +354,7 @@
             </div>
 
             <div
-              class="col-xs-3 col-sm-3 text-center self-center"
+              class="col-xs-2 col-sm-2 text-center self-center"
               style="margin: 0%"
             ></div>
 
