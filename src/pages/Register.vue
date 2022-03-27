@@ -32,6 +32,15 @@
                     </q-avatar>
                   </template>
                 </q-input>
+                <!-- <p
+                  class="text-center"
+                  v-for="error of v$.$errors"
+                  :key="error.$uid"
+                >
+                  <strong v-if="error.$property === email">email napiču</strong>
+                  <strong>{{ v$.$errors }} : </strong>
+                  <strong>{{ error.$message }}</strong>
+                </p> -->
               </div>
               <div class="text-center col-xs-12 col-md-6 q-gutter-x-sm">
                 <q-input
@@ -108,8 +117,7 @@
                 </q-input>
               </div>
 
-              <!-- :error="v$.password2.$error" -->
-              <q-field
+              <div
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-gutter-y-md"
               >
                 <q-input
@@ -118,7 +126,7 @@
                   rounded
                   type="password"
                   label="Password again"
-                  v-model="password2"
+                  v-model="passwordAgain"
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -126,23 +134,33 @@
                     </q-avatar>
                   </template>
                 </q-input>
-              </q-field>
+              </div>
             </div>
+            <q-card-actions class="q-px-lg q-py-none q-pb-md">
+              <q-btn
+                rounded
+                unelevated
+                color="primary"
+                value="Submit"
+                class="register_button"
+                size="lg"
+                label="Register"
+                type="submit"
+              />
+            </q-card-actions>
+            <q-card-section style="padding: 0; margin: 0">
+              <p
+                class="text-center q-m-none q-p-none"
+                v-for="error of v$.$errors"
+                :key="error.$uid"
+              >
+                <strong>{{ error.$message }}</strong>
+              </p>
+            </q-card-section>
           </q-form>
         </q-card-section>
-        <q-card-actions class="q-px-lg q-py-none q-pb-xl">
-          <q-btn
-            rounded
-            unelevated
-            color="primary"
-            class="register_button"
-            size="lg"
-            label="Register"
-            to="/login"
-          />
-        </q-card-actions>
 
-        <q-card-section class="text-center q-pa-none q-mt-xl">
+        <q-card-section class="text-center q-pa-none q-mt-sm">
           <p class="text-black-6 text-h6">Already registered?</p>
         </q-card-section>
         <q-card-actions class="q-px-xl q-py-none">
@@ -163,8 +181,7 @@
 
 <script lang="ts">
 import useVuelidate from '@vuelidate/core';
-import { minLength, required } from '@vuelidate/validators';
-
+import { minLength, required, email, helpers } from '@vuelidate/validators';
 import { defineComponent } from 'vue';
 
 interface State {
@@ -173,11 +190,12 @@ interface State {
   email: string;
   nickName: string;
   password: string;
-  password2: string;
+  passwordAgain: string;
 }
 
 export default defineComponent({
   name: 'Register',
+  setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
       name: '',
@@ -185,49 +203,57 @@ export default defineComponent({
       email: '',
       nickName: '',
       password: '',
-      password2: '',
+      passwordAgain: '',
     };
-  },
-  setup() {
-    return { v$: useVuelidate({ $autoDirty: true }) };
   },
   validations() {
     return {
       name: {
-        required,
-        minLength: minLength(3),
+        required: helpers.withMessage('Name is required', required),
+        minLength: helpers.withMessage(
+          'Name must be at least 3 characters long',
+          minLength(3)
+        ),
       },
       surname: {
-        required,
-        minLength: minLength(3),
+        required: helpers.withMessage('Surname is required', required),
+        minLength: helpers.withMessage(
+          'Surname must be at least 3 characters long',
+          minLength(3)
+        ),
       },
       email: {
-        required,
+        required: helpers.withMessage('Email is required', required),
+        email: helpers.withMessage('Email is not valid', email),
       },
       nickName: {
-        required,
-        minLength: minLength(6),
+        required: helpers.withMessage('Nickname is required', required),
+        minLength: helpers.withMessage(
+          'Nickname must be at least 3 characters long',
+          minLength(3)
+        ),
       },
       password: {
-        required,
-        minLength: minLength(8),
+        required: helpers.withMessage('Password is required', required),
+        minLength: helpers.withMessage(
+          'Password must be at least 8 characters long',
+          minLength(8)
+        ),
       },
-      password2: {
-        required,
-        minLength: minLength(8),
+      passwordAgain: {
+        required: helpers.withMessage('Password again is required', required),
+        minLength: helpers.withMessage(
+          'Password must be at least 8 characters long',
+          minLength(8)
+        ),
       },
     };
   },
   methods: {
     async onSubmit() {
       const isFormCorrect = await this.v$.$validate();
-      if (!isFormCorrect) {
-        this.$q.notify({
-          color: 'red-4',
-          textColor: 'white',
-          icon: 'warning',
-          message: this.v$.$errors.map((e) => e.$message).join(),
-        });
+      if (isFormCorrect) {
+        await this.$router.push('/login');
       }
     },
   },
