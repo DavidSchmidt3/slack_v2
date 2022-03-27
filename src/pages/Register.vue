@@ -13,7 +13,7 @@
           >
             Register
           </h5>
-          <q-form class="q-gutter-y-md">
+          <q-form class="q-gutter-y-md" @submit.stop="onSubmit">
             <div class="row justify-between">
               <div
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
@@ -28,7 +28,7 @@
                 >
                   <template v-slot:append>
                     <q-avatar>
-                      <img src="images/email.svg" />
+                      <img src="icons/email.svg" />
                     </q-avatar>
                   </template>
                 </q-input>
@@ -44,7 +44,7 @@
                 >
                   <template v-slot:append>
                     <q-avatar>
-                      <img src="images/user.svg" />
+                      <img src="icons/user.svg" />
                     </q-avatar>
                   </template>
                 </q-input>
@@ -65,7 +65,7 @@
                 >
                   <template v-slot:append>
                     <q-avatar>
-                      <img src="images/user.svg" />
+                      <img src="icons/user.svg" />
                     </q-avatar>
                   </template>
                 </q-input>
@@ -81,7 +81,7 @@
                 >
                   <template v-slot:append>
                     <q-avatar>
-                      <img src="images/user.svg" />
+                      <img src="icons/user.svg" />
                     </q-avatar>
                   </template>
                 </q-input>
@@ -102,13 +102,14 @@
                 >
                   <template v-slot:append>
                     <q-avatar>
-                      <img src="images/lock.svg" />
+                      <img src="icons/lock.svg" />
                     </q-avatar>
                   </template>
                 </q-input>
               </div>
 
-              <div
+              <!-- :error="v$.password2.$error" -->
+              <q-field
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-gutter-y-md"
               >
                 <q-input
@@ -121,11 +122,11 @@
                 >
                   <template v-slot:append>
                     <q-avatar>
-                      <img src="images/lock.svg" />
+                      <img src="icons/lock.svg" />
                     </q-avatar>
                   </template>
                 </q-input>
-              </div>
+              </q-field>
             </div>
           </q-form>
         </q-card-section>
@@ -160,20 +161,77 @@
   </q-page>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import useVuelidate from '@vuelidate/core';
+import { minLength, required } from '@vuelidate/validators';
+
+import { defineComponent } from 'vue';
+
+interface State {
+  name: string;
+  surname: string;
+  email: string;
+  nickName: string;
+  password: string;
+  password2: string;
+}
+
+export default defineComponent({
   name: 'Register',
-  data() {
+  data: (): State => {
     return {
+      name: '',
+      surname: '',
       email: '',
       nickName: '',
       password: '',
-      name: '',
-      surname: '',
       password2: '',
     };
   },
-};
+  setup() {
+    return { v$: useVuelidate({ $autoDirty: true }) };
+  },
+  validations() {
+    return {
+      name: {
+        required,
+        minLength: minLength(3),
+      },
+      surname: {
+        required,
+        minLength: minLength(3),
+      },
+      email: {
+        required,
+      },
+      nickName: {
+        required,
+        minLength: minLength(6),
+      },
+      password: {
+        required,
+        minLength: minLength(8),
+      },
+      password2: {
+        required,
+        minLength: minLength(8),
+      },
+    };
+  },
+  methods: {
+    async onSubmit() {
+      const isFormCorrect = await this.v$.$validate();
+      if (!isFormCorrect) {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'warning',
+          message: this.v$.$errors.map((e) => e.$message).join(),
+        });
+      }
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>
