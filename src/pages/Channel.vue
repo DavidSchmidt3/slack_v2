@@ -101,45 +101,6 @@
               <li class="list-item"><q-btn flat># ADM</q-btn></li>
             </ul>
           </q-card-section>
-          <q-card-section
-            style="padding-bottom: 0; padding-left: 5px"
-            class="flex justify-start items-center channel_list q-mb-sm"
-          >
-            <q-btn round flat v-on:click="toggleFriends">
-              <q-avatar
-                :style="invitesIconRotation"
-                icon="expand_more"
-                font-size="14px"
-                color="primary"
-                text-color="white"
-                size="28px"
-              />
-            </q-btn>
-            <h6 class="q-my-sm q-mx-xs section_title">Friends</h6>
-          </q-card-section>
-          <q-card-section style="padding-top: 5px; padding-bottom: 0">
-            <ul
-              class="q-gutter-md"
-              style="list-style-type: none; padding-left: 1rem"
-              v-show="friendsExpanded"
-            >
-              <li class="list-item">
-                <q-btn style="padding-right: 30px" flat
-                  >Dávid Schmidt<q-icon
-                    name="lock"
-                    style="
-                      position: absolute;
-                      top: 6px;
-                      right: 5px;
-                      font-size: 20px;
-                    "
-                /></q-btn>
-              </li>
-              <li class="list-item">
-                <q-btn flat>Ctibor Kovalčík</q-btn>
-              </li>
-            </ul>
-          </q-card-section>
         </q-card>
       </div>
 
@@ -441,7 +402,6 @@ interface State {
   newMessage: string;
   invitesExpanded: boolean;
   channelsExpanded: boolean;
-  friendsExpanded: boolean;
   userName: string;
   drawerLeft: boolean;
   user_pop: boolean;
@@ -456,7 +416,6 @@ export default defineComponent({
       userName: 'David',
       channelsExpanded: true,
       invitesExpanded: true,
-      friendsExpanded: true,
       newMessage: '',
       drawerLeft: false,
       messages: [
@@ -480,9 +439,7 @@ export default defineComponent({
     pop_up() {
       this.user_pop = true;
     },
-    toggleFriends() {
-      this.friendsExpanded = !this.friendsExpanded;
-    },
+
     toggleChannels() {
       this.channelsExpanded = !this.channelsExpanded;
     },
@@ -499,6 +456,7 @@ export default defineComponent({
       }
     },
     handleDrawer() {
+      console.log(this.drawerLeft);
       this.drawerLeft = !this.drawerLeft;
     },
   },
