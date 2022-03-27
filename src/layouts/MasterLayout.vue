@@ -8,9 +8,22 @@
               <q-toolbar-title>Slack_v2</q-toolbar-title></q-btn
             >
           </q-toolbar-title>
-          <q-btn flat rounded class="status" @click="icon = true">
-            <span class="dot"> </span>
-          </q-btn>
+          <div v-if="userStatus === 'online'">
+            <q-btn flat rounded class="status" @click="icon = true">
+              <span class="green-dot"></span>
+            </q-btn>
+          </div>
+          <div v-else-if="userStatus === 'dnd'">
+            <q-btn flat rounded class="status" @click="icon = true">
+              <span class="orange-dot"></span>
+            </q-btn>
+          </div>
+          <div v-else>
+            <q-btn flat rounded class="status" @click="icon = true">
+              <span class="red-dot"></span>
+            </q-btn>
+          </div>
+
           <q-btn class="q-pa-xs" flat>
             <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
             </q-avatar>
@@ -29,34 +42,25 @@
               <q-card-section class="column">
                 <q-radio
                   keep-color
-                  v-model="status_user"
+                  v-model="userStatus"
+                  :change="statusColor"
                   val="online"
                   label="Online"
                   color="green"
-                  @input="status_colour"
                 />
                 <q-radio
                   keep-color
-                  v-model="status_user"
-                  val="do_not_disturb"
+                  v-model="userStatus"
+                  val="dnd"
                   label="Do not Disturb"
-                  @onclik="status_colour"
-                  @select="status_colour"
                   color="red"
                 />
                 <q-radio
                   keep-color
-                  v-model="status_user"
+                  v-model="userStatus"
                   val="offline"
                   label="Offline"
                   color="grey"
-                />
-                <q-radio
-                  keep-color
-                  v-model="status_user"
-                  val="Away"
-                  label="Away"
-                  color="yellow"
                 />
               </q-card-section>
             </q-card>
@@ -84,11 +88,29 @@
   }
 }
 
-.dot {
+.green-dot {
   height: 25px;
   width: 25px;
 
-  background-color: rgb(109, 236, 24);
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red-dot {
+  height: 25px;
+  width: 25px;
+
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.orange-dot {
+  height: 25px;
+  width: 25px;
+
+  background-color: orange;
   border-radius: 50%;
   display: inline-block;
 }
@@ -109,12 +131,12 @@ export default {
       bar: ref(false),
       bar2: ref(false),
       toolbar: ref(false),
-      status_user: ref('line'),
+      userStatus: ref('online'),
     };
   },
   methods: {
-    status_colour(e) {
-      console.log('HUJC');
+    statusColor(e) {
+      console.log(e);
     },
   },
 };
