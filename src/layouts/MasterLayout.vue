@@ -15,16 +15,16 @@
           </div>
           <div v-else-if="userStatus === 'dnd'">
             <q-btn flat rounded class="status" @click="icon = true">
-              <span class="orange-dot"></span>
+              <span class="red-dot"></span>
             </q-btn>
           </div>
           <div v-else>
             <q-btn flat rounded class="status" @click="icon = true">
-              <span class="red-dot"></span>
+              <span class="grey-dot"></span>
             </q-btn>
           </div>
 
-          <q-btn class="q-pa-xs" flat>
+          <q-btn class="q-pa-xs" flat to="/profile">
             <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
             </q-avatar>
 
@@ -106,11 +106,11 @@
   display: inline-block;
 }
 
-.orange-dot {
+.grey-dot {
   height: 25px;
   width: 25px;
 
-  background-color: orange;
+  background-color: rgb(121, 119, 117);
   border-radius: 50%;
   display: inline-block;
 }
