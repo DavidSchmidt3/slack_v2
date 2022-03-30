@@ -26,6 +26,7 @@
 
         <q-card-section class="column">
           <q-input v-model="channelName" label="Channel name" />
+          <q-checkbox v-model="channelPrivate" label="Keep chanel private" />
           <q-btn
             @click="channel = false"
             class="q-my-md"
@@ -287,16 +288,39 @@
 }
 </style>
 
-<script>
-export default {
-  name: 'Login',
-  data() {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+interface State {
+  date: string;
+  email: string;
+  channelName: string;
+  channel: boolean;
+  channelPrivate: boolean;
+  password: string;
+}
+
+export default defineComponent({
+  name: 'Homepage',
+  data: (): State => {
     return {
-      date: new Date().toLocaleString('sk-SK', { dateStyle: 'short' }),
+      date: new Date().toLocaleString('sk-SK'),
       email: '',
       channel: false,
+      channelName: '',
+      channelPrivate: false,
       password: '',
     };
   },
-};
+  methods: {
+    countTime() {
+      this.date = new Date().toLocaleString('sk-SK');
+    },
+  },
+  mounted: function () {
+    window.setInterval(() => {
+      this.countTime();
+    }, 1000);
+  },
+});
 </script>
