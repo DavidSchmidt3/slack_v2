@@ -26,7 +26,7 @@
 
         <q-card-section class="column">
           <q-input v-model="channelName" label="Channel name" />
-          <q-checkbox v-model="channelPrivate" label="Keep chanel private" />
+          <q-checkbox v-model="channelPrivate" label="Keep channel private" />
           <q-btn
             @click="channel = false"
             class="q-my-md"
