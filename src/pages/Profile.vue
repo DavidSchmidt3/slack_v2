@@ -70,7 +70,9 @@
                 class="col-xs-5 col-sm-5 text-center self-center"
                 style="margin: 0%"
               >
-                <q-btn class="" color="primary">See all members</q-btn>
+                <q-btn class="" color="primary" @click="users = true"
+                  >See all members</q-btn
+                >
               </div>
 
               <q-btn
@@ -369,6 +371,106 @@
           </div>
         </q-card-section>
         <q-separator />
+        <q-card-section>
+          <q-dialog v-model="users">
+            <q-card class="q-pa-md">
+              <q-card-section class="row items-center q-pb-none">
+                <div class="text-h6">Members list</div>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
+              </q-card-section>
+
+              <q-card-section class="column">
+                <q-card-section style="padding-right: 0; padding-left: 0">
+                  <div class="row" style="min-width: 230px">
+                    <div class="gt-xs col-3">
+                      <q-avatar
+                        class="q-p-md"
+                        size="50px"
+                        font-size="20px"
+                        color="blue"
+                        text-color="white"
+                        icon="person"
+                      />
+                    </div>
+                    <div class="lt-sm col-4">
+                      <q-avatar
+                        class="q-p-lg"
+                        size="60px"
+                        font-size="25px"
+                        color="blue"
+                        text-color="white"
+                        icon="person"
+                      />
+                    </div>
+                    <label class="col-7 self-center text-center">Ctibor</label>
+                    <q-btn class="col-2" flat rounded color="red" icon="close">
+                    </q-btn>
+                  </div>
+                </q-card-section>
+                <q-separator />
+                <q-card-section style="padding-right: 0; padding-left: 0">
+                  <div class="row" style="min-width: 230px">
+                    <div class="gt-xs col-3">
+                      <q-avatar
+                        class="q-p-md"
+                        size="50px"
+                        font-size="20px"
+                        color="blue"
+                        text-color="white"
+                        icon="person"
+                      />
+                    </div>
+                    <div class="lt-sm col-4">
+                      <q-avatar
+                        class="q-p-lg"
+                        size="60px"
+                        font-size="25px"
+                        color="blue"
+                        text-color="white"
+                        icon="person"
+                      />
+                    </div>
+                    <label class="col-7 self-center text-center">David</label>
+                    <q-btn class="col-2" flat rounded color="red" icon="close">
+                    </q-btn>
+                  </div>
+                </q-card-section>
+                <q-separator />
+                <q-card-section style="padding-right: 0; padding-left: 0">
+                  <div class="row" style="min-width: 230px">
+                    <div class="gt-xs col-3">
+                      <q-avatar
+                        class="q-p-md"
+                        size="50px"
+                        font-size="20px"
+                        color="blue"
+                        text-color="white"
+                        icon="person"
+                      />
+                    </div>
+                    <div class="lt-sm col-4">
+                      <q-avatar
+                        class="q-p-lg"
+                        size="60px"
+                        font-size="25px"
+                        color="blue"
+                        text-color="white"
+                        icon="person"
+                      />
+                    </div>
+                    <label class="col-7 self-center text-center"
+                      >Sebastian</label
+                    >
+                    <q-btn class="col-2" flat rounded color="red" icon="close">
+                    </q-btn>
+                  </div>
+                </q-card-section>
+                <q-separator />
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+        </q-card-section>
       </q-card>
     </div>
   </q-page>
@@ -379,6 +481,7 @@ import { defineComponent } from 'vue';
 
 interface State {
   mentionedNotifications: boolean;
+  users: boolean;
 }
 
 export default defineComponent({
@@ -386,6 +489,7 @@ export default defineComponent({
   data: (): State => {
     return {
       mentionedNotifications: false,
+      users: false,
     };
   },
 });
