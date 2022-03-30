@@ -9,8 +9,40 @@
           class="height-full"
           style="max-height: 100%; height: 100%"
         >
+          <q-card-section style="padding-bottom: 0">
+            <q-page-section>
+              <q-btn
+                @click="members = true"
+                class="q-my-md"
+                text-color="white"
+                color="primary"
+                label="Add member"
+              />
+            </q-page-section>
+
+            <q-dialog v-model="members">
+              <q-card class="q-pa-md">
+                <q-card-section class="row items-center q-pb-none">
+                  <div class="text-h6">Add member</div>
+                  <q-space />
+                  <q-btn icon="close" flat round dense v-close-popup />
+                </q-card-section>
+
+                <q-card-section class="column">
+                  <q-input v-model="memberEmail" label="Member Email" />
+                  <q-btn
+                    @click="members = false"
+                    class="q-my-md"
+                    text-color="white"
+                    color="primary"
+                    label="Add member"
+                  />
+                </q-card-section>
+              </q-card>
+            </q-dialog>
+          </q-card-section>
           <q-card-section
-            style="padding-bottom: 0; padding-left: 5px"
+            style="padding-bottom: 0; padding-top: 0; padding-left: 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
           >
             <q-btn round flat v-on:click="toggleInvites">
@@ -240,8 +272,40 @@
           </q-card-section>
 
           <q-separator size="1px" color="black" />
+          <q-card-section style="padding-bottom: 0">
+            <q-page-section>
+              <q-btn
+                @click="members = true"
+                class="q-my-md"
+                text-color="white"
+                color="primary"
+                label="Add member"
+              />
+            </q-page-section>
+
+            <q-dialog v-model="members">
+              <q-card class="q-pa-md">
+                <q-card-section class="row items-center q-pb-none">
+                  <div class="text-h6">Add member</div>
+                  <q-space />
+                  <q-btn icon="close" flat round dense v-close-popup />
+                </q-card-section>
+
+                <q-card-section class="column">
+                  <q-input v-model="memberEmail" label="Member Email" />
+                  <q-btn
+                    @click="members = false"
+                    class="q-my-md"
+                    text-color="white"
+                    color="primary"
+                    label="Add member"
+                  />
+                </q-card-section>
+              </q-card>
+            </q-dialog>
+          </q-card-section>
           <q-card-section
-            style="padding-bottom: 0; padding-left: 5px"
+            style="padding-bottom: 0; padding-top: 0; padding-left: 5px"
             class="flex justify-start items-center channel_list q-mb-sm"
           >
             <q-btn round flat v-on:click="toggleInvites">
@@ -402,6 +466,8 @@ interface State {
   newMessage: string;
   invitesExpanded: boolean;
   channelsExpanded: boolean;
+  memberEmail: string;
+  members: boolean;
   userName: string;
   drawerLeft: boolean;
   user_pop: boolean;
@@ -414,8 +480,10 @@ export default defineComponent({
     return {
       user_pop: false,
       userName: 'David',
+      members: false,
       channelsExpanded: true,
       invitesExpanded: true,
+      memberEmail: '',
       newMessage: '',
       drawerLeft: false,
       messages: [

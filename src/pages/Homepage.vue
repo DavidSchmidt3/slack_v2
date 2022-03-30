@@ -5,6 +5,37 @@
       <h4 class="date-title">Today's date:</h4>
       <h4 class="date-title">{{ date }}</h4>
     </q-page-section>
+    <q-page-section>
+      <q-btn
+        @click="channel = true"
+        class="q-my-md"
+        size="lg"
+        text-color="white"
+        color="primary"
+        label="Add channel"
+      />
+    </q-page-section>
+
+    <q-dialog v-model="channel">
+      <q-card class="q-pa-md">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Add channel</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section class="column">
+          <q-input v-model="channelName" label="Channel name" />
+          <q-btn
+            @click="channel = false"
+            class="q-my-md"
+            text-color="white"
+            color="primary"
+            label="Add channel"
+          />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 
     <q-page-section class="col-12 text-center center channels_section">
       <div class="separator"></div>
@@ -263,6 +294,7 @@ export default {
     return {
       date: new Date().toLocaleString('sk-SK', { dateStyle: 'short' }),
       email: '',
+      channel: false,
       password: '',
     };
   },
