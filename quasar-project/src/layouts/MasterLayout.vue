@@ -122,22 +122,22 @@
 </style>
 
 <script>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 export default {
-  setup() {
+  setup () {
     return {
       icon: ref(false),
       bar: ref(false),
       bar2: ref(false),
       toolbar: ref(false),
-      userStatus: ref('online'),
-    };
+      userStatus: ref('online')
+    }
   },
   methods: {
-    statusColor(e) {
-      console.log(e);
-    },
-  },
-};
+    statusColor (e) {
+      console.log(e)
+    }
+  }
+}
 </script>

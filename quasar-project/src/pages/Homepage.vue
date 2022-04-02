@@ -289,7 +289,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 interface State {
   date: string;
@@ -301,7 +301,7 @@ interface State {
 }
 
 export default defineComponent({
-  name: 'Homepage',
+  name: 'Home-page',
   data: (): State => {
     return {
       date: new Date().toLocaleString('sk-SK'),
@@ -309,18 +309,18 @@ export default defineComponent({
       channel: false,
       channelName: '',
       channelPrivate: false,
-      password: '',
-    };
+      password: ''
+    }
   },
   methods: {
-    countTime() {
-      this.date = new Date().toLocaleString('sk-SK');
-    },
+    countTime () {
+      this.date = new Date().toLocaleString('sk-SK')
+    }
   },
   mounted: function () {
     window.setInterval(() => {
-      this.countTime();
-    }, 1000);
-  },
-});
+      this.countTime()
+    }, 1000)
+  }
+})
 </script>

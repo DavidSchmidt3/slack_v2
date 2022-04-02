@@ -460,7 +460,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 interface State {
   newMessage: string;
@@ -489,56 +489,56 @@ export default defineComponent({
       messages: [
         {
           text: 'Hey How are you ?',
-          from: 'Alice',
+          from: 'Alice'
         },
         {
           text: 'I am good,  you ?',
-          from: 'Bob',
+          from: 'Bob'
         },
         {
           text: 'I am fine, and what about you @David?',
-          from: 'Alice',
-        },
-      ],
-    };
+          from: 'Alice'
+        }
+      ]
+    }
   },
 
   methods: {
-    pop_up() {
-      this.user_pop = true;
+    pop_up () {
+      this.user_pop = true
     },
 
-    toggleChannels() {
-      this.channelsExpanded = !this.channelsExpanded;
+    toggleChannels () {
+      this.channelsExpanded = !this.channelsExpanded
     },
-    toggleInvites() {
-      this.invitesExpanded = !this.invitesExpanded;
+    toggleInvites () {
+      this.invitesExpanded = !this.invitesExpanded
     },
-    sendMessage() {
+    sendMessage () {
       if (this.newMessage) {
         this.messages.push({
           text: this.newMessage,
-          from: 'Me',
-        });
-        this.newMessage = '';
+          from: 'Me'
+        })
+        this.newMessage = ''
       }
     },
-    handleDrawer() {
-      console.log(this.drawerLeft);
-      this.drawerLeft = !this.drawerLeft;
-    },
+    handleDrawer () {
+      console.log(this.drawerLeft)
+      this.drawerLeft = !this.drawerLeft
+    }
   },
   computed: {
-    channelsIconRotation() {
+    channelsIconRotation () {
       return this.channelsExpanded
         ? 'transform: rotate(180deg);'
-        : 'transform: rotate(0deg);';
+        : 'transform: rotate(0deg);'
     },
-    invitesIconRotation() {
+    invitesIconRotation () {
       return this.invitesExpanded
         ? 'transform: rotate(180deg);'
-        : 'transform: rotate(0deg);';
-    },
-  },
-});
+        : 'transform: rotate(0deg);'
+    }
+  }
+})
 </script>

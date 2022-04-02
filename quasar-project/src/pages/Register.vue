@@ -180,9 +180,9 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core';
-import { minLength, required, email, helpers } from '@vuelidate/validators';
-import { defineComponent } from 'vue';
+import useVuelidate from '@vuelidate/core'
+import { minLength, required, email, helpers } from '@vuelidate/validators'
+import { defineComponent } from 'vue'
 
 interface State {
   name: string;
@@ -194,7 +194,7 @@ interface State {
 }
 
 export default defineComponent({
-  name: 'Register',
+  name: 'Register-page',
   setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
@@ -203,61 +203,61 @@ export default defineComponent({
       email: '',
       nickName: '',
       password: '',
-      passwordAgain: '',
-    };
+      passwordAgain: ''
+    }
   },
-  validations() {
+  validations () {
     return {
       name: {
         required: helpers.withMessage('Name is required', required),
         minLength: helpers.withMessage(
           'Name must be at least 3 characters long',
           minLength(3)
-        ),
+        )
       },
       surname: {
         required: helpers.withMessage('Surname is required', required),
         minLength: helpers.withMessage(
           'Surname must be at least 3 characters long',
           minLength(3)
-        ),
+        )
       },
       email: {
         required: helpers.withMessage('Email is required', required),
-        email: helpers.withMessage('Email is not valid', email),
+        email: helpers.withMessage('Email is not valid', email)
       },
       nickName: {
         required: helpers.withMessage('Nickname is required', required),
         minLength: helpers.withMessage(
           'Nickname must be at least 3 characters long',
           minLength(3)
-        ),
+        )
       },
       password: {
         required: helpers.withMessage('Password is required', required),
         minLength: helpers.withMessage(
           'Password must be at least 8 characters long',
           minLength(8)
-        ),
+        )
       },
       passwordAgain: {
         required: helpers.withMessage('Password again is required', required),
         minLength: helpers.withMessage(
           'Password must be at least 8 characters long',
           minLength(8)
-        ),
-      },
-    };
+        )
+      }
+    }
   },
   methods: {
-    async onSubmit() {
-      const isFormCorrect = await this.v$.$validate();
+    async onSubmit () {
+      const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        await this.$router.push('/login');
+        await this.$router.push('/login')
       }
-    },
-  },
-});
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

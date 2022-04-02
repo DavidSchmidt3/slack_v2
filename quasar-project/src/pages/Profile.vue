@@ -477,7 +477,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 interface State {
   mentionedNotifications: boolean;
@@ -489,10 +489,10 @@ export default defineComponent({
   data: (): State => {
     return {
       mentionedNotifications: false,
-      users: false,
-    };
-  },
-});
+      users: false
+    }
+  }
+})
 </script>
 
 <style>

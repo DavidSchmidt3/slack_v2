@@ -78,9 +78,9 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core';
-import { defineComponent } from 'vue';
-import { minLength, required, email, helpers } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core'
+import { defineComponent } from 'vue'
+import { minLength, required, email, helpers } from '@vuelidate/validators'
 
 interface State {
   email: string;
@@ -88,39 +88,38 @@ interface State {
 }
 
 export default defineComponent({
-  name: 'Login',
+  name: 'Login-page',
   setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
       email: '',
-      password: '',
-    };
+      password: ''
+    }
   },
-  validations() {
+  validations () {
     return {
       email: {
         required: helpers.withMessage('Email is required', required),
-        email: helpers.withMessage('Email is not valid', email),
+        email: helpers.withMessage('Email is not valid', email)
       },
       password: {
         required: helpers.withMessage('Password is required', required),
         minLength: helpers.withMessage(
           'Password must be at least 8 characters long',
           minLength(8)
-        ),
-      },
-    };
+        )
+      }
+    }
   },
   methods: {
-    async onSubmit() {
-      console.log('fsfds');
-      const isFormCorrect = await this.v$.$validate();
+    async onSubmit () {
+      const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        await this.$router.push('/homepage');
+        await this.$router.push('/homepage')
       }
-    },
-  },
-});
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
