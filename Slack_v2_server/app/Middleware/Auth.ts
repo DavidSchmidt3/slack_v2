@@ -2,7 +2,6 @@ import { GuardsList } from '@ioc:Adonis/Addons/Auth'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { AuthenticationException } from '@adonisjs/auth/build/standalone'
 import type { WsContextContract } from '@ioc:Ruby184/Socket.IO/WsContext'
-
 /**
  * Auth middleware is meant to restrict un-authenticated access to a given route
  * or a group of routes.
@@ -75,7 +74,6 @@ export default class AuthMiddleware {
     await next()
   }
 
-
   /**
    * Handle ws namespace connection
    */
@@ -93,4 +91,3 @@ export default class AuthMiddleware {
     await next()
   }
 }
-
