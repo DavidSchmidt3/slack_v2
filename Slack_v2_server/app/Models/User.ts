@@ -6,10 +6,7 @@ import {
   BaseModel,
   hasMany,
   HasMany,
-  manyToMany,
-  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import Channel from 'App/Models/Channel'
 import Message from 'App/Models/Message'
 
 
