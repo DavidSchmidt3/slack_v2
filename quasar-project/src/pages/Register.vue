@@ -19,12 +19,14 @@
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
               >
                 <q-input
+                  name="email"
+                  id="email"
+                  v-model.trim="form.email"
+                  type="email"
+                  label="Email"
                   outlined
                   class="custom_input text-center"
                   rounded
-                  type="text"
-                  label="Email"
-                  v-model="email"
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -49,7 +51,7 @@
                   rounded
                   type="text"
                   label="Nickname"
-                  v-model="nickName"
+                  v-model="form.nickName"
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -70,7 +72,7 @@
                   rounded
                   type="text"
                   label="Name"
-                  v-model="name"
+                  v-model="form.user_name"
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -81,12 +83,13 @@
               </div>
               <div class="text-center col-xs-12 col-md-6 q-gutter-x-sm">
                 <q-input
-                  outlined
+                  id="surname"
+                  name="surname"
+                  v-model="form.surname"
                   class="custom_input text-center"
                   rounded
-                  type="text"
                   label="Surname"
-                  v-model="surname"
+                  outlined
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -102,17 +105,21 @@
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
               >
                 <q-input
+                  id="password"
+                  name="password"
+                  v-model="form.password"
+                  :type="showPassword ? 'text' : 'password'"
                   outlined
                   class="custom_input text-center"
                   rounded
-                  type="password"
                   label="Password"
-                  v-model="password"
                 >
                   <template v-slot:append>
-                    <q-avatar>
-                      <img src="icons/lock.svg" />
-                    </q-avatar>
+                    <q-icon
+                      :name="showPassword ? 'visibility' : 'visibility_off'"
+                      class="cursor-pointer"
+                      @click="showPassword = !showPassword"
+                    />
                   </template>
                 </q-input>
               </div>
@@ -121,17 +128,21 @@
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-gutter-y-md"
               >
                 <q-input
+                  id="password_confirmation"
+                  name="password_confirmation"
+                  v-model="form.passwordConfirmation"
+                  label="Confirm Password"
+                  :type="showPassword ? 'text' : 'password'"
                   outlined
                   class="custom_input text-center"
                   rounded
-                  type="password"
-                  label="Password again"
-                  v-model="passwordAgain"
                 >
                   <template v-slot:append>
-                    <q-avatar>
-                      <img src="icons/lock.svg" />
-                    </q-avatar>
+                    <q-icon
+                      :name="showPassword ? 'visibility' : 'visibility_off'"
+                      class="cursor-pointer"
+                      @click="showPassword = !showPassword"
+                    />
                   </template>
                 </q-input>
               </div>
@@ -144,6 +155,7 @@
                 value="Submit"
                 class="register_button"
                 size="lg"
+                :loading="false"
                 label="Register"
                 type="submit"
               />
@@ -171,7 +183,7 @@
             color="primary"
             size="lg"
             label="Login"
-            to="/login"
+            to="login"
           />
         </q-card-actions>
       </q-card>
@@ -180,80 +192,93 @@
 </template>
 
 <script lang="ts">
-import useVuelidate from '@vuelidate/core'
-import { minLength, required, email, helpers } from '@vuelidate/validators'
 import { defineComponent } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
+import { minLength, required, email, helpers } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
 
 interface State {
-  name: string;
-  surname: string;
-  email: string;
-  nickName: string;
-  password: string;
-  passwordAgain: string;
+  form: {
+    email: string
+    password: string
+    passwordConfirmation: string
+    user_name: string
+    surname: string
+    nickName: string
+  }
+  showPassword: boolean;
 }
 
 export default defineComponent({
-  name: 'Register-page',
+  name: 'RegisterPage',
   setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
-      name: '',
-      surname: '',
-      email: '',
-      nickName: '',
-      password: '',
-      passwordAgain: ''
+      form: { email: '', password: '', passwordConfirmation: '', user_name: '', surname: '', nickName: '' },
+      showPassword: false
+    }
+  },
+  computed: {
+    redirectTo (): RouteLocationRaw {
+      return { name: 'login' }
+    },
+    loading (): boolean {
+      return this.$store.state.auth.status === 'pending'
     }
   },
   validations () {
+    console.log(this.form)
     return {
-      name: {
-        required: helpers.withMessage('Name is required', required),
-        minLength: helpers.withMessage(
-          'Name must be at least 3 characters long',
-          minLength(3)
-        )
-      },
-      surname: {
-        required: helpers.withMessage('Surname is required', required),
-        minLength: helpers.withMessage(
-          'Surname must be at least 3 characters long',
-          minLength(3)
-        )
-      },
-      email: {
-        required: helpers.withMessage('Email is required', required),
-        email: helpers.withMessage('Email is not valid', email)
-      },
-      nickName: {
-        required: helpers.withMessage('Nickname is required', required),
-        minLength: helpers.withMessage(
-          'Nickname must be at least 3 characters long',
-          minLength(3)
-        )
-      },
-      password: {
-        required: helpers.withMessage('Password is required', required),
-        minLength: helpers.withMessage(
-          'Password must be at least 8 characters long',
-          minLength(8)
-        )
-      },
-      passwordAgain: {
-        required: helpers.withMessage('Password again is required', required),
-        minLength: helpers.withMessage(
-          'Password must be at least 8 characters long',
-          minLength(8)
-        )
+      form: {
+        user_name: {
+          required: helpers.withMessage('Name is required', required),
+          minLength: helpers.withMessage(
+            'Name must be at least 3 characters long',
+            minLength(3)
+          )
+        },
+        surname: {
+          required: helpers.withMessage('Surname is required', required),
+          minLength: helpers.withMessage(
+            'Surname must be at least 3 characters long',
+            minLength(3)
+          )
+        },
+        email: {
+          required: helpers.withMessage('Email is required', required),
+          email: helpers.withMessage('Email is not valid', email)
+        },
+        nickName: {
+          required: helpers.withMessage('Nickname is required', required),
+          minLength: helpers.withMessage(
+            'Nickname must be at least 3 characters long',
+            minLength(3)
+          )
+        },
+        password: {
+          required: helpers.withMessage('Password is required', required),
+          minLength: helpers.withMessage(
+            'Password must be at least 8 characters long',
+            minLength(8)
+          )
+        },
+        passwordConfirmation: {
+          required: helpers.withMessage('Password again is required', required),
+          minLength: helpers.withMessage(
+            'Password must be at least 8 characters long',
+            minLength(8)
+          )
+        }
       }
     }
   },
   methods: {
     async onSubmit () {
+      console.log(this.form)
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        await this.$router.push('/login')
+        console.log('Form is correct')
+        this.$store.dispatch('auth/register', this.form).then(() => this.$router.push(this.redirectTo))
       }
     }
   }
