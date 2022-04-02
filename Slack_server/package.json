@@ -1,5 +1,5 @@
 {
-  "name": "Slack_v2_server",
+  "name": "Slack_server",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -23,14 +23,8 @@
     "youch-terminal": "^2.1.3"
   },
   "dependencies": {
-    "@adonisjs/auth": "^8.0.12",
     "@adonisjs/core": "^5.6.2",
-    "@adonisjs/lucid": "^17.1.1",
     "@adonisjs/repl": "^3.1.9",
-    "@ruby184/adonis-socket.io": "^0.1.0",
-    "@vscode/sqlite3": "^5.0.8",
-    "luxon": "^2.3.1",
-    "phc-argon2": "^1.1.3",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21"
