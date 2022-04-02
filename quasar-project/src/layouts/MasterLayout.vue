@@ -121,21 +121,29 @@
 }
 </style>
 
-<script>
-import { ref } from 'vue'
+<script lang="ts">
+import { ref, Ref } from "vue"
+
+interface State {
+  icon: Ref<boolean>,
+  bar: Ref<boolean>,
+  bar2: Ref<boolean>,
+  toolbar: Ref<boolean>,
+  userStatus: Ref<string>,
+}
 
 export default {
-  setup () {
+  setup (): State {
     return {
       icon: ref(false),
       bar: ref(false),
       bar2: ref(false),
       toolbar: ref(false),
-      userStatus: ref('online')
+      userStatus: ref("online")
     }
   },
   methods: {
-    statusColor (e) {
+    statusColor (e: any) {
       console.log(e)
     }
   }
