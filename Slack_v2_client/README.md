@@ -1,37 +1,33 @@
-# Quasar App (slack_v2)
+# VPWA app (slack-v2-client)
 
-VPWA Projekt
+A VPWA project
 
 ## Install the dependencies
-
 ```bash
+yarn
+# or
 npm install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
-
 ```bash
 quasar dev
 ```
 
-### Lint the files
 
+### Lint the files
 ```bash
+yarn lint
+# or
 npm run lint
 ```
 
-### Format the files
 
-```bash
-npm run format
-```
 
 ### Build the app for production
-
 ```bash
 quasar build
 ```
 
 ### Customize the configuration
-
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).
