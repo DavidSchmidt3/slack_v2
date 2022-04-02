@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import {
   column,
+  beforeSave,
   BaseModel,
   hasMany,
   HasMany,
