@@ -20,6 +20,15 @@ export default class User extends BaseModel {
   @column()
   public email: string
 
+  @column()
+  public nickname: string
+
+  @column()
+  public name: string
+
+  @column()
+  public surname: string
+
   @column({ serializeAs: null })
   public password: string
 
@@ -44,6 +53,14 @@ export default class User extends BaseModel {
     pivotTimestamps: true,
   })
   public channels: ManyToMany<typeof Channel>
+
+  @manyToMany(() => Channel, {
+    pivotTable: 'kicks_users',
+    pivotForeignKey: 'user_id',
+    pivotRelatedForeignKey: 'channel_id',
+    pivotTimestamps: true,
+  })
+  public kicks: ManyToMany<typeof Channel>
 
   @beforeSave()
   public static async hashPassword (user: User) {

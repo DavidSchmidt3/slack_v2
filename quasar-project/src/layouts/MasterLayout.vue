@@ -122,7 +122,7 @@
 </style>
 
 <script lang="ts">
-import { ref, Ref } from "vue"
+import { ref, Ref } from 'vue'
 
 interface State {
   icon: Ref<boolean>,
@@ -139,11 +139,11 @@ export default {
       bar: ref(false),
       bar2: ref(false),
       toolbar: ref(false),
-      userStatus: ref("online")
+      userStatus: ref('online')
     }
   },
   methods: {
-    statusColor (e: any) {
+    statusColor (e: Event) {
       console.log(e)
     }
   }

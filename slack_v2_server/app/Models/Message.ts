@@ -14,13 +14,13 @@ export default class Message extends BaseModel {
   public channelId: number
 
   @column()
-  public content: string
+  public message: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  // @column.dateTime({ autoCreate: true, autoUpdate: true })
+  // public updatedAt: DateTime
 
   @belongsTo(() => User, {
     foreignKey: 'createdBy',
