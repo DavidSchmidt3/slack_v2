@@ -132,12 +132,16 @@ export default defineComponent({
     async onSubmit () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        this.$store.dispatch('auth/login', this.credentials).then(() => this.$router.push(this.redirectTo)).catch((err) => this.$q.nofity)
+        this.$store.dispatch('auth/login', this.credentials).then(() => this.$router.push(this.redirectTo)).catch(() => this.$q.notify({
+          color: 'negative',
+          textColor: 'white',
+          message: 'Invalid credentials'
+        }))
       } else {
         this.$q.notify({
           color: 'negative',
           textColor: 'white',
-          message: 'Please fill in all the fields'
+          message: 'Please fill the form correctly'
         })
       }
     }
