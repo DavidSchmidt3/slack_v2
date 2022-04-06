@@ -227,7 +227,6 @@ export default defineComponent({
     }
   },
   validations () {
-    console.log(this.form)
     return {
       form: {
         user_name: {
@@ -279,6 +278,7 @@ export default defineComponent({
       if (isFormCorrect) {
         console.log('Form is correct')
         this.$store.dispatch('auth/register', this.form).then(() => this.$router.push(this.redirectTo))
+        console.log(this.redirectTo)
       }
     }
   }

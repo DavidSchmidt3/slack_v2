@@ -23,6 +23,7 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
       commit('AUTH_SUCCESS', null)
       return user
     } catch (err) {
+      console.log("SDA")
       commit('AUTH_ERROR', err)
       throw err
     }
@@ -36,6 +37,7 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
       authManager.setToken(apiToken.token)
       return apiToken
     } catch (err) {
+      console.log("SDA")
       commit('AUTH_ERROR', err)
       throw err
     }

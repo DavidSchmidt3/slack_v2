@@ -13,13 +13,13 @@
           >
             Login
           </h5>
-          <q-form class="q-gutter-md" @submit.stop="onSubmit">
+          <q-form class="q-gutter-md">
             <q-input
               rounded
               outlined
               class="custom_input"
               label="Email"
-              v-model="email"
+              v-model="credentials.email"
             >
               <template v-slot:append>
                 <q-avatar>
@@ -33,7 +33,7 @@
               rounded
               type="password"
               label="Password"
-              v-model="password"
+              v-model="credentials.password"
             >
               <template v-slot:append>
                 <q-avatar>
@@ -51,6 +51,7 @@
                 class="login_button"
                 size="lg"
                 label="Login"
+                @click.prevent="onSubmit"
               />
             </q-card-actions>
             <q-card-section style="padding: 0; margin: 0">
@@ -81,10 +82,13 @@
 import useVuelidate from '@vuelidate/core'
 import { defineComponent } from 'vue'
 import { minLength, required, email, helpers } from '@vuelidate/validators'
+import { RouteLocationRaw } from 'vue-router'
 
 interface State {
-  email: string;
-  password: string;
+  credentials: {
+    email: string;
+    password: string;
+  };
 }
 
 export default defineComponent({
@@ -92,30 +96,49 @@ export default defineComponent({
   setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
-      email: '',
-      password: ''
+      credentials: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  computed: {
+    redirectTo (): RouteLocationRaw {
+      return { name: 'home' }
+    },
+    loading (): boolean {
+      return this.$store.state.auth.status === 'pending'
     }
   },
   validations () {
     return {
-      email: {
-        required: helpers.withMessage('Email is required', required),
-        email: helpers.withMessage('Email is not valid', email)
-      },
-      password: {
-        required: helpers.withMessage('Password is required', required),
-        minLength: helpers.withMessage(
-          'Password must be at least 8 characters long',
-          minLength(8)
-        )
+      credentials: {
+        email: {
+          required: helpers.withMessage('Email is required', required),
+          email: helpers.withMessage('Email is not valid', email)
+        },
+        password: {
+          required: helpers.withMessage('Password is required', required),
+          minLength: helpers.withMessage(
+            'Password must be at least 8 characters long',
+            minLength(8)
+          )
+        }
       }
+
     }
   },
   methods: {
     async onSubmit () {
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        await this.$router.push('/homepage')
+        this.$store.dispatch('auth/login', this.credentials).then(() => this.$router.push(this.redirectTo)).catch((err) => this.$q.nofity)
+      } else {
+        this.$q.notify({
+          color: 'negative',
+          textColor: 'white',
+          message: 'Please fill in all the fields'
+        })
       }
     }
   }

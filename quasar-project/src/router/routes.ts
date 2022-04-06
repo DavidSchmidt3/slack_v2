@@ -4,13 +4,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/LoginLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/Login.vue') }]
+    children: [{ path: '', name: 'login', component: () => import('src/pages/Login.vue') }]
   },
 
   {
     path: '/login',
     component: () => import('layouts/LoginLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/Login.vue') }]
+    children: [{ path: '', name: 'login', component: () => import('src/pages/Login.vue') }]
   },
 
   {
@@ -21,9 +21,11 @@ const routes: RouteRecordRaw[] = [
 
   {
     path: '/homepage',
+    meta: { requiresAuth: true },
     component: () => import('layouts/MasterLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/Homepage.vue') }]
+    children: [{ path: '', name: 'home', component: () => import('src/pages/Homepage.vue') }]
   },
+
   {
     path: '/channel',
     component: () => import('layouts/MasterLayout.vue'),
