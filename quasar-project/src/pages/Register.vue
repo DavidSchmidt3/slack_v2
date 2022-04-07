@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="bg-grey-4 q-pa-md window-width row justify-center items-center"
+    class="my_color q-pa-md window-width row justify-center items-center"
   >
     <div class="">
       <q-card
@@ -25,7 +25,7 @@
                   type="email"
                   label="Email"
                   outlined
-                  class="custom_input text-center"
+                  class="custom_input text-center q-ma-sm"
                   rounded
                 >
                   <template v-slot:append>
@@ -47,7 +47,7 @@
               <div class="text-center col-xs-12 col-md-6 q-gutter-x-sm">
                 <q-input
                   outlined
-                  class="custom_input text-center"
+                  class="custom_input text-center q-ma-sm"
                   rounded
                   type="text"
                   label="Nickname"
@@ -62,13 +62,13 @@
               </div>
             </div>
 
-            <div class="row justify-between">
+            <div class="row justify-between q-mt-none">
               <div
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
               >
                 <q-input
                   outlined
-                  class="custom_input text-center"
+                  class="custom_input text-center q-ma-sm"
                   rounded
                   type="text"
                   label="Name"
@@ -86,7 +86,7 @@
                   id="surname"
                   name="surname"
                   v-model="form.surname"
-                  class="custom_input text-center"
+                  class="custom_input text-center q-ma-sm"
                   rounded
                   label="Surname"
                   outlined
@@ -100,7 +100,7 @@
               </div>
             </div>
 
-            <div class="row justify-between">
+            <div class="row justify-between q-mt-none">
               <div
                 class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
               >
@@ -110,14 +110,14 @@
                   v-model="form.password"
                   :type="showPassword ? 'text' : 'password'"
                   outlined
-                  class="custom_input text-center"
+                  class="custom_input text-center q-ma-sm"
                   rounded
                   label="Password"
                 >
                   <template v-slot:append>
                     <q-icon
                       :name="showPassword ? 'visibility' : 'visibility_off'"
-                      class="cursor-pointer"
+                      class="cursor-pointer "
                       @click="showPassword = !showPassword"
                     />
                   </template>
@@ -125,7 +125,7 @@
               </div>
 
               <div
-                class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-gutter-y-md"
+                class="text-center col-xs-12 col-md-6 q-gutter-x-sm q-pb-xs-md q-pb-md-none"
               >
                 <q-input
                   id="password_confirmation"
@@ -134,7 +134,7 @@
                   label="Confirm Password"
                   :type="showPassword ? 'text' : 'password'"
                   outlined
-                  class="custom_input text-center"
+                  class="custom_input text-center q-ma-sm"
                   rounded
                 >
                   <template v-slot:append>
@@ -307,5 +307,9 @@ export default defineComponent({
 .register_button {
   width: 180px;
   margin: 0 auto;
+}
+
+.my_color{
+  background-image: url(src/assets/blue.png);
 }
 </style>

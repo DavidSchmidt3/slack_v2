@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-grey-4 row justify-center items-center">
+  <q-page class="bg-grey-3 row justify-center items-center">
     <q-page-section class="col-12 text-center center">
       <h3 style="margin: 2rem">Welcome Dávid Schmidt</h3>
       <h4 class="date-title">Today's date:</h4>

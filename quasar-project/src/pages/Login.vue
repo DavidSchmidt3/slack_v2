@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="bg-grey-4 window-height window-width row justify-center items-center"
+    class="my_color window-height window-width row justify-center items-center"
   >
     <div class="">
       <q-card
@@ -168,5 +168,9 @@ export default defineComponent({
   @media (min-width: $breakpoint-xs) {
     width: 300px;
   }
+}
+
+.my_color{
+  background-image: url(src/assets/blue.png);
 }
 </style>
