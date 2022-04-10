@@ -40,6 +40,15 @@ export default class ChannelSeeder extends BaseSeeder {
         kicked_at: null
       }
     }
+
+    const getKick = () => {
+      const date = new Date().toISOString();
+      return {
+        kicked_at: `${date.slice(0, 10)} ${date.slice(11, 19)}`,
+        kicker_id: 1,
+        channel_id: 1
+      }
+    }
     const users = await User.query();
     users.forEach(user => {
       user.related('channels').attach({
@@ -47,6 +56,10 @@ export default class ChannelSeeder extends BaseSeeder {
         [2]: getAttach(),
         [3]: getAttach()
       });
+    });
+    users[1].related('kicks').attach({
+      [1]: getKick(),
+      [2]: getKick(),
     });
   }
 }

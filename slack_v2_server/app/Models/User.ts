@@ -57,7 +57,6 @@ export default class User extends BaseModel {
     pivotTable: 'kicks_users',
     pivotForeignKey: 'user_id',
     pivotRelatedForeignKey: 'channel_id',
-    pivotTimestamps: true,
   })
   public kicks: ManyToMany<typeof Channel>
 
