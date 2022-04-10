@@ -50,7 +50,6 @@ export default class User extends BaseModel {
     pivotTable: 'channel_users',
     pivotForeignKey: 'user_id',
     pivotRelatedForeignKey: 'channel_id',
-    pivotTimestamps: true,
   })
   public channels: ManyToMany<typeof Channel>
 

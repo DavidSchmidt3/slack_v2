@@ -44,6 +44,9 @@ const databaseConfig: DatabaseConfig = {
           conn.run('PRAGMA foreign_keys=true', cb)
         }
       },
+      seeders: {
+        paths: ['./database/seeders/MainSeeder']
+      },
       migrations: {
         naturalSort: true,
       },
