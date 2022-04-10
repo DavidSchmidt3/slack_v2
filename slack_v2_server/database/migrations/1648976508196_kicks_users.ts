@@ -7,18 +7,11 @@ export default class KicksUsers extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-      .integer('user_id')
-      .unsigned()
-      .notNullable()
-      .references('id')
-      .inTable('users')
-        .onDelete('CASCADE')
-      table
-        .integer('channel_id')
+        .integer('user_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('channels')
+        .inTable('users')
         .onDelete('CASCADE')
       table
         .integer('kicker_id')
@@ -26,6 +19,13 @@ export default class KicksUsers extends BaseSchema {
         .notNullable()
         .references('id')
         .inTable('users')
+        .onDelete('CASCADE')
+      table
+        .integer('channel_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('channels')
         .onDelete('CASCADE')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -7,18 +7,18 @@ export default class Messages extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-    .integer('created_by')
-    .unsigned()
-    .references('id')
-    .inTable('users')
-    .onDelete('CASCADE')
-table
-    .integer('channel_id')
-    .unsigned()
-    .references('id')
-    .inTable('channels')
-    .onDelete('CASCADE')
-table.text('content')
+        .integer('created_by')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+      table
+        .integer('channel_id')
+        .unsigned()
+        .references('id')
+        .inTable('channels')
+        .onDelete('CASCADE')
+      table.text('message')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
