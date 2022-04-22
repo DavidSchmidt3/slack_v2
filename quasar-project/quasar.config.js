@@ -58,7 +58,7 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: {
-        API_URL: process.env.API_URL || (ctx.dev ? 'http://localhost:3000' : 'https://api.example.com')
+        API_URL: process.env.API_URL || (ctx.dev ? 'http://localhost:3333' : 'https://api.example.com')
       }
 
       // transpile: false,

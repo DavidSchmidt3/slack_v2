@@ -51,7 +51,7 @@
                   rounded
                   type="text"
                   label="Nickname"
-                  v-model="form.nickName"
+                  v-model="form.nickname"
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -72,7 +72,7 @@
                   rounded
                   type="text"
                   label="Name"
-                  v-model="form.user_name"
+                  v-model="form.name"
                 >
                   <template v-slot:append>
                     <q-avatar>
@@ -202,9 +202,9 @@ interface State {
     email: string
     password: string
     passwordConfirmation: string
-    user_name: string
+    name: string
     surname: string
-    nickName: string
+    nickname: string
   }
   showPassword: boolean;
 }
@@ -214,7 +214,7 @@ export default defineComponent({
   setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
-      form: { email: '', password: '', passwordConfirmation: '', user_name: '', surname: '', nickName: '' },
+      form: { email: '', password: '', passwordConfirmation: '', name: '', surname: '', nickname: '' },
       showPassword: false
     }
   },
@@ -229,7 +229,7 @@ export default defineComponent({
   validations () {
     return {
       form: {
-        user_name: {
+        name: {
           required: helpers.withMessage('Name is required', required),
           minLength: helpers.withMessage(
             'Name must be at least 3 characters long',
@@ -247,7 +247,7 @@ export default defineComponent({
           required: helpers.withMessage('Email is required', required),
           email: helpers.withMessage('Email is not valid', email)
         },
-        nickName: {
+        nickname: {
           required: helpers.withMessage('Nickname is required', required),
           minLength: helpers.withMessage(
             'Nickname must be at least 3 characters long',
@@ -278,7 +278,6 @@ export default defineComponent({
       if (isFormCorrect) {
         console.log('Form is correct')
         this.$store.dispatch('auth/register', this.form).then(() => this.$router.push(this.redirectTo))
-        console.log(this.redirectTo)
       }
     }
   }
