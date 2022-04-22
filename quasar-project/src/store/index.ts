@@ -1,3 +1,4 @@
+import { ChannelsStateInterface } from './channels/state'
 import { store } from 'quasar/wrappers'
 import auth from './module-auth'
 import type { AuthStateInterface } from './module-auth/state'
@@ -7,6 +8,7 @@ import {
   Store as VuexStore,
   useStore as vuexUseStore
 } from 'vuex'
+import channels from './channels'
 
 // import example from './module-example'
 // import { ExampleStateInterface } from './module-example/state';
@@ -22,6 +24,7 @@ import {
 
 export interface StateInterface {
   auth: AuthStateInterface
+  channels: ChannelsStateInterface
 }
 
 // provide typings for `this.$store`
@@ -37,7 +40,8 @@ export const storeKey: InjectionKey<VuexStore<StateInterface>> = Symbol('vuex-ke
 export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     modules: {
-      auth
+      auth,
+      channels
     },
 
     // enable strict mode (adds overhead!)

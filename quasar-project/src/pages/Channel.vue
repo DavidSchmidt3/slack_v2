@@ -218,27 +218,10 @@
               class="q-py-xs q-px-md col-4 send_section"
               style="padding-top: 0"
             >
-              <q-form @submit="sendMessage">
-                <q-input
-                  rounded
-                  outlined
-                  v-model="newMessage"
-                  placeholder="Enter your message"
-                  dense
-                  class="full-width"
-                >
-                  <template v-slot:after>
-                    <q-btn
-                      type="submit"
-                      round
-                      dense
-                      flat
-                      icon="send"
-                      @click="sendMessage"
-                    />
-                  </template>
-                </q-input>
-              </q-form>
+              <q-toolbar class="bg-grey-3 text-black row">
+                 <q-input v-model="message" :disable="loading" @keydown.enter.prevent="send" rounded outlined dense class="WAL__field col-grow q-mr-sm" bg-color="white" placeholder="Type a message" />
+          <q-btn :disable="loading" @click="send" round flat icon="send" />
+             </q-toolbar>
             </q-card-section>
           </div>
         </q-card>
@@ -461,6 +444,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 interface State {
   newMessage: string;
@@ -469,8 +453,10 @@ interface State {
   memberEmail: string;
   members: boolean;
   userName: string;
+  message: string;
   drawerLeft: boolean;
   user_pop: boolean;
+  loading: boolean;
   messages: { text: string; from: string }[];
 }
 
@@ -484,8 +470,10 @@ export default defineComponent({
       channelsExpanded: true,
       invitesExpanded: true,
       memberEmail: '',
+      message: '',
       newMessage: '',
       drawerLeft: false,
+      loading: false,
       messages: [
         {
           text: 'Hey How are you ?',
@@ -526,9 +514,24 @@ export default defineComponent({
     handleDrawer () {
       console.log(this.drawerLeft)
       this.drawerLeft = !this.drawerLeft
-    }
+    },
+    async send () {
+      this.loading = true
+      await this.addMessage({ channel: this.activeChannel, message: this.message })
+      this.message = ''
+      this.loading = false
+    },
+    ...mapMutations('channels', {
+      setActiveChannel: 'SET_ACTIVE'
+    }),
+    ...mapActions('auth', ['logout']),
+    ...mapActions('channels', ['addMessage'])
   },
   computed: {
+    ...mapGetters('channels', {
+      channels: 'joinedChannels',
+      lastMessageOf: 'lastMessageOf'
+    }),
     channelsIconRotation () {
       return this.channelsExpanded
         ? 'transform: rotate(180deg);'
@@ -538,6 +541,9 @@ export default defineComponent({
       return this.invitesExpanded
         ? 'transform: rotate(180deg);'
         : 'transform: rotate(0deg);'
+    },
+    activeChannel () {
+      return this.$store.state.channels.active
     }
   }
 })
