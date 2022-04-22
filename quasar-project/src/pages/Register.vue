@@ -1,16 +1,9 @@
 <template>
-  <q-page
-    class="my_color q-pa-md window-width row justify-center items-center"
-  >
+  <q-page class="my_color q-pa-md window-width row justify-center items-center">
     <div class="">
-      <q-card
-        bordered
-        class="q-px-xs-none q-px-sm-xl q-pb-lg shadow-2 register_card"
-      >
+      <q-card bordered class="q-px-xs-none q-px-sm-xl q-pb-lg shadow-2 register_card">
         <q-card-section class="q-pb-lg">
-          <h5
-            class="text-center register_title text-black-6 text-weight-bold text-h4"
-          >
+          <h5 class="text-center register_title text-black-6 text-weight-bold text-h4">
             Register
           </h5>
           <q-form class="q-gutter-y-md" @submit.stop="onSubmit">
@@ -117,7 +110,7 @@
                   <template v-slot:append>
                     <q-icon
                       :name="showPassword ? 'visibility' : 'visibility_off'"
-                      class="cursor-pointer "
+                      class="cursor-pointer"
                       @click="showPassword = !showPassword"
                     />
                   </template>
@@ -199,13 +192,13 @@ import useVuelidate from '@vuelidate/core'
 
 interface State {
   form: {
-    email: string
-    password: string
-    passwordConfirmation: string
-    name: string
-    surname: string
-    nickname: string
-  }
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+    name: string;
+    surname: string;
+    nickname: string;
+  };
   showPassword: boolean;
 }
 
@@ -214,7 +207,14 @@ export default defineComponent({
   setup: () => ({ v$: useVuelidate({ $autoDirty: true }) }),
   data: (): State => {
     return {
-      form: { email: '', password: '', passwordConfirmation: '', name: '', surname: '', nickname: '' },
+      form: {
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+        name: '',
+        surname: '',
+        nickname: ''
+      },
       showPassword: false
     }
   },
@@ -273,11 +273,18 @@ export default defineComponent({
   },
   methods: {
     async onSubmit () {
-      console.log(this.form)
       const isFormCorrect = await this.v$.$validate()
       if (isFormCorrect) {
-        console.log('Form is correct')
-        this.$store.dispatch('auth/register', this.form).then(() => this.$router.push(this.redirectTo))
+        this.$store
+          .dispatch('auth/register', this.form)
+          .then(() => this.$router.push(this.redirectTo))
+          .catch(() => {
+            this.$q.notify({
+              color: 'negative',
+              textColor: 'white',
+              message: this.$store.state.auth.errorMessage
+            })
+          })
       }
     }
   }
@@ -308,7 +315,7 @@ export default defineComponent({
   margin: 0 auto;
 }
 
-.my_color{
+.my_color {
   background-image: url(src/assets/blue.png);
 }
 </style>
