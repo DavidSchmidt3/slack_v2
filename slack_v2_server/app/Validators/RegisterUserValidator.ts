@@ -42,7 +42,6 @@ export default class RegisterUserValidator {
       rules.maxLength(254),
     ]),
     nickname: schema.string({}, [
-      rules.alpha(),
       rules.maxLength(30),
       rules.unique({ table: 'users', column: 'nickname' })
     ]),
