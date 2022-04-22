@@ -1,107 +1,109 @@
 <template>
-  <div class="WAL position-relative bg-grey-4" :style="{ height: $q.screen.height + 'px' }">
-    <q-layout view="lHh Lpr lFf" class="WAL__layout shadow-3" container>
+  <q-layout view="hHh lpR fFf">
+    <q-page-container>
       <q-header elevated>
-        <q-toolbar class="bg-grey-3 text-black">
-          <q-btn
-            round
-            flat
-            icon="keyboard_arrow_left"
-            class="WAL__drawer-open q-mr-sm"
-            @click="leftDrawerOpen = !leftDrawerOpen"
-          />
+        <q-toolbar>
+          <q-toolbar-title class="q-ml-xs-xs q-ml-md-md">
+            <q-btn flat to="/homepage">
+              <q-toolbar-title>Slack_v2</q-toolbar-title></q-btn
+            >
+          </q-toolbar-title>
+          <div v-if="userStatus === 'online'">
+            <q-btn flat rounded class="status" @click="icon = true">
+              <span class="green-dot"></span>
+            </q-btn>
+          </div>
+          <div v-else-if="userStatus === 'dnd'">
+            <q-btn flat rounded class="status" @click="icon = true">
+              <span class="red-dot"></span>
+            </q-btn>
+          </div>
+          <div v-else>
+            <q-btn flat rounded class="status" @click="icon = true">
+              <span class="grey-dot"></span>
+            </q-btn>
+          </div>
 
-          <q-btn round flat>
-            <q-avatar color="primary" text-color="white">G</q-avatar>
+          <q-btn class="q-pa-xs" flat to="/profile">
+            <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
+            </q-avatar>
+
+            <div class="text-subtitle1 q-mr-md">David</div>
           </q-btn>
 
-          <span class="q-subtitle-1 q-pl-md">
-            {{ activeChannel }}
-          </span>
+          <q-dialog v-model="icon">
+            <q-card>
+              <q-card-section class="row items-center q-pb-none">
+                <div class="text-h6">Set your status</div>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
+              </q-card-section>
+
+              <q-card-section class="column">
+                <q-radio
+                  keep-color
+                  v-model="userStatus"
+                  :change="statusColor"
+                  val="online"
+                  label="Online"
+                  color="green"
+                />
+                <q-radio
+                  keep-color
+                  v-model="userStatus"
+                  val="dnd"
+                  label="Do not Disturb"
+                  color="red"
+                />
+                <q-radio
+                  keep-color
+                  v-model="userStatus"
+                  val="offline"
+                  label="Offline"
+                  color="grey"
+                />
+              </q-card-section>
+            </q-card>
+          </q-dialog>
+
+          <q-btn
+            class="position-right"
+            color="negative"
+            size="md"
+            icon="logout"
+            v-close-popup
+            to="/login"
+          />
         </q-toolbar>
       </q-header>
-
-      <q-drawer
-        v-model="leftDrawerOpen"
-        show-if-above
-        bordered
-        :breakpoint="690"
-      >
-        <q-toolbar class="bg-grey-3">
-          <q-avatar class="cursor-pointer">
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" />
-          </q-avatar>
-
-          <q-space />
-
-          <q-btn round flat icon="more_vert">
-            <q-menu auto-close :offset="[110, 8]">
-              <q-list style="min-width: 150px">
-                <q-item clickable @click="logout">
-                  <q-item-section>Logout</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-
-          <q-btn
-            round
-            flat
-            icon="close"
-            class="WAL__drawer-close"
-            @click="leftDrawerOpen = !leftDrawerOpen"
-          />
-        </q-toolbar>
-
-        <q-scroll-area style="height: calc(100% - 100px)">
-          <q-list>
-            <q-item
-              v-for="(channel, index) in channels"
-              :key="index"
-              clickable
-              v-ripple
-              @click="setActiveChannel(channel)"
-            >
-              <q-item-section>
-                <q-item-label lines="1">
-                  {{ channel }}
-                </q-item-label>
-                <q-item-label class="conversation__summary" caption>
-                  {{ lastMessageOf(channel)?.content || '' }}
-                </q-item-label>
-              </q-item-section>
-
-              <q-item-section side>
-                <!--q-item-label caption>
-                  {{ channel }}
-                </q-item-label-->
-                <q-icon name="keyboard_arrow_down" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-scroll-area>
-      </q-drawer>
-
-      <q-page-container class="bg-grey-2">
-        <router-view />
-      </q-page-container>
-
-      <q-footer>
-        <q-toolbar class="bg-grey-3 text-black row">
-          <q-input v-model="message" :disable="loading" @keydown.enter.prevent="send" rounded outlined dense class="WAL__field col-grow q-mr-sm" bg-color="white" placeholder="Type a message" />
-          <q-btn :disable="loading" @click="send" round flat icon="send" />
-        </q-toolbar>
-      </q-footer>
-    </q-layout>
-  </div>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, Ref } from 'vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+
+interface State {
+  icon: Ref<boolean>,
+  bar: Ref<boolean>,
+  bar2: Ref<boolean>,
+  toolbar: Ref<boolean>,
+  userStatus: Ref<string>,
+}
 
 export default defineComponent({
   name: 'ChatLayout',
+  setup (): State {
+    return {
+      icon: ref(false),
+      bar: ref(false),
+      bar2: ref(false),
+      toolbar: ref(false),
+      userStatus: ref('online')
+    }
+  },
   data () {
     return {
       leftDrawerOpen: false,
@@ -128,6 +130,9 @@ export default defineComponent({
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.loading = false
     },
+    statusColor (e: Event) {
+      console.log(e)
+    },
     ...mapMutations('channels', {
       setActiveChannel: 'SET_ACTIVE'
     }),
@@ -137,44 +142,42 @@ export default defineComponent({
 })
 </script>
 
-<style lang="sass">
-.WAL
-  width: 100%
-  height: 100%
-  padding-top: 20px
-  padding-bottom: 20px
-  &:before
-    content: ''
-    height: 127px
-    position: fixed
-    top: 0
-    width: 100%
-    background-color: #009688
-  &__layout
-    margin: 0 auto
-    z-index: 4000
-    height: 100%
-    width: 90%
-    max-width: 950px
-    border-radius: 5px
-  &__field.q-field--outlined .q-field__control:before
-    border: none
-  .q-drawer--standard
-    .WAL__drawer-close
-      display: none
-@media (max-width: 850px)
-  .WAL
-    padding: 0
-    &__layout
-      width: 100%
-      border-radius: 0
-@media (min-width: 691px)
-  .WAL
-    &__drawer-open
-      display: none
-.conversation__summary
-  margin-top: 4px
-.conversation__more
-  margin-top: 0!important
-  font-size: 1.4rem
+<style scoped lang="scss">
+.text-subtitle1 {
+  @media (max-width: $breakpoint-xs) {
+    display: none;
+  }
+}
+
+.green-dot {
+  height: 25px;
+  width: 25px;
+
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red-dot {
+  height: 25px;
+  width: 25px;
+
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.grey-dot {
+  height: 25px;
+  width: 25px;
+
+  background-color: rgb(121, 119, 117);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status {
+  margin: 0;
+  padding: 0;
+}
 </style>

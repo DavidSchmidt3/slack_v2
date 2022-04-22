@@ -3,8 +3,7 @@ import { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/LoginLayout.vue'),
-    children: [{ path: '', name: 'login', component: () => import('src/pages/Login.vue') }]
+    redirect: () => ({ name: 'login' })
   },
 
   {
@@ -30,7 +29,7 @@ const routes: RouteRecordRaw[] = [
     path: '/channel',
     meta: { requiresAuth: true },
     component: () => import('layouts/ChatLayout.vue'),
-    children: [{ path: '', component: () => import('src/pages/ChannelPage.vue') }]
+    children: [{ path: '', component: () => import('src/pages/Channel.vue') }]
   },
 
   {

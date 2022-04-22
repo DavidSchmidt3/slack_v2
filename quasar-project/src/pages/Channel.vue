@@ -158,7 +158,7 @@
 
           <div class="flex column" style="height: calc(100% - 4.5rem)">
             <q-card-section class="message_section">
-              <q-scroll-area style="width: 100%; height: 100%">
+              <!-- <q-scroll-area style="width: 100%; height: 100%">
                 <div style="width: 100%">
                   <q-chat-message
                     v-for="(message, index) in messages"
@@ -207,6 +207,17 @@
                     </template>
                   </q-chat-message>
                 </div>
+              </q-scroll-area> -->
+              <q-scroll-area ref="area" style="width: 100%; height: calc(100vh - 150px)">
+                <div style="width: 100%; max-width: 400px; margin: 0 auto;">
+                  <q-chat-message v-for="message in messages"
+                    :key="message.id"
+                    :name="message.author.email"
+                    :text="[message.content]"
+                    :stamp="message.createdAt"
+                    :sent="isMine(message)"
+                  />
+                </div>
               </q-scroll-area>
             </q-card-section>
 
@@ -220,7 +231,7 @@
             >
               <q-toolbar class="bg-grey-3 text-black row">
                  <q-input v-model="message" :disable="loading" @keydown.enter.prevent="send" rounded outlined dense class="WAL__field col-grow q-mr-sm" bg-color="white" placeholder="Type a message" />
-          <q-btn :disable="loading" @click="send" round flat icon="send" />
+              <q-btn :disable="loading" @click="send" round flat icon="send" />
              </q-toolbar>
             </q-card-section>
           </div>
@@ -385,6 +396,111 @@
   </q-page>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { QScrollArea } from 'quasar'
+import { SerializedMessage } from 'src/contracts'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
+
+interface State {
+  newMessage: string;
+  invitesExpanded: boolean;
+  channelsExpanded: boolean;
+  memberEmail: string;
+  members: boolean;
+  userName: string;
+  message: string;
+  drawerLeft: boolean;
+  user_pop: boolean;
+  loading: boolean;
+}
+
+export default defineComponent({
+  name: 'ChannelPage',
+  data: (): State => {
+    return {
+      user_pop: false,
+      userName: 'David',
+      members: false,
+      channelsExpanded: true,
+      invitesExpanded: true,
+      memberEmail: '',
+      message: '',
+      newMessage: '',
+      drawerLeft: false,
+      loading: false
+    }
+  },
+
+  methods: {
+    pop_up () {
+      this.user_pop = true
+    },
+    toggleChannels () {
+      this.channelsExpanded = !this.channelsExpanded
+    },
+    toggleInvites () {
+      this.invitesExpanded = !this.invitesExpanded
+    },
+    handleDrawer () {
+      this.drawerLeft = !this.drawerLeft
+    },
+    async send () {
+      this.loading = true
+      await this.addMessage({ channel: this.activeChannel, message: this.message })
+      this.message = ''
+      this.loading = false
+    },
+    scrollMessages () {
+      const area = this.$refs.area as QScrollArea
+      area && area.setScrollPercentage('vertical', 1.1)
+    },
+    isMine (message: SerializedMessage): boolean {
+      return message.author.id === this.currentUser
+    },
+    ...mapMutations('channels', {
+      setActiveChannel: 'SET_ACTIVE'
+    }),
+    ...mapActions('auth', ['logout']),
+    ...mapActions('channels', ['addMessage'])
+  },
+  computed: {
+    ...mapGetters('channels', {
+      channels: 'joinedChannels',
+      lastMessageOf: 'lastMessageOf'
+    }),
+    channelsIconRotation () {
+      return this.channelsExpanded
+        ? 'transform: rotate(180deg);'
+        : 'transform: rotate(0deg);'
+    },
+    invitesIconRotation () {
+      return this.invitesExpanded
+        ? 'transform: rotate(180deg);'
+        : 'transform: rotate(0deg);'
+    },
+    activeChannel () {
+      console.log(this.$store.state.channels)
+      return this.$store.state.channels.active
+    },
+    messages (): SerializedMessage[] {
+      return this.$store.getters['channels/currentMessages']
+    },
+    currentUser () {
+      return this.$store.state.auth.user?.id
+    }
+  },
+  watch: {
+    messages: {
+      handler () {
+        this.$nextTick(() => this.scrollMessages())
+      },
+      deep: true
+    }
+  }
+})
+</script>
+
 <style scoped lang="scss">
 .label_name {
   &:hover {
@@ -441,110 +557,3 @@
   height: 3.5rem;
 }
 </style>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapActions, mapMutations, mapGetters } from 'vuex'
-
-interface State {
-  newMessage: string;
-  invitesExpanded: boolean;
-  channelsExpanded: boolean;
-  memberEmail: string;
-  members: boolean;
-  userName: string;
-  message: string;
-  drawerLeft: boolean;
-  user_pop: boolean;
-  loading: boolean;
-  messages: { text: string; from: string }[];
-}
-
-export default defineComponent({
-  name: 'ChannelLayout',
-  data: (): State => {
-    return {
-      user_pop: false,
-      userName: 'David',
-      members: false,
-      channelsExpanded: true,
-      invitesExpanded: true,
-      memberEmail: '',
-      message: '',
-      newMessage: '',
-      drawerLeft: false,
-      loading: false,
-      messages: [
-        {
-          text: 'Hey How are you ?',
-          from: 'Alice'
-        },
-        {
-          text: 'I am good,  you ?',
-          from: 'Bob'
-        },
-        {
-          text: 'I am fine, and what about you @David?',
-          from: 'Alice'
-        }
-      ]
-    }
-  },
-
-  methods: {
-    pop_up () {
-      this.user_pop = true
-    },
-
-    toggleChannels () {
-      this.channelsExpanded = !this.channelsExpanded
-    },
-    toggleInvites () {
-      this.invitesExpanded = !this.invitesExpanded
-    },
-    sendMessage () {
-      if (this.newMessage) {
-        this.messages.push({
-          text: this.newMessage,
-          from: 'Me'
-        })
-        this.newMessage = ''
-      }
-    },
-    handleDrawer () {
-      console.log(this.drawerLeft)
-      this.drawerLeft = !this.drawerLeft
-    },
-    async send () {
-      this.loading = true
-      await this.addMessage({ channel: this.activeChannel, message: this.message })
-      this.message = ''
-      this.loading = false
-    },
-    ...mapMutations('channels', {
-      setActiveChannel: 'SET_ACTIVE'
-    }),
-    ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage'])
-  },
-  computed: {
-    ...mapGetters('channels', {
-      channels: 'joinedChannels',
-      lastMessageOf: 'lastMessageOf'
-    }),
-    channelsIconRotation () {
-      return this.channelsExpanded
-        ? 'transform: rotate(180deg);'
-        : 'transform: rotate(0deg);'
-    },
-    invitesIconRotation () {
-      return this.invitesExpanded
-        ? 'transform: rotate(180deg);'
-        : 'transform: rotate(0deg);'
-    },
-    activeChannel () {
-      return this.$store.state.channels.active
-    }
-  }
-})
-</script>
