@@ -31,11 +31,11 @@
                 <q-card-section class="column">
                   <q-input v-model="memberEmail" label="Member Email" />
                   <q-btn
-                    @click="members = false"
+                    @click="add_user()"
                     class="q-my-md"
                     text-color="white"
                     color="primary"
-                    label="Add member"
+                    label="Add membesr"
                   />
                 </q-card-section>
               </q-card>
@@ -274,13 +274,17 @@
                 <q-card-section class="row items-center q-pb-none">
                   <div class="text-h6">Add member</div>
                   <q-space />
-                  <q-btn icon="close" flat round dense v-close-popup />
+                  <q-btn icon="close" flat round dense @click="members = false"
+                    class="q-my-md"
+                    text-color="white"
+                    color="primary"
+                    label="Add member" v-close-popup />
                 </q-card-section>
 
                 <q-card-section class="column">
                   <q-input v-model="memberEmail" label="Member Email" />
                   <q-btn
-                    @click="members = false"
+                    @click="add_user()"
                     class="q-my-md"
                     text-color="white"
                     color="primary"
@@ -415,6 +419,15 @@ export default defineComponent({
   },
 
   methods: {
+    add_user () {
+      console.log('GEGES')
+      const data = {
+        user: this.memberEmail,
+        channel: this.activeChannel
+      }
+      this.members = false
+      this.join(data)
+    },
     pop_up () {
       this.user_pop = true
     },
@@ -441,14 +454,15 @@ export default defineComponent({
       return message.author.id === this.currentUser
     },
     isTag (message: SerializedMessage): boolean {
-      const regex = new RegExp(` @${this.currentNickname} `)
+      const regex = new RegExp(`@${this.currentNickname}`)
       return regex.test(message.message)
     },
     ...mapMutations('channels', {
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage'])
+    ...mapActions('channels', ['addMessage']),
+    ...mapActions('channels', ['join'])
   },
   computed: {
     ...mapGetters('channels', {

@@ -1,5 +1,8 @@
 import { RawMessage, SerializedMessage } from 'src/contracts'
 import { BootParams, SocketManager } from './SocketManager'
+import { api } from 'src/boot/axios'
+import type { Channel } from 'src/contracts'
+import auth from 'src/boot/auth'
 
 // creating instance of this class automatically connects to given socket.io namespace
 // subscribe is called with boot params, so you can use it to dispatch actions for socket events
@@ -29,11 +32,16 @@ class ChannelService {
     if (this.channels.has(name)) {
       throw new Error(`User is already joined in channel "${name}"`)
     }
-
     // connect to given channel namespace
+
     const channel = new ChannelSocketManager(`/channels/${name}`)
     this.channels.set(name, channel)
     return channel
+  }
+
+  public create (name: string): string {
+    console.log('SERVICE')
+    return 'SDADA'
   }
 
   public leave (name: string): boolean {

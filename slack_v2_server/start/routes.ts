@@ -33,4 +33,9 @@ Route.group(() => {
   Route.post('login', 'AuthController.login')
   Route.post('logout', 'AuthController.logout').middleware('auth')
   Route.get('me', 'AuthController.me').middleware('auth')
+  
+  
 }).prefix('auth')
+
+Route.post('channels', 'ChannelsController.create').middleware('auth').as('createChannel5')
+Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as('adduser5')

@@ -8,6 +8,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async join ({ commit }, channel: string) {
     try {
       commit('LOADING_START')
+      console.log(channel)
       const messages = await channelService.join(channel).loadMessages()
       commit('LOADING_SUCCESS', { channel, messages })
     } catch (err) {
@@ -15,6 +16,19 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       throw err
     }
   },
+
+  async create ({ commit }, channel: string) {
+    try {
+      commit('LOADING_START')
+      console.log('TU SOM MORE RE A')
+      const messages = await channelService.create(channel)
+      commit('LOADING_SUCCESS', { channel, messages })
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
   async leave ({ getters, commit }, channel: string | null) {
     const leaving: string[] = channel !== null ? [channel] : getters.joinedChannels
 

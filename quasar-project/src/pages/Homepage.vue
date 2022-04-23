@@ -25,14 +25,14 @@
         </q-card-section>
 
         <q-card-section class="column">
-          <q-input v-model="channelName" label="Channel name" />
+          <q-input v-model="new_channel" label="Channel name" />
           <q-checkbox v-model="channelPrivate" label="Keep channel private" />
           <q-btn
-            @click="channel = false"
             class="q-my-md"
             text-color="white"
             color="primary"
             label="Add channel"
+            @click="createChannel()"
           />
         </q-card-section>
       </q-card>
@@ -201,6 +201,7 @@ interface State {
   channelName: string;
   channelPrivate: boolean;
   password: string;
+  new_channel: string;
 }
 
 export default defineComponent({
@@ -211,7 +212,8 @@ export default defineComponent({
       email: '',
       channelName: '',
       channelPrivate: false,
-      password: ''
+      password: '',
+      new_channel: ''
     }
   },
   methods: {
