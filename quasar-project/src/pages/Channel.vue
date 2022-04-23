@@ -117,9 +117,6 @@
               </q-item-section>
 
               <q-item-section side>
-                <!--q-item-label caption>
-                  {{ channel }}
-                </q-item-label-->
                 <q-icon name="keyboard_arrow_down" />
               </q-item-section>
             </q-item>
@@ -201,10 +198,10 @@
                 </div>
               </q-scroll-area> -->
               <q-scroll-area ref="area" style="width: 100%; height: calc(100vh - 150px)">
-                <div style="width: 100%; max-width: 400px; margin: 0 auto;">
+                <div style="width: 100%; max-width: ; margin: 0 auto;">
                   <q-chat-message v-for="message in messages"
                     :key="message.id"
-                    :name="message.author.email"
+                    :name="message.author.nickname"
                     :text="[message.message]"
                     :stamp="message.createdAt"
                     :sent="isMine(message)"
@@ -402,7 +399,7 @@ export default defineComponent({
   data: (): State => {
     return {
       user_pop: false,
-      userName: 'David',
+      userName: "David",
       members: false,
       channelsExpanded: true,
       invitesExpanded: true,

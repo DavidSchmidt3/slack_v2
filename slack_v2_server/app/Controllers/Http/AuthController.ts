@@ -21,27 +21,6 @@ export default class AuthController {
   async login({ auth, request }: HttpContextContract) {
     const email = request.input('email')
     const password = request.input('password')
-    
-    //get user id
-    const user1 = await User.findByOrFail ('email', email)
-
-    
-
-    const user = auth.use('api').attempt(email, password)
-
-    
-    const user5 = await User.findByOrFail ('id', user1.id)
-    console.log(user5)
-
-    const bIds = await ChannelUser.query().where('user_id', user1.id)
-    console.log(bIds[0].channel_id)
-    console.log(bIds[1].channel_id)
-    console.log((bIds.length))
-    
-    const channels = await ChannelUser.findBy ('user_id', user1.id)
-    console.log(channels)
-    
-
 
 
     //const user_channels = await Channel_users.findByOrFail ('user_id', 5)

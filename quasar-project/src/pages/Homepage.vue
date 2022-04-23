@@ -109,9 +109,13 @@
         <q-scroll-area style="height: 14rem; width: 100vw; display: flex">
           <div
             class="row no-wrap text-center flex justify-center items-center"
-            style="height: 9rem; margin-top: 3rem"
-          >
-            <div class="avatar">
+            style="height: 9rem; margin-top: 3rem">
+              <div class="avatar"
+              v-for="(channel, index) in channels"
+              :key="index"
+              clickable
+              v-ripple
+              @click="setActiveChannel(channel)">
               <q-btn round to="/channel">
                 <q-avatar
                   class="q-p-md"
@@ -127,109 +131,7 @@
                 />
               </q-btn>
 
-              <h6 class="row justify-center q-mt-sm">PKS</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">PAP</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">VAVA</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">WTECH</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">PIS</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-                <q-icon
-                  name="lock"
-                  style="position: absolute; top: -10px; right: -10px"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">PSI</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">VPWA</h6>
-            </div>
-
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm">MTAA</h6>
+              <h6 class="row justify-center q-mt-sm">{{ channel }}</h6>
             </div>
           </div>
         </q-scroll-area>
@@ -290,12 +192,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { SerializedMessage } from '../contracts'
 
 interface State {
   date: string;
   email: string;
   channelName: string;
-  channel: boolean;
   channelPrivate: boolean;
   password: string;
 }
@@ -306,7 +209,6 @@ export default defineComponent({
     return {
       date: new Date().toLocaleString('sk-SK'),
       email: '',
-      channel: false,
       channelName: '',
       channelPrivate: false,
       password: ''
@@ -315,6 +217,26 @@ export default defineComponent({
   methods: {
     countTime () {
       this.date = new Date().toLocaleString('sk-SK')
+    },
+    ...mapMutations('channels', {
+      setActiveChannel: 'SET_ACTIVE'
+    }),
+    ...mapActions('auth', ['logout']),
+    ...mapActions('channels', ['addMessage'])
+  },
+  computed: {
+    ...mapGetters('channels', {
+      channels: 'joinedChannels',
+      lastMessageOf: 'lastMessageOf'
+    }),
+    activeChannel () {
+      return this.$store.state.channels.active
+    },
+    messages (): SerializedMessage[] {
+      return this.$store.getters['channels/currentMessages']
+    },
+    currentUser () {
+      return this.$store.state.auth.user?.id
     }
   },
   mounted: function () {
