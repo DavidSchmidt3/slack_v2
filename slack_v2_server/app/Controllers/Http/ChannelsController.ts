@@ -11,9 +11,10 @@ export default class ChannelsController {
   async create ({ request, response, params, session, auth }) {
     
     const user = auth.user as User
-
+    
 
     const channel = await Channel.create({
+      
       name: request.all()['channel'],
       ownerId: user.$attributes.id,
       type: ChannelType.PRIVATE

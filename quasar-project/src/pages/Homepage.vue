@@ -220,11 +220,16 @@ export default defineComponent({
     countTime () {
       this.date = new Date().toLocaleString('sk-SK')
     },
+    createChannel () {
+      console.log("Creating channel")
+      this.create(this.new_channel)
+    },
     ...mapMutations('channels', {
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage'])
+    ...mapActions('channels', ['addMessage']),
+    ...mapActions('channels', ['create'])
   },
   computed: {
     ...mapGetters('channels', {

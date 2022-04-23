@@ -39,9 +39,16 @@ class ChannelService {
     return channel
   }
 
-  public create (name: string): string {
-    console.log('SERVICE')
-    return 'SDADA'
+  public create (name: string): ChannelSocketManager {
+    console.log(name)
+    const data = {
+      channel: name
+    }
+    const response = api.post<Channel>('/channels', data)
+
+    const channel = new ChannelSocketManager(`/channels/${name}`)
+    this.channels.set(name, channel)
+    return channel
   }
 
   public leave (name: string): boolean {
