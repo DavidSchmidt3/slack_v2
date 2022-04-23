@@ -197,14 +197,17 @@
                   </q-chat-message>
                 </div>
               </q-scroll-area> -->
-              <q-scroll-area ref="area" style="width: 100%; height: calc(100vh - 150px)">
-                <div style="width: 100%; max-width: ; margin: 0 auto;">
+              <q-scroll-area ref="area" style="width: 100%; height: calc(100vh - 250px)">
+                <div style="width: 100%; margin: 0 auto; padding-right: 30px">
                   <q-chat-message v-for="message in messages"
                     :key="message.id"
                     :name="message.author.nickname"
                     :text="[message.message]"
                     :stamp="message.createdAt"
                     :sent="isMine(message)"
+                    :style="{
+                      fontWeight: this.isTag(message) ? 800 : 400,
+                    }"
                   />
                 </div>
               </q-scroll-area>
@@ -399,7 +402,7 @@ export default defineComponent({
   data: (): State => {
     return {
       user_pop: false,
-      userName: "David",
+      userName: 'David',
       members: false,
       channelsExpanded: true,
       invitesExpanded: true,
@@ -437,6 +440,10 @@ export default defineComponent({
     isMine (message: SerializedMessage): boolean {
       return message.author.id === this.currentUser
     },
+    isTag (message: SerializedMessage): boolean {
+      const regex = new RegExp(` @${this.currentNickname} `)
+      return regex.test(message.message)
+    },
     ...mapMutations('channels', {
       setActiveChannel: 'SET_ACTIVE'
     }),
@@ -466,6 +473,10 @@ export default defineComponent({
     },
     currentUser () {
       return this.$store.state.auth.user?.id
+    },
+    currentNickname () {
+      console.log(this.$store.state.auth.user?.nickname)
+      return this.$store.state.auth.user?.nickname
     }
   },
   watch: {

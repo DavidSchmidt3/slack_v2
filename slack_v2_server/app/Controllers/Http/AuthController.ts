@@ -12,7 +12,7 @@ export default class AuthController {
     const user = await User.create(data)
     // join user to general channel
     const general = await Channel.findByOrFail('name', 'general')
-    
+
     await user.related('channels').attach([general.id])
 
     return user
@@ -22,10 +22,12 @@ export default class AuthController {
     const email = request.input('email')
     const password = request.input('password')
 
+    // const user5 = await User.findByOrFail ('id', user1.id)
+    // console.log(user5)
 
-    //const user_channels = await Channel_users.findByOrFail ('user_id', 5)
-    
-  
+    // const bIds = await ChannelUser.query().where('user_id', user1.id)
+    // const channels = await ChannelUser.findBy ('user_id', user1.id)
+    // console.log(channels)
 
     return auth.attempt(email, password)
   }
