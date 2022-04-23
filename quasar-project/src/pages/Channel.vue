@@ -97,41 +97,33 @@
             <h6 class="q-my-sm q-mx-xs section_title">Channels</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px; padding-bottom: 0">
-            <ul
-              class="q-gutter-md"
+             <q-list class="q-gutter-md"
               style="list-style-type: none; padding-left: 1rem"
-              v-show="channelsExpanded"
+              v-show="channelsExpanded">
+            <q-item
+              v-for="(channel, index) in channels"
+              :key="index"
+              clickable
+              v-ripple
+              @click="setActiveChannel(channel)"
             >
-              <li class="list-item">
-                <q-btn style="padding-right: 30px" flat
-                  ># PKS<q-icon
-                    name="lock"
-                    style="
-                      position: absolute;
-                      top: 6px;
-                      right: 5px;
-                      font-size: 20px;
-                    "
-                /></q-btn>
-              </li>
-              <li class="list-item"><q-btn flat># VPWA</q-btn></li>
-              <li class="list-item"><q-btn flat># PIS</q-btn></li>
-              <li class="list-item">
-                <q-btn style="padding-right: 30px" flat
-                  ># PSI<q-icon
-                    name="lock"
-                    style="
-                      position: absolute;
-                      top: 6px;
-                      right: 5px;
-                      font-size: 20px;
-                    "
-                /></q-btn>
-              </li>
-              <li class="list-item"><q-btn flat># WTECH</q-btn></li>
-              <li class="list-item"><q-btn flat># MA</q-btn></li>
-              <li class="list-item"><q-btn flat># ADM</q-btn></li>
-            </ul>
+              <q-item-section>
+                <q-item-label lines="1">
+                  {{ channel }}
+                </q-item-label>
+                <q-item-label class="conversation__summary" caption>
+                  {{ lastMessageOf(channel)?.content || '' }}
+                </q-item-label>
+              </q-item-section>
+
+              <q-item-section side>
+                <!--q-item-label caption>
+                  {{ channel }}
+                </q-item-label-->
+                <q-icon name="keyboard_arrow_down" />
+              </q-item-section>
+            </q-item>
+          </q-list>
           </q-card-section>
         </q-card>
       </div>
@@ -152,7 +144,7 @@
                 @click="handleDrawer"
               />
             </div>
-            <h5 style="margin: 0" class="font-weight-bold">#VPWA</h5>
+            <h5 style="margin: 0" class="font-weight-bold">{{ activeChannel }}</h5>
           </q-card-section>
           <q-separator size="1px" color="black" />
 
@@ -213,7 +205,7 @@
                   <q-chat-message v-for="message in messages"
                     :key="message.id"
                     :name="message.author.email"
-                    :text="[message.content]"
+                    :text="[message.message]"
                     :stamp="message.createdAt"
                     :sent="isMine(message)"
                   />
@@ -354,41 +346,31 @@
             <h6 class="q-my-sm q-mx-xs section_title">Channels</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px; padding-bottom: 0">
-            <ul
-              class="q-gutter-md"
-              style="list-style-type: none; padding-left: 1rem"
-              v-show="channelsExpanded"
+            <q-list>
+            <q-item
+              v-for="(channel, index) in channels"
+              :key="index"
+              clickable
+              v-ripple
+              @click="setActiveChannel(channel)"
             >
-              <li class="list-item">
-                <q-btn style="padding-right: 30px" flat
-                  ># PKS<q-icon
-                    name="lock"
-                    style="
-                      position: absolute;
-                      top: 6px;
-                      right: 5px;
-                      font-size: 20px;
-                    "
-                /></q-btn>
-              </li>
-              <li class="list-item"><q-btn flat># VPWA</q-btn></li>
-              <li class="list-item"><q-btn flat># PIS</q-btn></li>
-              <li class="list-item">
-                <q-btn style="padding-right: 30px" flat
-                  ># PSI<q-icon
-                    name="lock"
-                    style="
-                      position: absolute;
-                      top: 6px;
-                      right: 5px;
-                      font-size: 20px;
-                    "
-                /></q-btn>
-              </li>
-              <li class="list-item"><q-btn flat># WTECH</q-btn></li>
-              <li class="list-item"><q-btn flat># MA</q-btn></li>
-              <li class="list-item"><q-btn flat># ADM</q-btn></li>
-            </ul>
+              <q-item-section>
+                <q-item-label lines="1">
+                  {{ channel }}
+                </q-item-label>
+                <q-item-label class="conversation__summary" caption>
+                  {{ lastMessageOf(channel)?.content || '' }}
+                </q-item-label>
+              </q-item-section>
+
+              <q-item-section side>
+                <!--q-item-label caption>
+                  {{ channel }}
+                </q-item-label-->
+                <q-icon name="keyboard_arrow_down" />
+              </q-item-section>
+            </q-item>
+          </q-list>
           </q-card-section>
         </q-card>
       </div>
@@ -399,7 +381,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { QScrollArea } from 'quasar'
-import { SerializedMessage } from 'src/contracts'
+import { SerializedMessage } from '../contracts'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 interface State {
@@ -480,7 +462,6 @@ export default defineComponent({
         : 'transform: rotate(0deg);'
     },
     activeChannel () {
-      console.log(this.$store.state.channels)
       return this.$store.state.channels.active
     },
     messages (): SerializedMessage[] {

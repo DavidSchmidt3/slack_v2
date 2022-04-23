@@ -29,4 +29,14 @@ export interface User {
   surname: string,
   createdAt: string,
   updatedAt: string
+  // eslint-disable-next-line no-use-before-define
+  channels: Array<Channel>
+}
+
+export interface Channel {
+  id: number
+  name: string
+  createdAt: string
+  updatedAt: string
+  owner_id: number
 }

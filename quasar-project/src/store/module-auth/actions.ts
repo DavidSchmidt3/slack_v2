@@ -1,17 +1,25 @@
+
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { AuthStateInterface } from './state'
 import { authService, authManager } from 'src/services'
-import { LoginCredentials, RegisterData } from 'src/contracts'
-
+import { LoginCredentials, RegisterData, Channel } from 'src/contracts'
 const actions: ActionTree<AuthStateInterface, StateInterface> = {
   async check ({ commit, state, dispatch }) {
     try {
       commit('AUTH_START')
       const user = await authService.me()
+      // get channels from response
+      const channels = user?.channels
       // join user to general channel - hardcoded for now
       if (user?.id !== state.user?.id) {
-        await dispatch('channels/join', 'general', { root: true })
+        console.log(user)
+        // dispatch all channesl from channels
+        if (channels) {
+          channels.forEach((channel) => {
+            dispatch('channels/join', channel.name, { root: true })
+          })
+        }
       }
 
       commit('AUTH_SUCCESS', user)
