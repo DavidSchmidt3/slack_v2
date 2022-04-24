@@ -20,8 +20,16 @@ class ChannelSocketManager extends SocketManager {
     return this.emitAsync('addMessage', message)
   }
 
-  public loadMessages (): Promise<SerializedMessage[]> {
-    return this.emitAsync('loadMessages')
+  public loadAllMessages (): Promise<SerializedMessage[]> {
+    return this.emitAsync('loadAllMessages')
+  }
+
+  public loadSomeMessages (startIndex: number, endIndex: number): Promise<SerializedMessage[]> {
+    return this.emitAsync('loadSomeMessages', startIndex, endIndex)
+  }
+
+  public getMessagesCount (): Promise<number> {
+    return this.emitAsync('getMessagesCount')
   }
 }
 
@@ -49,6 +57,10 @@ class ChannelService {
     const channel = new ChannelSocketManager(`/channels/${name}`)
     this.channels.set(name, channel)
     return channel
+  }
+
+  public getChannel (name: string): ChannelSocketManager | undefined {
+    return this.channels.get(name)
   }
 
   public leave (name: string): boolean {

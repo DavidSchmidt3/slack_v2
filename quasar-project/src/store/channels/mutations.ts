@@ -22,6 +22,12 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   SET_ACTIVE (state, channel: string) {
     state.active = channel
   },
+  SET_MESSAGE_INDEX (state, index: number) {
+    state.messageIndex = index
+  },
+  SET_MESSAGES_COUNT (state, count: number) {
+    state.messagesCount = count
+  },
   NEW_MESSAGE (state, { channel, message }: { channel: string, message: SerializedMessage }) {
     console.log(channel)
     console.log(message)

@@ -147,58 +147,16 @@
 
           <div class="flex column" style="height: calc(100% - 4.5rem)">
             <q-card-section class="message_section">
-              <!-- <q-scroll-area style="width: 100%; height: 100%">
-                <div style="width: 100%">
-                  <q-chat-message
-                    v-for="(message, index) in messages"
-                    :key="index"
-                    :style="{
-                      fontWeight: message.text.includes(`@${userName}`)
-                        ? 800
-                        : 400,
-                    }"
-                    :text="[message.text]"
-                  >
-                    <template v-slot:name
-                      ><q-btn
-                        @click="pop_up"
-                        class="button_popup"
-                        no-caps
-                        flat
-                        dense
-                        style="padding: 0"
-                      >
-                        <label class="label_name">{{ message.from }}</label>
-                      </q-btn>
-                      <q-dialog v-model="user_pop">
-                        <q-card
-                          flat
-                          bordered
-                          square
-                          class="q-pa-lg col-xs-12 col-sm-4 col-lg-3"
-                        >
-                          <div class="text-center q-mt-md">
-                            <q-avatar
-                              class="q-p-lg"
-                              size="120px"
-                              font-size="40px"
-                              color="blue"
-                              text-color="white"
-                              icon="person"
-                            />
-                            <h4 class="q-mb-md">{{ message.from }}</h4>
-                            <q-separator> </q-separator>
-                            <h5>Currently typing :</h5>
-                            <p>I was thinking about lunch with you guys</p>
-                          </div>
-                        </q-card>
-                      </q-dialog>
-                    </template>
-                  </q-chat-message>
-                </div>
-              </q-scroll-area> -->
-              <q-scroll-area ref="area" style="width: 100%; height: calc(100vh - 250px)">
+              <q-scroll-area ref="area" style="width: 100%; height: calc(100vh - 250px)" @scroll="checkPosition">
                 <div style="width: 100%; margin: 0 auto; padding-right: 30px">
+                  <div class="text-center" v-if="this.messageIndex > 0">
+                    <q-btn
+                      style="font-size: 15px; size: 30px"
+                      class="self-center justify-center text-center"
+                      flat
+                      @click="handleLoadMessages"
+                    >Load more messages</q-btn>
+                  </div>
                   <q-chat-message v-for="message in messages"
                     :key="message.id"
                     :name="message.author.nickname"
@@ -445,10 +403,19 @@ export default defineComponent({
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.message = ''
       this.loading = false
+      this.scrollMessages()
+    },
+    async handleLoadMessages () {
+      console.log(this.messagesCount, this.messageIndex)
+      await this.loadMoreMessages({ channel: this.activeChannel, startIndex: this.messageIndex - 20, endIndex: this.messagesCount })
+      const area = this.$refs.area as QScrollArea
+      area?.setScrollPosition('vertical', area.getScrollPosition().top + 1510)
     },
     scrollMessages () {
       const area = this.$refs.area as QScrollArea
-      area && area.setScrollPercentage('vertical', 1.1)
+      setTimeout(() => {
+        area?.setScrollPercentage('vertical', 100)
+      }, 0)
     },
     isMine (message: SerializedMessage): boolean {
       return message.author.id === this.currentUser
@@ -461,8 +428,7 @@ export default defineComponent({
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage']),
-    ...mapActions('channels', ['join'])
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join'])
   },
   computed: {
     ...mapGetters('channels', {
@@ -485,16 +451,27 @@ export default defineComponent({
     messages (): SerializedMessage[] {
       return this.$store.getters['channels/currentMessages']
     },
+    messageIndex (): number {
+      return this.$store.state.channels.messageIndex
+    },
+    messagesCount (): number {
+      return this.$store.state.channels.messagesCount
+    },
     currentUser () {
       return this.$store.state.auth.user?.id
     },
     currentNickname () {
-      console.log(this.$store.state.auth.user?.nickname)
       return this.$store.state.auth.user?.nickname
     }
   },
   watch: {
-    messages: {
+    // messages: {
+    //   handler () {
+    //     this.$nextTick(() => this.scrollMessages())
+    //   },
+    //   deep: true
+    // },
+    activeChannel: {
       handler () {
         this.$nextTick(() => this.scrollMessages())
       },

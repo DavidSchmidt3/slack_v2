@@ -25,7 +25,9 @@ import Ws from '@ioc:Ruby184/Socket.IO/Ws'
 // this is dynamic namespace, in controller methods we can use params.name
 Ws.namespace('channels/:name')
   // .middleware('channel') // check if user can join given channel
-  .on('loadMessages', 'MessageController.loadMessages')
+  .on('loadAllMessages', 'MessageController.loadAllMessages')
+  .on('loadSomeMessages', 'MessageController.loadSomeMessages')
+  .on('getMessagesCount', 'MessageController.getMessagesCount')
   .on('addMessage', 'MessageController.addMessage')
 
 Route.group(() => {

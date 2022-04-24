@@ -11,6 +11,26 @@ export default class MessageRepository implements MessageRepositoryContract {
     return channel.messages.map((message) => message.serialize() as SerializedMessage)
   }
 
+  public async getSome(channelName: string, startIndex: number, endIndex: number): Promise<SerializedMessage[]> {
+    const channel = await Channel.query()
+      .where('name', channelName)
+      .preload('messages', (messagesQuery) => messagesQuery.preload('author'))
+      .firstOrFail()
+
+    return channel.messages.filter((undefined, idx) => idx >= startIndex && idx <= endIndex).map(message => message.serialize() as SerializedMessage)
+
+  }
+
+  public async getMessagesCount(channelName:string): Promise<number> {
+    const channel = await Channel.query()
+      .where('name', channelName)
+      .preload('messages', (messagesQuery) => messagesQuery.preload('author'))
+      .firstOrFail()
+
+    return channel.messages.length
+
+  }
+
   public async create(channelName: string, userId: number, content: string): Promise<SerializedMessage> {
     const channel = await Channel.findByOrFail('name', channelName)
     const message = await channel.related('messages').create({ createdBy: userId, message:content })

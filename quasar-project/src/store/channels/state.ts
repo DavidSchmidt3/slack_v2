@@ -4,7 +4,9 @@ export interface ChannelsStateInterface {
   loading: boolean,
   error: Error | null,
   messages: { [channel: string]: SerializedMessage[] }
-  active: string | null
+  active: string | null,
+  messageIndex: number,
+  messagesCount: number
 }
 
 function state (): ChannelsStateInterface {
@@ -12,7 +14,9 @@ function state (): ChannelsStateInterface {
     loading: false,
     error: null,
     messages: {},
-    active: null
+    active: null,
+    messageIndex: 0,
+    messagesCount: 0
   }
 }
 
