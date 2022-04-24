@@ -221,7 +221,6 @@ export default defineComponent({
       this.date = new Date().toLocaleString('sk-SK')
     },
     createChannel () {
-      console.log('Creating channel')
       this.create(this.new_channel)
     },
     ...mapMutations('channels', {

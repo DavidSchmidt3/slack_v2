@@ -1,7 +1,7 @@
 import { RawMessage, SerializedMessage } from 'src/contracts'
 import { BootParams, SocketManager } from './SocketManager'
 import { api } from 'src/boot/axios'
-import type { Channel } from 'src/contracts'
+import type { Channel, User } from 'src/contracts'
 
 // creating instance of this class automatically connects to given socket.io namespace
 // subscribe is called with boot params, so you can use it to dispatch actions for socket events
@@ -62,9 +62,13 @@ class ChannelService {
   }
 
   public async leaveOrDelete (name: string, userId: number): Promise<void> {
-    console.log(name, userId)
     await api.post<Channel>('/channels/leaveOrDelete', { channel: name, userId })
     this.channels.delete(name)
+  }
+
+  public async getChannelUsers (name: string): Promise<User[]> {
+    const channelUsers = await api.get<User[]>('/channels/getChannelUsers', { params: { channel: name } })
+    return channelUsers.data
   }
 
   public leave (name: string): boolean {

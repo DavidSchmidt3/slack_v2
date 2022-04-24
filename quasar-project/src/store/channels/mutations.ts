@@ -1,4 +1,4 @@
-import { SerializedMessage } from 'src/contracts'
+import { SerializedMessage, User } from 'src/contracts'
 import { MutationTree } from 'vuex'
 import { ChannelsStateInterface } from './state'
 
@@ -24,6 +24,9 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   SET_MESSAGE_INDEX (state, { channel, index }: {channel: string, index: number}) {
     state.messageIndex[channel] = index
+  },
+  SET_CHANNEL_USERS (state, { channel, users }: { channel: string, users: User[] }) {
+    state.channelUsers[channel] = users
   },
   SET_MESSAGES_COUNT (state, { channel, count }: { channel: string, count: number }) {
     state.messagesCount[channel] = count

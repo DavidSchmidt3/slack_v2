@@ -33,10 +33,20 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
 
   async leaveOrDelete ({ commit }, { channel, userId } : { channel: string, userId: number }) {
     try {
-      console.log(channel, userId)
       commit('LOADING_START')
       await channelService.leaveOrDelete(channel, userId)
       commit('CLEAR_CHANNEL', channel)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async getChannelUsers ({ commit }, channel: string) {
+    try {
+      commit('LOADING_START')
+      const users = await channelService.getChannelUsers(channel)
+      commit('SET_CHANNEL_USERS', { channel, users })
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

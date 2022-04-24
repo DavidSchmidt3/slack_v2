@@ -53,4 +53,13 @@ export default class ChannelsController {
     }
   }
 
+  async getChannelUsers({ request,  }): Promise<User[]> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const channelUsers = await ChannelUser.query().where('channel_id', channel.id)
+    const users = await User.query().whereIn('id', channelUsers.map(channelUser => channelUser.user_id))
+
+    return users
+  }
+
 }

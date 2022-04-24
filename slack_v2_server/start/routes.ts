@@ -40,3 +40,4 @@ Route.group(() => {
 Route.post('channels', 'ChannelsController.create').middleware('auth').as('createChannel5')
 Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as('adduser5')
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
+Route.get('channels/getChannelUsers', 'ChannelsController.getChannelUsers').middleware('auth').as('getChannelUsers')

@@ -337,13 +337,39 @@
         </q-card>
       </div>
     </div>
+    <q-dialog v-model="userListModal">
+      <q-card class="q-pa-md">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">List of users</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section class="column">
+          <q-list class="q-gutter-md"
+            style="list-style-type: none; padding-left: 1rem">
+            <q-item
+              v-for="(user, index) in this.channelUsers"
+              :key="index"
+              v-ripple
+            >
+              <q-item-section>
+                <q-item-label lines="1">
+                  {{ user.nickname }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { QScrollArea } from 'quasar'
-import { SerializedMessage } from '../contracts'
+import { SerializedMessage, User } from '../contracts'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 interface State {
@@ -357,6 +383,8 @@ interface State {
   drawerLeft: boolean;
   user_pop: boolean;
   loading: boolean;
+  userListModal: boolean;
+  modelData: User[];
 }
 
 export default defineComponent({
@@ -372,7 +400,9 @@ export default defineComponent({
       message: '',
       newMessage: '',
       drawerLeft: false,
-      loading: false
+      loading: false,
+      userListModal: false,
+      modelData: []
     }
   },
 
@@ -397,14 +427,21 @@ export default defineComponent({
     handleDrawer () {
       this.drawerLeft = !this.drawerLeft
     },
-    isSpecialMessage (message: string) {
+    async handleSpecialMessage (message: string) {
       if (message.match(/\/cancel/)) {
         this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
-        return true
+      }
+      if (message.match(/\/list/)) {
+        await this.listUsers(this.activeChannel)
       }
     },
+    async listUsers (channel: string) {
+      await this.getChannelUsers(channel)
+      console.log()
+      this.userListModal = true
+    },
     async send () {
-      if (this.isSpecialMessage(this.message)) { return }
+      await this.handleSpecialMessage(this.message)
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.message = ''
@@ -433,7 +470,7 @@ export default defineComponent({
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete'])
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers'])
   },
   computed: {
     ...mapGetters('channels', {
@@ -467,6 +504,9 @@ export default defineComponent({
     },
     currentNickname () {
       return this.$store.state.auth.user?.nickname
+    },
+    channelUsers () {
+      return this.$store.state.channels.channelUsers[this.activeChannel]
     }
   },
   watch: {
