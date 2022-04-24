@@ -38,4 +38,5 @@ export default class MessageRepository implements MessageRepositoryContract {
 
     return message.serialize() as SerializedMessage
   }
+
 }

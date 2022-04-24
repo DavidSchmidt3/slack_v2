@@ -1,7 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Channel from 'App/Models/Channel'
-import ChannelUser from 'App/Models/ChannelUser'
-import Channel_users from 'App/Models/Channel_users'
 import User from 'App/Models/User'
 import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
 
@@ -21,13 +19,6 @@ export default class AuthController {
   async login({ auth, request }: HttpContextContract) {
     const email = request.input('email')
     const password = request.input('password')
-
-    // const user5 = await User.findByOrFail ('id', user1.id)
-    // console.log(user5)
-
-    // const bIds = await ChannelUser.query().where('user_id', user1.id)
-    // const channels = await ChannelUser.findBy ('user_id', user1.id)
-    // console.log(channels)
 
     return auth.attempt(email, password)
   }

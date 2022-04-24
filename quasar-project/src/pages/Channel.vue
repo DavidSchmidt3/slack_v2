@@ -378,7 +378,6 @@ export default defineComponent({
 
   methods: {
     add_user () {
-      console.log('GEGES')
       const data = {
         user: this.memberEmail,
         channel: this.activeChannel
@@ -398,7 +397,14 @@ export default defineComponent({
     handleDrawer () {
       this.drawerLeft = !this.drawerLeft
     },
+    isSpecialMessage (message: string) {
+      if (message.match(/\/cancel/)) {
+        this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
+        return true
+      }
+    },
     async send () {
+      if (this.isSpecialMessage(this.message)) { return }
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.message = ''
@@ -427,7 +433,7 @@ export default defineComponent({
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join'])
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete'])
   },
   computed: {
     ...mapGetters('channels', {

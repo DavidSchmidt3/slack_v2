@@ -9,12 +9,8 @@ export default class ChannelsController {
 
   // create channel
   async create ({ request, response, params, session, auth }) {
-    
     const user = auth.user as User
-    
-
     const channel = await Channel.create({
-      
       name: request.all()['channel'],
       ownerId: user.$attributes.id,
       type: ChannelType.PRIVATE
@@ -42,6 +38,19 @@ export default class ChannelsController {
     // return channel
   }
 
-
+  async leaveOrDelete({ request }): Promise<boolean> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    if (params.userId === channel.ownerId) {
+      await channel.delete()
+      return true
+    } else {
+      await ChannelUser.query()
+        .where('channel_id', channel.id)
+        .where('user_id', params.userId)
+        .delete()
+      return false
+    }
+  }
 
 }
