@@ -406,7 +406,6 @@ export default defineComponent({
       this.scrollMessages()
     },
     async handleLoadMessages () {
-      console.log(this.messagesCount, this.messageIndex)
       await this.loadMoreMessages({ channel: this.activeChannel, startIndex: this.messageIndex - 20, endIndex: this.messagesCount })
       const area = this.$refs.area as QScrollArea
       area?.setScrollPosition('vertical', area.getScrollPosition().top + 1510)
@@ -445,17 +444,17 @@ export default defineComponent({
         ? 'transform: rotate(180deg);'
         : 'transform: rotate(0deg);'
     },
-    activeChannel () {
+    activeChannel (): string {
       return this.$store.state.channels.active
     },
     messages (): SerializedMessage[] {
       return this.$store.getters['channels/currentMessages']
     },
     messageIndex (): number {
-      return this.$store.state.channels.messageIndex
+      return this.$store.state.channels.messageIndex[this.activeChannel]
     },
     messagesCount (): number {
-      return this.$store.state.channels.messagesCount
+      return this.$store.state.channels.messagesCount[this.activeChannel]
     },
     currentUser () {
       return this.$store.state.auth.user?.id

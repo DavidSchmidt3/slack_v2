@@ -16,21 +16,19 @@ const mutation: MutationTree<ChannelsStateInterface> = {
     state.error = error
   },
   CLEAR_CHANNEL (state, channel) {
-    state.active = null
+    state.active = ''
     delete state.messages[channel]
   },
   SET_ACTIVE (state, channel: string) {
     state.active = channel
   },
-  SET_MESSAGE_INDEX (state, index: number) {
-    state.messageIndex = index
+  SET_MESSAGE_INDEX (state, { channel, index }: {channel: string, index: number}) {
+    state.messageIndex[channel] = index
   },
-  SET_MESSAGES_COUNT (state, count: number) {
-    state.messagesCount = count
+  SET_MESSAGES_COUNT (state, { channel, count }: { channel: string, count: number }) {
+    state.messagesCount[channel] = count
   },
   NEW_MESSAGE (state, { channel, message }: { channel: string, message: SerializedMessage }) {
-    console.log(channel)
-    console.log(message)
     state.messages[channel].push(message)
   }
 }
