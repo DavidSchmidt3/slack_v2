@@ -98,7 +98,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async isTyping ({ commit }, { channel, usernum, message_typing }: { channel: string, usernum: number, message_typing: RawMessage }) {
     console.log(channel)
     console.log(channel, usernum, message_typing)
-    console.log("USER")
+    console.log('USER')
     console.log(usernum.toString())
     // eslint-disable-next-line camelcase
     const typed_message = await channelService.in(channel)?.isTyping(message_typing, usernum.toString())
@@ -106,7 +106,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     // eslint-disable-next-line camelcase
     const user = usernum.toString()
     // eslint-disable-next-line camelcase
-    commit('IS_TYPING', { channel: channel, user: user, message_typing: message_typing })
+    commit('IS_TYPING', { channel, user, message_typing })
   }
 }
 

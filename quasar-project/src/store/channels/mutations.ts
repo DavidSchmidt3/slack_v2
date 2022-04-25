@@ -41,15 +41,13 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   // eslint-disable-next-line camelcase
   IS_TYPING (state, { channel, user, message_typing }: { channel: string, user: string, message_typing: string }) {
-    console.log("MOREASDAsss")
     console.log(state.typing)
     console.log(user, message_typing, channel)
     state.typing[channel] = {
-      user: user,
+      user,
       // eslint-disable-next-line camelcase
-      message_typing: message_typing
+      message_typing
     }
-    console.log("TU SOMSMSS")
     // eslint-disable-next-line camelcase
   }
 }

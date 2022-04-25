@@ -393,8 +393,6 @@ import { defineComponent } from 'vue'
 import { QScrollArea } from 'quasar'
 import { Channel, SerializedMessage, User } from '../contracts'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
-import ChannelPageVue from './ChannelPage.vue'
-import { Socket } from 'net'
 
 interface State {
   newMessage: string;
@@ -491,6 +489,9 @@ export default defineComponent({
       this.userListModal = true
     },
     async send () {
+      if (this.message === '') {
+        return
+      }
       console.log(this.$store.state)
       await this.handleSpecialMessage(this.message)
       this.loading = true
@@ -571,9 +572,6 @@ export default defineComponent({
       return this.$store.getters['channels/currentMessages']
     },
     typingmessage (): string {
-      const a = this.$store.getters['channels/typingMessage']
-      console.log("KONECNE")
-      console.log(a.message_typing)
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       return this.$store.getters['channels/typingMessage'].message_typing
     },

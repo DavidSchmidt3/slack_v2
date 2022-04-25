@@ -28,8 +28,6 @@ class ChannelSocketManager extends SocketManager {
   }
 
   public isTyping (message: RawMessage, user: string): Promise<SerializedMessage> {
-    console.log("MOREASDA")
-    console.log("SERCIVE")
     console.log(user, message)
     return this.emitAsync('typing', message, user)
   }
