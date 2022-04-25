@@ -62,8 +62,6 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async loadMoreMessages ({ commit }, { channel, startIndex, endIndex }) {
     try {
       const messages = await channelService.getChannel(channel)?.loadSomeMessages(startIndex, endIndex)
-      console.log(messages)
-      console.log(channel)
       commit('SET_MESSAGE_INDEX', { channel, index: startIndex })
       commit('LOADING_SUCCESS', { channel, messages })
     } catch (err) {

@@ -76,6 +76,7 @@ class ChannelService {
   }
 
   public async getChannelUsers (name: string): Promise<User[]> {
+    console.log(name)
     const channelUsers = await api.get<User[]>('/channels/getChannelUsers', { params: { channel: name } })
     console.log('TU')
     console.log(channelUsers)

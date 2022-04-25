@@ -441,6 +441,7 @@ export default defineComponent({
     },
     async listUsers (channel: string) {
       await this.getChannelUsers(channel)
+      console.log(this.modelData)
       this.userListModal = true
     },
     async send () {
@@ -525,6 +526,7 @@ export default defineComponent({
       return this.$store.state.auth.user?.nickname
     },
     channelUsers () {
+      console.log("HER")
       return this.$store.state.channels.channelUsers[this.activeChannel]
     }
   },

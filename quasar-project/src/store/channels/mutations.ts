@@ -30,8 +30,8 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   SET_MESSAGE_INDEX (state, { channel, index }: {channel: Channel, index: number}) {
     state.messageIndex[channel.name] = index
   },
-  SET_CHANNEL_USERS (state, { channel, users }: { channel: Channel, users: User[] }) {
-    state.channelUsers[channel.name] = users
+  SET_CHANNEL_USERS (state, { channel, users }: { channel: string, users: User[] }) {
+    state.channelUsers[channel] = users
   },
   SET_MESSAGES_COUNT (state, { channel, count }: { channel: Channel, count: number }) {
     state.messagesCount[channel.name] = count
