@@ -97,30 +97,30 @@
             <h6 class="q-my-sm q-mx-xs section_title">Channels</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px; padding-bottom: 0">
-             <q-list class="q-gutter-md"
+             <ul
+              class="q-gutter-md"
               style="list-style-type: none; padding-left: 1rem"
-              v-show="channelsExpanded">
-            <q-item
-              v-for="(channel, index) in channels"
-              :key="index"
-              clickable
-              v-ripple
-              @click="setActiveChannel(channel)"
+              v-show="channelsExpanded"
             >
-              <q-item-section>
-                <q-item-label lines="1">
-                  {{ channel }}
-                </q-item-label>
-                <q-item-label class="conversation__summary" caption>
-                  {{ lastMessageOf(channel)?.content || '' }}
-                </q-item-label>
-              </q-item-section>
 
-              <q-item-section side>
-                <q-icon name="keyboard_arrow_down" />
-              </q-item-section>
-            </q-item>
-          </q-list>
+              <li class="list-item"
+              v-for="(channel, index) in channelsdata"
+              :key="index"
+              @click="setActiveChannel(channel.name)">
+                <q-btn style="padding-right: 30px" flat
+                  >#   {{ channel.name }}<q-icon
+                  v-if="channel.type == 'private'"
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                />
+                </q-btn>
+              </li>
+          </ul>
           </q-card-section>
         </q-card>
       </div>
@@ -369,8 +369,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { QScrollArea } from 'quasar'
-import { SerializedMessage, User } from '../contracts'
+import { Channel, SerializedMessage, User } from '../contracts'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
+import ChannelPageVue from './ChannelPage.vue'
 
 interface State {
   newMessage: string;
@@ -475,7 +476,8 @@ export default defineComponent({
   computed: {
     ...mapGetters('channels', {
       channels: 'joinedChannels',
-      lastMessageOf: 'lastMessageOf'
+      lastMessageOf: 'lastMessageOf',
+      channelsdata: 'channels'
     }),
     channelsIconRotation () {
       return this.channelsExpanded
@@ -489,6 +491,9 @@ export default defineComponent({
     },
     activeChannel (): string {
       return this.$store.state.channels.active
+    },
+    activeChannelfromData (): Channel | null {
+      return null
     },
     messages (): SerializedMessage[] {
       return this.$store.getters['channels/currentMessages']

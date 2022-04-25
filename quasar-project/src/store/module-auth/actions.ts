@@ -17,7 +17,7 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
         // dispatch all channesl from channels
         if (channels) {
           channels.forEach((channel) => {
-            dispatch('channels/join', channel.name, { root: true })
+            dispatch('channels/join', channel, { root: true })
           })
         }
       }

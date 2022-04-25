@@ -1,7 +1,7 @@
 <template>
   <q-page class="bg-grey-3 row justify-center items-center">
     <q-page-section class="col-12 text-center center">
-      <h3 style="margin: 2rem">Welcome Dávid Schmidt</h3>
+      <h3 style="margin: 2rem">Welcome {{active_user}}</h3>
       <h4 class="date-title">Today's date:</h4>
       <h4 class="date-title">{{ date }}</h4>
     </q-page-section>
@@ -111,11 +111,9 @@
             class="row no-wrap text-center flex justify-center items-center"
             style="height: 9rem; margin-top: 3rem">
               <div class="avatar"
-              v-for="(channel, index) in channels"
+              v-for="( channel, index) in channelsdata"
               :key="index"
-              clickable
-              v-ripple
-              @click="setActiveChannel(channel)">
+              @click="setActiveChannel(channel.name)">
               <q-btn round to="/channel">
                 <q-avatar
                   class="q-p-md"
@@ -126,12 +124,13 @@
                   icon="groups"
                 />
                 <q-icon
+                v-if="channel.type == 'private'"
                   name="lock"
                   style="position: absolute; top: -10px; right: -10px"
                 />
               </q-btn>
 
-              <h6 class="row justify-center q-mt-sm">{{ channel }}</h6>
+              <h6 class="row justify-center q-mt-sm">{{ channel.name }}</h6>
             </div>
           </div>
         </q-scroll-area>
@@ -202,6 +201,7 @@ interface State {
   channelPrivate: boolean;
   password: string;
   new_channel: string;
+  active_user: string;
 }
 
 export default defineComponent({
@@ -213,7 +213,8 @@ export default defineComponent({
       channelName: '',
       channelPrivate: false,
       password: '',
-      new_channel: ''
+      new_channel: '',
+      active_user: 'David Schmidt'
     }
   },
   methods: {
@@ -233,19 +234,27 @@ export default defineComponent({
   computed: {
     ...mapGetters('channels', {
       channels: 'joinedChannels',
-      lastMessageOf: 'lastMessageOf'
+      lastMessageOf: 'lastMessageOf',
+      channelsdata: 'channels'
     }),
     activeChannel () {
+      console.log(this.channels)
       return this.$store.state.channels.active
     },
     messages (): SerializedMessage[] {
       return this.$store.getters['channels/currentMessages']
     },
-    currentUser () {
-      return this.$store.state.auth.user?.id
+    currentUserName () {
+      return this.$store.state.auth.user?.name
+    },
+    currentUserSurname () {
+      return this.$store.state.auth.user?.surname
     }
   },
   mounted: function () {
+    if (this.currentUserSurname && this.currentUserName) {
+      this.active_user = this.currentUserName + ' ' + this.currentUserSurname
+    }
     window.setInterval(() => {
       this.countTime()
     }, 1000)

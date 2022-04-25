@@ -1,4 +1,4 @@
-import { SerializedMessage, User } from 'src/contracts'
+import { Channel, SerializedMessage, User } from 'src/contracts'
 import { MutationTree } from 'vuex'
 import { ChannelsStateInterface } from './state'
 
@@ -7,9 +7,10 @@ const mutation: MutationTree<ChannelsStateInterface> = {
     state.loading = true
     state.error = null
   },
-  LOADING_SUCCESS (state, { channel, messages }: { channel: string, messages: SerializedMessage[] }) {
+  LOADING_SUCCESS (state, { channel, messages }: { channel: Channel, messages: SerializedMessage[] }) {
     state.loading = false
-    state.messages[channel] = messages
+    state.messages[channel.name] = messages
+    state.channels[channel.name] = channel
   },
   LOADING_ERROR (state, error) {
     state.loading = false

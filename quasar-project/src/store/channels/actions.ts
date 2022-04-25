@@ -1,3 +1,4 @@
+import { Channel } from 'src/contracts/Auth'
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { ChannelsStateInterface } from './state'
@@ -5,12 +6,11 @@ import { channelService } from 'src/services'
 import { RawMessage } from 'src/contracts'
 
 const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
-  async join ({ commit }, channel: string) {
+  async join ({ commit }, channel: Channel) {
     try {
-      console.log('joined')
       commit('LOADING_START')
-      const messagesCount = await channelService.join(channel).getMessagesCount()
-      const messages = await channelService.getChannel(channel)?.loadSomeMessages(messagesCount - 20, messagesCount)
+      const messagesCount = await channelService.join(channel.name).getMessagesCount()
+      const messages = await channelService.getChannel(channel.name)?.loadSomeMessages(messagesCount - 20, messagesCount)
       commit('SET_MESSAGE_INDEX', { channel, index: messagesCount - 20 })
       commit('SET_MESSAGES_COUNT', { channel, count: messagesCount })
       commit('LOADING_SUCCESS', { channel, messages })
