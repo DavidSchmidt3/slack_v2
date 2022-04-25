@@ -13,10 +13,25 @@ class ChannelSocketManager extends SocketManager {
     this.socket.on('message', (message: SerializedMessage) => {
       store.commit('channels/NEW_MESSAGE', { channel, message })
     })
+    // eslint-disable-next-line camelcase
+    this.socket.on('typing', (user: string, message_typing: string) => {
+      // eslint-disable-next-line camelcase
+      // eslint-disable-next-line camelcase
+      store.commit('channels/IS_TYPING', { channel, user, message_typing })
+      console.log(user)
+    })
   }
 
   public addMessage (message: RawMessage): Promise<SerializedMessage> {
+    console.log(this.socket)
     return this.emitAsync('addMessage', message)
+  }
+
+  public isTyping (message: RawMessage, user: string): Promise<SerializedMessage> {
+    console.log("MOREASDA")
+    console.log("SERCIVE")
+    console.log(user, message)
+    return this.emitAsync('typing', message, user)
   }
 
   public loadAllMessages (): Promise<SerializedMessage[]> {
@@ -94,7 +109,7 @@ class ChannelService {
 
   public async addUser (channel: string, user: string): Promise<void> {
     console.log(channel, user)
-    await api.post<string>('/channels/add', { channel: channel, userEmail: user })
+    await api.post<string>('/channels/add', { channel, userEmail: user })
   }
 
   public in (name: string): ChannelSocketManager | undefined {

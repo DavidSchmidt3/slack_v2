@@ -171,9 +171,23 @@
                 </div>
               </q-scroll-area>
             </q-card-section>
-
             <q-card-section class="q-py-xs q-ml-md" style="padding-bottom: 0">
-              <label class="typing_label">David is typing ...</label>
+              <label
+                v-if="typingmessage != '' && typingmessage != undefined && typinguser != currentUser"
+                style="font-size: 12px; color: #9e9e9e"
+               class="typing_label">{{typinguser}} is typing : {{typingmessage}} ...
+               </label>
+               <label
+                v-if="typingmessage == undefined || typingmessage == ''"
+                style="font-size: 12px; color: #9e9e9e"
+                class="typing_label">.
+               </label>
+               <label
+                v-if="currentUser == typinguser"
+                style="font-size: 12px; color: #9e9e9e"
+                class="typing_label">.
+               </label>
+
             </q-card-section>
 
             <q-card-section
@@ -181,7 +195,14 @@
               style="padding-top: 0"
             >
               <q-toolbar class="bg-grey-3 text-black row">
-                 <q-input v-model="message" :disable="loading" @keydown.enter.prevent="send" rounded outlined dense class="WAL__field col-grow q-mr-sm" bg-color="white" placeholder="Type a message" />
+                 <q-input
+                 v-model="message"
+                 :disable="loading"
+                 @keyup="onTyping"
+                 rounded
+                 outlined
+                 dense
+                 class="WAL__field col-grow q-mr-sm" bg-color="white" placeholder="Type a message" />
               <q-btn :disable="loading" @click="send" round flat icon="send" />
              </q-toolbar>
             </q-card-section>
@@ -373,6 +394,7 @@ import { QScrollArea } from 'quasar'
 import { Channel, SerializedMessage, User } from '../contracts'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 import ChannelPageVue from './ChannelPage.vue'
+import { Socket } from 'net'
 
 interface State {
   newMessage: string;
@@ -389,6 +411,9 @@ interface State {
   modelData: User[];
   private_channel : boolean;
   is_owner : boolean;
+  typing: boolean;
+  typing_user: string;
+  typing_message: string;
 }
 
 export default defineComponent({
@@ -408,11 +433,27 @@ export default defineComponent({
       userListModal: false,
       modelData: [],
       private_channel: false,
-      is_owner: false
+      is_owner: false,
+      typing: false,
+      typing_user: '',
+      typing_message: ''
     }
   },
 
   methods: {
+    async onTyping () {
+      console.log(this.$store.state.channels)
+      console.log(this.$store.state.channels.typing)
+      console.log(this.message)
+      this.typing = true
+      console.log(this.activeChannel)
+      const data = {
+        channel: this.activeChannel,
+        usernum: this.currentUser,
+        message_typing: this.message
+      }
+      await this.isTyping(data)
+    },
     async add_user () {
       const data = {
         user: this.memberEmail,
@@ -436,6 +477,9 @@ export default defineComponent({
     async handleSpecialMessage (message: string) {
       if (message.match(/\/cancel/)) {
         this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
+        // refresh site
+        window.location.reload()
+        this.activeChannel = ''
       }
       if (message.match(/\/list/)) {
         await this.listUsers(this.activeChannel)
@@ -447,6 +491,7 @@ export default defineComponent({
       this.userListModal = true
     },
     async send () {
+      console.log(this.$store.state)
       await this.handleSpecialMessage(this.message)
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
@@ -476,7 +521,7 @@ export default defineComponent({
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers', 'addUser'])
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers', 'addUser', 'isTyping'])
   },
   computed: {
     ...mapGetters('channels', {
@@ -505,20 +550,15 @@ export default defineComponent({
       } else {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.private_channel = true
-        // get current user
         const user = this.$store.state.auth.user
-        // get current channel
         console.log(Object(user).id)
         console.log(Object(a).owner_id)
         if (Object(a).owner_id === Object(user).id) {
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          console.log("TRUE")
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
         } else {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = false
-          console.log("FALSE")
         }
         return this.$store.state.channels.active
       }
@@ -530,6 +570,22 @@ export default defineComponent({
     messages (): SerializedMessage[] {
       return this.$store.getters['channels/currentMessages']
     },
+    typingmessage (): string {
+      const a = this.$store.getters['channels/typingMessage']
+      console.log("KONECNE")
+      console.log(a.message_typing)
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      return this.$store.getters['channels/typingMessage'].message_typing
+    },
+
+    typinguser (): string {
+      const a = this.$store.getters['channels/typingUser']
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.typing_user = a.user
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      return this.$store.getters['channels/typingUser'].user
+    },
+
     messageIndex (): number {
       return this.$store.state.channels.messageIndex[this.activeChannel]
     },
@@ -543,7 +599,6 @@ export default defineComponent({
       return this.$store.state.auth.user?.nickname
     },
     channelUsers () {
-      console.log("HER")
       return this.$store.state.channels.channelUsers[this.activeChannel]
     }
   },

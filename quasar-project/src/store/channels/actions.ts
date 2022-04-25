@@ -9,7 +9,6 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async join ({ commit }, channel: Channel) {
     try {
       commit('LOADING_START')
-      console.log(channel)
       const messagesCount = await channelService.join(channel.name).getMessagesCount()
       console.log(messagesCount)
       const messages = await channelService.getChannel(channel.name)?.loadSomeMessages(messagesCount - 20, messagesCount)
@@ -93,6 +92,21 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async addMessage ({ commit }, { channel, message }: { channel: string, message: RawMessage }) {
     const newMessage = await channelService.in(channel)?.addMessage(message)
     commit('NEW_MESSAGE', { channel, message: newMessage })
+  },
+
+  // eslint-disable-next-line camelcase
+  async isTyping ({ commit }, { channel, usernum, message_typing }: { channel: string, usernum: number, message_typing: RawMessage }) {
+    console.log(channel)
+    console.log(channel, usernum, message_typing)
+    console.log("USER")
+    console.log(usernum.toString())
+    // eslint-disable-next-line camelcase
+    const typed_message = await channelService.in(channel)?.isTyping(message_typing, usernum.toString())
+    console.log(typed_message)
+    // eslint-disable-next-line camelcase
+    const user = usernum.toString()
+    // eslint-disable-next-line camelcase
+    commit('IS_TYPING', { channel: channel, user: user, message_typing: message_typing })
   }
 }
 

@@ -8,7 +8,8 @@ export interface ChannelsStateInterface {
   messageIndex: { [channel: string]: number },
   messagesCount: { [channel: string]: number },
   channelUsers: { [channel: string]: User[] },
-  channels: { [channel: string]: Channel }
+  channels: { [channel: string]: Channel },
+  typing: { [channel: string]: {message_typing:string, user: string} }
 }
 
 function state (): ChannelsStateInterface {
@@ -20,7 +21,8 @@ function state (): ChannelsStateInterface {
     messageIndex: {},
     messagesCount: {},
     channelUsers: {},
-    channels: {}
+    channels: {},
+    typing: {}
   }
 }
 

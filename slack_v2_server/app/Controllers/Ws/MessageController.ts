@@ -32,4 +32,18 @@ export default class MessageController {
     // return message to sender
     return message
   }
+
+  public async isTyping({ params, socket, auth }: WsContextContract, content: string) {
+    // broadcast message to other users in channel
+    console.log(content)
+    console.log(params)
+    const data = {
+      channel: params.name,
+      user: auth.user!.nickname,
+      content: content
+    }
+    socket.broadcast.emit('typing', auth.user!.nickname, content)
+    // return message to sender
+    return params
+  }
 }

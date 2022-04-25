@@ -29,6 +29,7 @@ Ws.namespace('channels/:name')
   .on('loadSomeMessages', 'MessageController.loadSomeMessages')
   .on('getMessagesCount', 'MessageController.getMessagesCount')
   .on('addMessage', 'MessageController.addMessage')
+  .on('typing', 'MessageController.isTyping')
 
 Route.group(() => {
   Route.post('register', 'AuthController.register')

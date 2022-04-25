@@ -14,6 +14,14 @@ const getters: GetterTree<ChannelsStateInterface, StateInterface> = {
   currentMessages (context) {
     return context.active !== null ? context.messages[context.active] : []
   },
+  typingMessage (context) {
+    console.log(context)
+    return context.typing[context.active] || ' '
+  },
+  typingUser (context) {
+    console.log(context)
+    return context.typing[context.active] || ' '
+  },
   lastMessageOf (context) {
     return (channel: string) => {
       const messages = context.messages[channel]
