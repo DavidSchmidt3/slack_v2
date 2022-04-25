@@ -222,7 +222,13 @@ export default defineComponent({
       this.date = new Date().toLocaleString('sk-SK')
     },
     createChannel () {
-      this.create(this.new_channel)
+      console.log(this.new_channel)
+      const data =
+      {
+        name: this.new_channel,
+        type: this.channelPrivate
+      }
+      this.create(data)
     },
     ...mapMutations('channels', {
       setActiveChannel: 'SET_ACTIVE'

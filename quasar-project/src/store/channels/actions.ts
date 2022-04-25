@@ -9,8 +9,14 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async join ({ commit }, channel: Channel) {
     try {
       commit('LOADING_START')
+      console.log(channel)
       const messagesCount = await channelService.join(channel.name).getMessagesCount()
+      console.log(messagesCount)
       const messages = await channelService.getChannel(channel.name)?.loadSomeMessages(messagesCount - 20, messagesCount)
+      // disable eslint
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      // get channel name
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       commit('SET_MESSAGE_INDEX', { channel, index: messagesCount - 20 })
       commit('SET_MESSAGES_COUNT', { channel, count: messagesCount })
       commit('LOADING_SUCCESS', { channel, messages })
@@ -20,11 +26,11 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
-  async create ({ commit }, channel: string) {
+  async create ({ commit }, { name, type }) {
     try {
       commit('LOADING_START')
-      const messages = await channelService.create(channel)
-      commit('LOADING_SUCCESS', { channel, messages })
+      const messages = await channelService.create(name, type)
+      commit('LOADING_SUCCESS', { name, messages })
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err
@@ -56,6 +62,8 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async loadMoreMessages ({ commit }, { channel, startIndex, endIndex }) {
     try {
       const messages = await channelService.getChannel(channel)?.loadSomeMessages(startIndex, endIndex)
+      console.log(messages)
+      console.log(channel)
       commit('SET_MESSAGE_INDEX', { channel, index: startIndex })
       commit('LOADING_SUCCESS', { channel, messages })
     } catch (err) {

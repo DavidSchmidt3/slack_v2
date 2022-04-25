@@ -10,10 +10,12 @@ export default class ChannelsController {
   // create channel
   async create ({ request, response, params, session, auth }) {
     const user = auth.user as User
+    console.log(request.all())
+    console.log(params)
     const channel = await Channel.create({
       name: request.all()['channel'],
       ownerId: user.$attributes.id,
-      type: ChannelType.PRIVATE
+      type: request.all()['type'] === 'private' ? ChannelType.PRIVATE : ChannelType.PUBLIC
     })
 
     // add user to table ChannelUser

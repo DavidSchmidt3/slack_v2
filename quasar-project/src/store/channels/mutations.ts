@@ -9,8 +9,12 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   LOADING_SUCCESS (state, { channel, messages }: { channel: Channel, messages: SerializedMessage[] }) {
     state.loading = false
-    state.messages[channel.name] = messages
-    state.channels[channel.name] = channel
+    if (typeof (channel) === 'string') {
+      state.messages[channel] = messages
+    } else {
+      state.messages[channel.name] = messages
+      state.channels[channel.name] = channel
+    }
   },
   LOADING_ERROR (state, error) {
     state.loading = false
@@ -23,14 +27,14 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   SET_ACTIVE (state, channel: string) {
     state.active = channel
   },
-  SET_MESSAGE_INDEX (state, { channel, index }: {channel: string, index: number}) {
-    state.messageIndex[channel] = index
+  SET_MESSAGE_INDEX (state, { channel, index }: {channel: Channel, index: number}) {
+    state.messageIndex[channel.name] = index
   },
-  SET_CHANNEL_USERS (state, { channel, users }: { channel: string, users: User[] }) {
-    state.channelUsers[channel] = users
+  SET_CHANNEL_USERS (state, { channel, users }: { channel: Channel, users: User[] }) {
+    state.channelUsers[channel.name] = users
   },
-  SET_MESSAGES_COUNT (state, { channel, count }: { channel: string, count: number }) {
-    state.messagesCount[channel] = count
+  SET_MESSAGES_COUNT (state, { channel, count }: { channel: Channel, count: number }) {
+    state.messagesCount[channel.name] = count
   },
   NEW_MESSAGE (state, { channel, message }: { channel: string, message: SerializedMessage }) {
     state.messages[channel].push(message)

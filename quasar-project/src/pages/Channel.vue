@@ -12,6 +12,7 @@
           <q-card-section style="padding-bottom: 0">
             <q-page-section>
               <q-btn
+              v-if="private_channel"
                 @click="members = true"
                 class="q-my-md"
                 text-color="white"
@@ -386,6 +387,7 @@ interface State {
   loading: boolean;
   userListModal: boolean;
   modelData: User[];
+  private_channel : boolean;
 }
 
 export default defineComponent({
@@ -403,7 +405,8 @@ export default defineComponent({
       drawerLeft: false,
       loading: false,
       userListModal: false,
-      modelData: []
+      modelData: [],
+      private_channel: false
     }
   },
 
@@ -438,7 +441,6 @@ export default defineComponent({
     },
     async listUsers (channel: string) {
       await this.getChannelUsers(channel)
-      console.log()
       this.userListModal = true
     },
     async send () {
@@ -490,8 +492,20 @@ export default defineComponent({
         : 'transform: rotate(0deg);'
     },
     activeChannel (): string {
-      return this.$store.state.channels.active
+      const actual = this.$store.state.channels.active
+      const a = this.channelsdata[actual] as Channel
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      if (Object(a).type === 'public') {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.private_channel = false
+        return this.$store.state.channels.active
+      } else {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.private_channel = true
+        return this.$store.state.channels.active
+      }
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     activeChannelfromData (): Channel | null {
       return null
     },

@@ -46,10 +46,19 @@ class ChannelService {
     return channel
   }
 
-  public create (name: string): ChannelSocketManager {
-    const data = {
-      channel: name
+  public create (name: string, type: boolean): ChannelSocketManager {
+    let typ = ''
+    if (type === true) {
+      typ = 'private'
+    } else {
+      typ = 'public'
     }
+
+    const data = {
+      channel: name,
+      type: typ
+    }
+    console.log(data)
 
     api.post<Channel>('/channels', data)
     const channel = new ChannelSocketManager(`/channels/${name}`)
