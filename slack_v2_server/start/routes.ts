@@ -41,3 +41,4 @@ Route.post('channels', 'ChannelsController.create').middleware('auth').as('creat
 Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as('adduser5')
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
 Route.get('channels/getChannelUsers', 'ChannelsController.getChannelUsers').middleware('auth').as('getChannelUsers')
+Route.get('channels/public', 'ChannelsController.getPublicChannels').middleware('auth').as('getPublicChannels')

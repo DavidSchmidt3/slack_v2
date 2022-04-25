@@ -17,19 +17,36 @@ export default class ChannelsController {
       ownerId: user.$attributes.id,
       type: request.all()['type'] === 'private' ? ChannelType.PRIVATE : ChannelType.PUBLIC
     })
+    if (channel.type === ChannelType.PUBLIC) {
+      // join all users to this channel
+      await user.related('channels').attach([channel.id])
+    }
 
     // add user to table ChannelUser
     await ChannelUser.create({
       user_id: user.$attributes.id,
       channel_id: channel.$attributes.id
       })
-
-
     return channel
+
+    //add all users to this channel
+    
   }
 
   async add_user({ request, response, params, session, auth }) {
-    console.log(request.all())
+    console.log(request.all()['userEmail'])
+    const emailos = request.all()['userEmail']
+    const channel = request.all()['channel']
+    try
+    {
+      const user = await User.findByOrFail('email', emailos)
+      const channelOne = await Channel.findByOrFail('name', channel)
+      await user.related('channels').attach([channelOne.id])
+    }
+    catch(e)
+    {
+      console.log(e)
+    }
 
     // add user to table ChannelUser
     //await ChannelUser.create({
@@ -62,6 +79,11 @@ export default class ChannelsController {
     const users = await User.query().whereIn('id', channelUsers.map(channelUser => channelUser.user_id))
 
     return users
+  }
+
+  async getPublicChannels({ request,  }): Promise<Channel[]> {
+    const channels = await Channel.query().where('type', ChannelType.PUBLIC)
+    return channels
   }
 
 }

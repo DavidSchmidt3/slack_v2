@@ -70,6 +70,18 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
+  async addUser ({ commit }, { channel, user }) {
+    try {
+      commit('LOADING_START')
+      console.log(channel, user)
+      await channelService.addUser(channel, user)
+      commit('LOADING_SUCCESS', { channel, messages: [] })
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
   async leave ({ getters, commit }, channel: string | null) {
     const leaving: string[] = channel !== null ? [channel] : getters.joinedChannels
 

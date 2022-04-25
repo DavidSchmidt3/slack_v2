@@ -76,10 +76,7 @@ class ChannelService {
   }
 
   public async getChannelUsers (name: string): Promise<User[]> {
-    console.log(name)
     const channelUsers = await api.get<User[]>('/channels/getChannelUsers', { params: { channel: name } })
-    console.log('TU')
-    console.log(channelUsers)
     return channelUsers.data
   }
 
@@ -93,6 +90,11 @@ class ChannelService {
     // disconnect namespace and remove references to socket
     channel.destroy()
     return this.channels.delete(name)
+  }
+
+  public async addUser (channel: string, user: string): Promise<void> {
+    console.log(channel, user)
+    await api.post<string>('/channels/add', { channel: channel, userEmail: user })
   }
 
   public in (name: string): ChannelSocketManager | undefined {

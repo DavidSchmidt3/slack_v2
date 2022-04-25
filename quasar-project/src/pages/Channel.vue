@@ -12,7 +12,7 @@
           <q-card-section style="padding-bottom: 0">
             <q-page-section>
               <q-btn
-              v-if="private_channel"
+              v-if="private_channel && is_owner"
                 @click="members = true"
                 class="q-my-md"
                 text-color="white"
@@ -388,6 +388,7 @@ interface State {
   userListModal: boolean;
   modelData: User[];
   private_channel : boolean;
+  is_owner : boolean;
 }
 
 export default defineComponent({
@@ -406,18 +407,19 @@ export default defineComponent({
       loading: false,
       userListModal: false,
       modelData: [],
-      private_channel: false
+      private_channel: false,
+      is_owner: false
     }
   },
 
   methods: {
-    add_user () {
+    async add_user () {
       const data = {
         user: this.memberEmail,
         channel: this.activeChannel
       }
       this.members = false
-      this.join(data)
+      this.addUser(data)
     },
     pop_up () {
       this.user_pop = true
@@ -474,7 +476,7 @@ export default defineComponent({
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers'])
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers', 'addUser'])
   },
   computed: {
     ...mapGetters('channels', {
@@ -503,6 +505,21 @@ export default defineComponent({
       } else {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.private_channel = true
+        // get current user
+        const user = this.$store.state.auth.user
+        // get current channel
+        console.log(Object(user).id)
+        console.log(Object(a).owner_id)
+        if (Object(a).owner_id === Object(user).id) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          console.log("TRUE")
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.is_owner = true
+        } else {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.is_owner = false
+          console.log("FALSE")
+        }
         return this.$store.state.channels.active
       }
     },

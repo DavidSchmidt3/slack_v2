@@ -31,6 +31,11 @@ class AuthService {
   async logout (): Promise<void> {
     await api.post('auth/logout')
   }
+
+  async getPublicChannels (): Promise<string[]> {
+    const response = await api.get<string[]>('channels/public')
+    return response.data
+  }
 }
 
 export default new AuthService()

@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Channel from 'App/Models/Channel'
 import User from 'App/Models/User'
 import RegisterUserValidator from 'App/Validators/RegisterUserValidator'
+import { ChannelType } from 'Contracts/enums'
 
 export default class AuthController {
   async register({ request }: HttpContextContract) {
@@ -9,10 +10,10 @@ export default class AuthController {
     const data = await request.validate(RegisterUserValidator)
     const user = await User.create(data)
     // join user to general channel
-    const general = await Channel.findByOrFail('name', 'general')
-
-    await user.related('channels').attach([general.id])
-
+    const channels = await Channel.query().where('type', ChannelType.PUBLIC)
+    for (const channel of channels) {
+      user?.related('channels').attach([channel.id])
+    }
     return user
   }
 
@@ -29,6 +30,9 @@ export default class AuthController {
 
   async me({ auth }: HttpContextContract) {
     await auth.user!.load('channels')
+    
+    
+    
     return auth.user
   }
 }
