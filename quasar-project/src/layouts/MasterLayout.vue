@@ -72,7 +72,8 @@
             size="md"
             icon="logout"
             v-close-popup
-            to="/login"
+            @click="logout"
+            redirect="/login"
           />
         </q-toolbar>
       </q-header>
@@ -123,6 +124,7 @@
 
 <script lang="ts">
 import { ref, Ref } from 'vue'
+import { mapActions } from 'vuex'
 
 interface State {
   icon: Ref<boolean>,
@@ -145,7 +147,11 @@ export default {
   methods: {
     statusColor (e: Event) {
       console.log(e)
-    }
+    },
+    logmeout () {
+      this.logout()
+    },
+    ...mapActions('auth', ['logout'])
   }
 }
 </script>
