@@ -28,7 +28,11 @@ const mutation: MutationTree<ChannelsStateInterface> = {
     state.active = channel
   },
   SET_MESSAGE_INDEX (state, { channel, index }: {channel: Channel, index: number}) {
-    state.messageIndex[channel.name] = index
+    if (typeof (channel) === 'string') {
+      state.messageIndex[channel] = index
+    } else {
+      state.messageIndex[channel.name] = index
+    }
   },
   SET_CHANNEL_USERS (state, { channel, users }: { channel: string, users: User[] }) {
     state.channelUsers[channel] = users
