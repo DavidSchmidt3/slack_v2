@@ -173,22 +173,51 @@
             </q-card-section>
             <q-card-section class="q-py-xs q-ml-md" style="padding-bottom: 0">
               <label
-                v-if="typingmessage != '' && typingmessage != undefined && typinguser != currentUser"
+                v-if="typingmessage != '' && typingmessage != undefined && typinguser != currentUser && typing_message != ''"
                 style="font-size: 12px; color: #9e9e9e"
-               class="typing_label">{{typinguser}} is typing : {{typingmessage}} ...
+               class="typing_label">
+               <label @click="showtyping" clickable style="color: #2196f3; font-size= 12px">
+                {{typing_user}}
+               </label>
+                is typing ...
                </label>
                <label
-                v-if="typingmessage == undefined || typingmessage == ''"
+                v-if="typing_message == undefined || typing_message == ''"
                 style="font-size: 12px; color: #9e9e9e"
                 class="typing_label">.
                </label>
                <label
-                v-if="currentUser == typinguser"
+                v-if="currentUser == typin_guser"
                 style="font-size: 12px; color: #9e9e9e"
                 class="typing_label">.
                </label>
 
             </q-card-section>
+              <q-dialog
+                v-model="user_pop"
+                v-show="user_pop">
+                <q-card
+                  flat
+                  bordered
+                  square
+                  class="q-pa-lg col-xs-12 col-sm-4 col-lg-3"
+                >
+                <div class="text-center q-mt-md">
+                  <q-avatar
+                    class="q-p-lg"
+                    size="120px"
+                    font-size="40px"
+                    color="blue"
+                    text-color="white"
+                    icon="person"
+                  />
+                    <h4 class="q-mb-md">{{ typinguser}}</h4>
+                    <q-separator> </q-separator>
+                    <h5>Currently typing :</h5>
+                    <p>{{typingmessage}}</p>
+                  </div>
+                </q-card>
+              </q-dialog>
 
             <q-card-section
               class="q-py-xs q-px-md col-4 send_section"
@@ -412,6 +441,7 @@ interface State {
   typing: boolean;
   typing_user: string;
   typing_message: string;
+  typing_pop: boolean;
 }
 
 export default defineComponent({
@@ -434,17 +464,14 @@ export default defineComponent({
       is_owner: false,
       typing: false,
       typing_user: '',
-      typing_message: ''
+      typing_message: '',
+      typing_pop: false
     }
   },
 
   methods: {
     async onTyping () {
-      console.log(this.$store.state.channels)
-      console.log(this.$store.state.channels.typing)
-      console.log(this.message)
       this.typing = true
-      console.log(this.activeChannel)
       const data = {
         channel: this.activeChannel,
         usernum: this.currentUser,
@@ -459,6 +486,10 @@ export default defineComponent({
       }
       this.members = false
       this.addUser(data)
+    },
+    showtyping () {
+      this.typing_pop = true
+      this.user_pop = true
     },
     pop_up () {
       this.user_pop = true
@@ -485,20 +516,28 @@ export default defineComponent({
     },
     async listUsers (channel: string) {
       await this.getChannelUsers(channel)
-      console.log(this.modelData)
       this.userListModal = true
     },
     async send () {
       if (this.message === '') {
         return
       }
-      console.log(this.$store.state)
+      this.typing_user = ""
+      this.typing_message = ""
       await this.handleSpecialMessage(this.message)
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.message = ''
       this.loading = false
       this.scrollMessages()
+      this.typing = false
+      this.user_pop = false
+      const data = {
+        channel: this.activeChannel,
+        usernum: "",
+        message_typing: ""
+      }
+      await this.isTyping(data)
     },
     async handleLoadMessages () {
       await this.loadMoreMessages({ channel: this.activeChannel, startIndex: this.messageIndex - 20, endIndex: this.messagesCount })
@@ -552,8 +591,6 @@ export default defineComponent({
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.private_channel = true
         const user = this.$store.state.auth.user
-        console.log(Object(user).id)
-        console.log(Object(a).owner_id)
         if (Object(a).owner_id === Object(user).id) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
@@ -573,6 +610,26 @@ export default defineComponent({
     },
     typingmessage (): string {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.typing_message = this.$store.getters['channels/typingmessage']
+      // eslint-disable-next-line vue/no-async-in-computed-properties
+      // eslint-disable-next-line no-undef
+      if (this.$store.getters['channels/typingMessage'].message_typing === '') {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.typing_pop = false
+      }
+      // eslint-disable-next-line vue/no-async-in-computed-properties
+      // eslint-disable-next-line camelcase
+      const old_message = this.$store.getters['channels/typingMessage']
+      // eslint-disable-next-line vue/no-async-in-computed-properties
+      setTimeout(() => {
+        // eslint-disable-next-line camelcase
+        if (old_message !== this.$store.getters['channels/typingMessage']) {
+          this.typing_pop = true
+        } else {
+          this.typing_message = ''
+        }
+      }, 3000)
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       return this.$store.getters['channels/typingMessage'].message_typing
     },
 
@@ -580,7 +637,13 @@ export default defineComponent({
       const a = this.$store.getters['channels/typingUser']
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.typing_user = a.user
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      if (this.$store.getters['channels/typingMessage'].message_typing === '') {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.typing_pop = false
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.user_pop = false
+      }
+      // eslint-disable-next-line vue/no-async-in-computed-properties
       return this.$store.getters['channels/typingUser'].user
     },
 
