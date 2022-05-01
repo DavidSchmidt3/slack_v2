@@ -8,7 +8,7 @@ import { ChannelType } from "Contracts/enums"
 export default class ChannelsController {
 
   // create channel
-  async create ({ request, response, params, session, auth }) {
+  async create ({ request, params, auth }) {
     const user = auth.user as User
     console.log(request.all())
     console.log(params)
@@ -30,10 +30,10 @@ export default class ChannelsController {
     return channel
 
     //add all users to this channel
-    
+
   }
 
-  async add_user({ request, response, params, session, auth }) {
+  async add_user({ request }) {
     console.log(request.all()['userEmail'])
     const emailos = request.all()['userEmail']
     const channel = request.all()['channel']
@@ -72,7 +72,7 @@ export default class ChannelsController {
     }
   }
 
-  async getChannelUsers({ request,  }): Promise<User[]> {
+  async getChannelUsers({ request }): Promise<User[]> {
     const params = request.all()
     const channel = await Channel.findByOrFail('name', params.channel)
     const channelUsers = await ChannelUser.query().where('channel_id', channel.id)
@@ -81,7 +81,7 @@ export default class ChannelsController {
     return users
   }
 
-  async getPublicChannels({ request,  }): Promise<Channel[]> {
+  async getPublicChannels(): Promise<Channel[]> {
     const channels = await Channel.query().where('type', ChannelType.PUBLIC)
     return channels
   }

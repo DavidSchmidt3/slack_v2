@@ -1,8 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany, BelongsTo, belongsTo } from '@ioc:Adonis/Lucid/Orm'
-import Message from 'App/Models/Message'
+import { BaseModel, column, BelongsTo, belongsTo } from '@ioc:Adonis/Lucid/Orm'
 import User from 'App/Models/User'
-import { ChannelType } from 'Contracts/enums'
 import Channel from './Channel'
 
 export default class Channel_users extends BaseModel {

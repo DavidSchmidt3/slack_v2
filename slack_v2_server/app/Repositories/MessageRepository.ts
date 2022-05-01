@@ -17,7 +17,7 @@ export default class MessageRepository implements MessageRepositoryContract {
       .preload('messages', (messagesQuery) => messagesQuery.preload('author'))
       .firstOrFail()
 
-    return channel.messages.filter((undefined, idx) => idx >= startIndex && idx <= endIndex).map(message => message.serialize() as SerializedMessage)
+    return channel.messages.filter((item, idx) => (idx >= startIndex && idx <= endIndex) && item).map(message => message.serialize() as SerializedMessage)
 
   }
 

@@ -37,11 +37,11 @@ export default class MessageController {
     // broadcast message to other users in channel
     console.log(content)
     console.log(params)
-    const data = {
-      channel: params.name,
-      user: auth.user!.nickname,
-      content: content
-    }
+    // const data = {
+    //   channel: params.name,
+    //   user: auth.user!.nickname,
+    //   content: content
+    // }
     socket.broadcast.emit('typing', auth.user!.nickname, content)
     // return message to sender
     return params
