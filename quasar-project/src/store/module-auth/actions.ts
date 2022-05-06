@@ -1,8 +1,7 @@
-
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { AuthStateInterface } from './state'
-import { authService, authManager } from 'src/services'
+import { authService, authManager, channelService } from 'src/services'
 import { LoginCredentials, RegisterData } from 'src/contracts'
 const actions: ActionTree<AuthStateInterface, StateInterface> = {
   async check ({ commit, state, dispatch }) {
@@ -10,15 +9,23 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
       commit('AUTH_START')
       const user = await authService.me()
       // get channels from response
-      const channels = user?.channels
+      // const channels = user?.channels
+      const joinedChannels = channelService.getJoinedChannels()
+      const invitedChannels = channelService.getInvitedChannels()
+      console.log(joinedChannels, invitedChannels)
       // join user to general channel - hardcoded for now
       if (user?.id !== state.user?.id) {
-        console.log(user)
         // dispatch all channesl from channels
-        if (channels) {
-          channels.forEach((channel) => {
-            dispatch('channels/join', channel, { root: true })
+        if (joinedChannels) {
+          (await joinedChannels).forEach((joinedchannel: unknown) => {
+            dispatch('channels/join', joinedchannel, { root: true })
           })
+        }
+        if (invitedChannels) {
+          (await invitedChannels).forEach((invitedchannel: unknown) => {
+            dispatch('channels/invited_assign', invitedchannel, { root: true })
+          })
+          dispatch('user/join', user, { root: true })
         }
       }
 

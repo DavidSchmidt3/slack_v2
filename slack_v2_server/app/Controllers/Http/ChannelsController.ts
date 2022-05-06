@@ -17,17 +17,11 @@ export default class ChannelsController {
       ownerId: user.$attributes.id,
       type: request.all()['type'] === 'private' ? ChannelType.PRIVATE : ChannelType.PUBLIC
     })
-    if (channel.type === ChannelType.PUBLIC) {
-      // join all users to this channel
-      await user.related('channels').attach([channel.id])
-    }
+    
+    await user.related('channels').attach([channel.id])
+    
 
     // add user to table ChannelUser
-    await ChannelUser.create({
-      user_id: user.$attributes.id,
-      channel_id: channel.$attributes.id
-      })
-    return channel
 
     //add all users to this channel
 
@@ -85,5 +79,7 @@ export default class ChannelsController {
     const channels = await Channel.query().where('type', ChannelType.PUBLIC)
     return channels
   }
+
+  
 
 }

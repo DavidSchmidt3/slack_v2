@@ -9,7 +9,10 @@ export interface ChannelsStateInterface {
   messagesCount: { [channel: string]: number },
   channelUsers: { [channel: string]: User[] },
   channels: { [channel: string]: Channel },
+  invited: { [channel: string]: Channel},
+  joined: { [channel: string]: Channel},
   typing: { [channel: string]: {message_typing:string, user: string} }
+  invitations: { [channel: string]: Channel }
 }
 
 function state (): ChannelsStateInterface {
@@ -22,7 +25,10 @@ function state (): ChannelsStateInterface {
     messagesCount: {},
     channelUsers: {},
     channels: {},
-    typing: {}
+    typing: {},
+    invitations: {},
+    invited: {},
+    joined: {}
   }
 }
 

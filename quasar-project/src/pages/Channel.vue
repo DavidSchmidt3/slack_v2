@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-side-effects-in-computed-properties */
 <template>
   <q-page>
     <div v-show="!drawerLeft" class="row channel_page">
@@ -12,12 +13,12 @@
           <q-card-section style="padding-bottom: 0">
             <q-page-section>
               <q-btn
-              v-if="private_channel && is_owner"
+              v-if="is_owner"
                 @click="members = true"
                 class="q-my-md"
                 text-color="white"
                 color="primary"
-                label="Add member"
+                label="Add memberss"
               />
             </q-page-section>
 
@@ -59,14 +60,19 @@
             <h6 class="q-my-sm q-mx-xs section_title">Invites</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px; padding-bottom: 0">
-            <ul
+           <ul
               class="q-gutter-md"
               style="list-style-type: none; padding-left: 1rem"
-              v-show="invitesExpanded"
+              v-show="channelsExpanded"
             >
-              <li class="list-item">
+
+              <li class="list-item"
+              v-for="(channel, index) in invited"
+              :key="index"
+              @click="setActiveChannel(channel.name)">
                 <q-btn style="padding-right: 30px" flat
-                  ># FIIT<q-icon
+                  >#   {{ channel.name }}<q-icon
+                  v-if="channel.type == 'private'"
                     name="lock"
                     style="
                       position: absolute;
@@ -74,12 +80,10 @@
                       right: 5px;
                       font-size: 20px;
                     "
-                /></q-btn>
+                />
+                </q-btn>
               </li>
-              <li class="list-item">
-                <q-btn class="text-weight-bolder" flat># DBS 2022</q-btn>
-              </li>
-            </ul>
+          </ul>
           </q-card-section>
           <q-card-section
             style="padding: 0 0 0 5px"
@@ -105,7 +109,7 @@
             >
 
               <li class="list-item"
-              v-for="(channel, index) in channelsdata"
+              v-for="(channel, index) in joined"
               :key="index"
               @click="setActiveChannel(channel.name)">
                 <q-btn style="padding-right: 30px" flat
@@ -228,6 +232,7 @@
                  v-model="message"
                  :disable="loading"
                  @keyup="onTyping"
+                 @keyup.enter="send"
                  rounded
                  outlined
                  dense
@@ -485,6 +490,7 @@ export default defineComponent({
         channel: this.activeChannel
       }
       this.members = false
+      console.log(data)
       this.addUser(data)
     },
     showtyping () {
@@ -522,8 +528,8 @@ export default defineComponent({
       if (this.message === '') {
         return
       }
-      this.typing_user = ""
-      this.typing_message = ""
+      this.typing_user = ''
+      this.typing_message = ''
       await this.handleSpecialMessage(this.message)
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
@@ -534,8 +540,8 @@ export default defineComponent({
       this.user_pop = false
       const data = {
         channel: this.activeChannel,
-        usernum: "",
-        message_typing: ""
+        usernum: '',
+        message_typing: ''
       }
       await this.isTyping(data)
     },
@@ -561,13 +567,16 @@ export default defineComponent({
       setActiveChannel: 'SET_ACTIVE'
     }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers', 'addUser', 'isTyping'])
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers', 'isTyping']),
+    ...mapActions('channels', ['addUser'])
   },
   computed: {
     ...mapGetters('channels', {
-      channels: 'joinedChannels',
+      channels: 'invitedChannels',
       lastMessageOf: 'lastMessageOf',
-      channelsdata: 'channels'
+      channelsdata: 'channels',
+      joined: 'joined',
+      invited: 'invited'
     }),
     channelsIconRotation () {
       return this.channelsExpanded
@@ -581,17 +590,27 @@ export default defineComponent({
     },
     activeChannel (): string {
       const actual = this.$store.state.channels.active
-      const a = this.channelsdata[actual] as Channel
+      const a = this.joined[actual] as Channel
+      const user = this.$store.state.auth.user
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       if (Object(a).type === 'public') {
+        if (Object(a).owner_id === Object(user).id) {
+          console.log(a)
+          console.log(user)
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.is_owner = true
+        } else {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.is_owner = false
+        }
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.private_channel = false
         return this.$store.state.channels.active
       } else {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.private_channel = true
-        const user = this.$store.state.auth.user
         if (Object(a).owner_id === Object(user).id) {
+          console.log(a)
+          console.log(user)
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
         } else {
@@ -654,6 +673,7 @@ export default defineComponent({
       return this.$store.state.channels.messagesCount[this.activeChannel]
     },
     currentUser () {
+      console.log(this.$store.state.auth.user)
       return this.$store.state.auth.user?.id
     },
     currentNickname () {

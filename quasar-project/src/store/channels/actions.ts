@@ -4,18 +4,19 @@ import { StateInterface } from '../index'
 import { ChannelsStateInterface } from './state'
 import { channelService } from 'src/services'
 import { RawMessage } from 'src/contracts'
+import UserService from 'src/services/UserService'
 
 const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async join ({ commit }, channel: Channel) {
     try {
+      console.log(channel)
       commit('LOADING_START')
       const messagesCount = await channelService.join(channel.name).getMessagesCount()
-      console.log(messagesCount)
-      const messages = await channelService.getChannel(channel.name)?.loadSomeMessages(messagesCount - 20, messagesCount)
-      // disable eslint
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      // get channel name
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let messages = await channelService.getChannel(channel.name)?.loadSomeMessages(messagesCount - 20, messagesCount)
+      if (!messages) {
+        // eslint-disable-next-line no-const-assign
+        messages = []
+      }
       commit('SET_MESSAGE_INDEX', { channel, index: messagesCount - 20 })
       commit('SET_MESSAGES_COUNT', { channel, count: messagesCount })
       commit('LOADING_SUCCESS', { channel, messages })
@@ -25,6 +26,15 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
+  async invited_assign ({ commit }, channel: Channel) {
+    try {
+      commit('LOADING_START')
+      commit('SET_INVITED', channel)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
   async create ({ commit }, { name, type }) {
     try {
       commit('LOADING_START')
@@ -75,6 +85,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       console.log(channel, user)
       await channelService.addUser(channel, user)
       commit('LOADING_SUCCESS', { channel, messages: [] })
+      commit('NEW_INVITATION', { channel, user })
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

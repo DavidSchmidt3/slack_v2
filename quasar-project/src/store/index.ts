@@ -2,6 +2,7 @@ import { ChannelsStateInterface } from './channels/state'
 import { store } from 'quasar/wrappers'
 import auth from './module-auth'
 import type { AuthStateInterface } from './module-auth/state'
+import type { UserStateInterface } from './user/state'
 import { InjectionKey } from 'vue'
 import {
   createStore,
@@ -9,6 +10,7 @@ import {
   useStore as vuexUseStore
 } from 'vuex'
 import channels from './channels'
+import user from './user'
 
 // import example from './module-example'
 // import { ExampleStateInterface } from './module-example/state';
@@ -25,6 +27,7 @@ import channels from './channels'
 export interface StateInterface {
   auth: AuthStateInterface
   channels: ChannelsStateInterface
+  user: UserStateInterface
 }
 
 // provide typings for `this.$store`
@@ -41,7 +44,8 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     modules: {
       auth,
-      channels
+      channels,
+      user
     },
 
     // enable strict mode (adds overhead!)

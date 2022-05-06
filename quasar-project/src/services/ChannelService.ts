@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { RawMessage, SerializedMessage } from 'src/contracts'
 import { BootParams, SocketManager } from './SocketManager'
 import { api } from 'src/boot/axios'
@@ -15,10 +16,11 @@ class ChannelSocketManager extends SocketManager {
     })
     // eslint-disable-next-line camelcase
     this.socket.on('typing', (user: string, message_typing: string) => {
-      // eslint-disable-next-line camelcase
-      // eslint-disable-next-line camelcase
       store.commit('channels/IS_TYPING', { channel, user, message_typing })
       console.log(user)
+    })
+    this.socket.on('invite_channel', (channel: Channel, user: string) => {
+      store.commit('channels/NEW_INVITATION', { channel, user })
     })
   }
 
@@ -30,6 +32,11 @@ class ChannelSocketManager extends SocketManager {
   public isTyping (message: RawMessage, user: string): Promise<SerializedMessage> {
     console.log(user, message)
     return this.emitAsync('typing', message, user)
+  }
+
+  public invitation (channel: Channel, user: User): Promise<Channel> {
+    console.log(channel, user)
+    return this.emitAsync('invite_channel', channel, user.name)
   }
 
   public loadAllMessages (): Promise<SerializedMessage[]> {
@@ -91,6 +98,18 @@ class ChannelService {
   public async getChannelUsers (name: string): Promise<User[]> {
     const channelUsers = await api.get<User[]>('/channels/getChannelUsers', { params: { channel: name } })
     return channelUsers.data
+  }
+
+  public async getJoinedChannels (): Promise<Channel[]> {
+    const channels = await api.get<Channel[]>('/channels/getJoinedChannels')
+    console.log(channels.data)
+    return channels.data
+  }
+
+  public async getInvitedChannels (): Promise<Channel[]> {
+    const channels = await api.get<Channel[]>('/channels/getInvitedChannels')
+    console.log(channels.data)
+    return channels.data
   }
 
   public leave (name: string): boolean {

@@ -11,6 +11,7 @@ const mutation: MutationTree<ChannelsStateInterface> = {
     state.loading = false
     if (typeof (channel) === 'string') {
       state.messages[channel] = messages
+      state.channels[channel] = channel
     } else {
       state.messages[channel.name] = messages
       state.channels[channel.name] = channel
@@ -53,6 +54,10 @@ const mutation: MutationTree<ChannelsStateInterface> = {
       message_typing
     }
     // eslint-disable-next-line camelcase
+  },
+  SET_INVITED (state, channel: Channel) {
+    state.invited[channel.name] = channel
+    console.log(state)
   }
 }
 

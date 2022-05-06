@@ -22,6 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 
 import Ws from '@ioc:Ruby184/Socket.IO/Ws'
 
+
 // this is dynamic namespace, in controller methods we can use params.name
 Ws.namespace('channels/:name')
   // .middleware('channel') // check if user can join given channel
@@ -30,6 +31,9 @@ Ws.namespace('channels/:name')
   .on('getMessagesCount', 'MessageController.getMessagesCount')
   .on('addMessage', 'MessageController.addMessage')
   .on('typing', 'MessageController.isTyping')
+
+Ws.namespace('users/:name')
+  .on('invite_channel', 'InvitesController.invites')
 
 Route.group(() => {
   Route.post('register', 'AuthController.register')
@@ -43,3 +47,5 @@ Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as(
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
 Route.get('channels/getChannelUsers', 'ChannelsController.getChannelUsers').middleware('auth').as('getChannelUsers')
 Route.get('channels/public', 'ChannelsController.getPublicChannels').middleware('auth').as('getPublicChannels')
+Route.get('channels/getInvitedChannels', 'AuthController.getInvitedChannels').middleware('auth').as('getInvitedChannels')
+Route.get('channels/getJoinedChannels', 'AuthController.getJoinedChannels').middleware('auth').as('getJoinedChannels')
