@@ -129,6 +129,11 @@ class ChannelService {
     await api.post<string>('/channels/add', { channel, userEmail: user })
   }
 
+  public async acceptInvite (channel: Channel): Promise<void> {
+    console.log(channel)
+    await api.post<string>('/channels/acceptInvite', { channel })
+  }
+
   public in (name: string): ChannelSocketManager | undefined {
     return this.channels.get(name)
   }

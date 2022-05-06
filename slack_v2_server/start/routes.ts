@@ -49,3 +49,4 @@ Route.get('channels/getChannelUsers', 'ChannelsController.getChannelUsers').midd
 Route.get('channels/public', 'ChannelsController.getPublicChannels').middleware('auth').as('getPublicChannels')
 Route.get('channels/getInvitedChannels', 'AuthController.getInvitedChannels').middleware('auth').as('getInvitedChannels')
 Route.get('channels/getJoinedChannels', 'AuthController.getJoinedChannels').middleware('auth').as('getJoinedChannels')
+Route.post('channels/acceptInvite', 'AuthController.acceptInvite').middleware('auth').as('invite')

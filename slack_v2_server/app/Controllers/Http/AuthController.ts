@@ -51,4 +51,17 @@ export default class AuthController {
     const channels1 = await Channel.query().whereIn('id', channels.map(channel => channel.channel_id))
     return channels1
   }
+
+  async acceptInvite({ auth, request }: HttpContextContract) {
+    const kanal = request.input('channel')
+    const channel = await Channel.find(kanal.id)
+    const user = await auth.user
+    if (!channel || !user) {
+      throw new Error('Channel or user not found')
+    }
+   
+    
+    await Channel_users.query().where('user_id', user.id).where('channel_id', channel.id).update({ invited_at: null , joined_at: new Date()})
+    return channel
+  }
 }

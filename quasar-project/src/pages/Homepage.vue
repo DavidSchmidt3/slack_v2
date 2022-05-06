@@ -57,7 +57,7 @@
               v-for="( channel, index) in invited"
               :key="index"
               @click="setActiveChannel(channel.name)">
-              <q-btn round to="/channel">
+              <q-btn round >
                 <q-avatar
                   class="q-p-md"
                   size="120px"
@@ -65,6 +65,7 @@
                   color="blue"
                   text-color="white"
                   icon="groups"
+                  @click="joinChannel(channel)"
                 />
                 <q-icon
                 v-if="channel.type == 'private'"
@@ -79,6 +80,21 @@
         </q-scroll-area>
       </div>
     </q-page-section>
+
+    <q-dialog v-if="accept_invite" v-model="accept_invite">
+              <q-card class="q-pa-md">
+                <q-card-section class="row items-center q-pb-none">
+                  <q-space />
+                  <q-btn
+                    class="q-my-md"
+                    text-color="white"
+                    color="primary"
+                    label="Accept Invite"
+                    @click="joinChannel(acceptinvite())"
+                  />
+                </q-card-section>
+                </q-card>
+            </q-dialog>
 
     <q-page-section
       class="col-12 text-center center channels_section"
@@ -180,7 +196,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { SerializedMessage } from '../contracts'
+import { Channel, SerializedMessage } from '../contracts'
 
 interface State {
   date: string;
@@ -190,6 +206,8 @@ interface State {
   password: string;
   new_channel: string;
   active_user: string;
+  accept_invite: boolean;
+  channelname_to_join: Channel | null;
 }
 
 export default defineComponent({
@@ -202,10 +220,23 @@ export default defineComponent({
       channelPrivate: false,
       password: '',
       new_channel: '',
-      active_user: 'David Schmidt'
+      active_user: 'David Schmidt',
+      accept_invite: false,
+      channelname_to_join: null
     }
   },
   methods: {
+    joinChannel (channel: Channel) {
+      this.channelname_to_join = channel
+      this.accept_invite = true
+      console.log("here")
+    },
+
+    acceptinvite () {
+      this.join(this.channelname_to_join)
+      this.accept_invite = false
+      console.log(this.accept_invite)
+    },
     countTime () {
       this.date = new Date().toLocaleString('sk-SK')
     },
@@ -223,7 +254,8 @@ export default defineComponent({
     }),
     ...mapActions('auth', ['logout']),
     ...mapActions('channels', ['addMessage']),
-    ...mapActions('channels', ['create'])
+    ...mapActions('channels', ['create']),
+    ...mapActions('channels', ['join'])
   },
   computed: {
     ...mapGetters('channels', {

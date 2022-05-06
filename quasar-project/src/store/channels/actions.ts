@@ -20,6 +20,8 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       commit('SET_MESSAGE_INDEX', { channel, index: messagesCount - 20 })
       commit('SET_MESSAGES_COUNT', { channel, count: messagesCount })
       commit('LOADING_SUCCESS', { channel, messages })
+      const abrakadabra = await channelService.acceptInvite(channel)
+      console.log(abrakadabra)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

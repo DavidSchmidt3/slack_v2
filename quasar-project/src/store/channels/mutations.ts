@@ -9,12 +9,20 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   LOADING_SUCCESS (state, { channel, messages }: { channel: Channel, messages: SerializedMessage[] }) {
     state.loading = false
+    console.log(channel)
     if (typeof (channel) === 'string') {
       state.messages[channel] = messages
-      state.channels[channel] = channel
+      state.joined[channel] = channel
+      if (state.invited.in === channel) {
+        delete state.invited[channel]
+      }
     } else {
       state.messages[channel.name] = messages
-      state.channels[channel.name] = channel
+      state.joined[channel.name] = channel
+      // delete channel from state invited
+      if (state.invited[channel.name]) {
+        delete state.invited[channel.name]
+      }
     }
   },
   LOADING_ERROR (state, error) {
