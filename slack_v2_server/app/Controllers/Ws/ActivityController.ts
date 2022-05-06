@@ -49,4 +49,10 @@ export default class ActivityController {
 
     logger.info('websocket disconnected', reason)
   }
+
+  public async addUser({ socket, auth, logger }: WsContextContract, user: User) {
+    const room = this.getUserRoom(auth.user!)
+    socket.broadcast.in(room).emit('user:online', user)
+    logger.info('user added to room', room)
+  }
 }

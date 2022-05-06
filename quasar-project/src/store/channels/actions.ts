@@ -5,6 +5,7 @@ import { ChannelsStateInterface } from './state'
 import { channelService } from 'src/services'
 import { RawMessage } from 'src/contracts'
 import UserService from 'src/services/UserService'
+import AcitivityService from 'src/services/AcitivityService'
 
 const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async join ({ commit }, channel: Channel) {
@@ -20,8 +21,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       commit('SET_MESSAGE_INDEX', { channel, index: messagesCount - 20 })
       commit('SET_MESSAGES_COUNT', { channel, count: messagesCount })
       commit('LOADING_SUCCESS', { channel, messages })
-      const abrakadabra = await channelService.acceptInvite(channel)
-      console.log(abrakadabra)
+      await channelService.acceptInvite(channel)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err
@@ -88,6 +88,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       await channelService.addUser(channel, user)
       commit('LOADING_SUCCESS', { channel, messages: [] })
       commit('NEW_INVITATION', { channel, user })
+      await AcitivityService.add_user(channel, user)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

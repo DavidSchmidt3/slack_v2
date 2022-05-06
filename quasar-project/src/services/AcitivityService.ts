@@ -1,4 +1,4 @@
-import { User } from 'src/contracts'
+import { Channel, User } from 'src/contracts'
 import { authManager } from '.'
 import { SocketManager } from './SocketManager'
 
@@ -23,6 +23,11 @@ class ActivitySocketManager extends SocketManager {
         this.socket.disconnect()
       }
     })
+  }
+
+  public add_user (channel: Channel, user: User): void {
+    console.log("som tu")
+    this.socket.emit('addUser', user)
   }
 }
 

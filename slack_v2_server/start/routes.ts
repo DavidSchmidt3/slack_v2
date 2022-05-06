@@ -31,6 +31,7 @@ Ws.namespace('channels/:name')
   .on('getMessagesCount', 'MessageController.getMessagesCount')
   .on('addMessage', 'MessageController.addMessage')
   .on('typing', 'MessageController.isTyping')
+  .on('addUser', 'ActivityController.addUser')
 
 Ws.namespace('users/:name')
   .on('invite_channel', 'InvitesController.invites')
