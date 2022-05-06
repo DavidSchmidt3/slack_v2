@@ -12,12 +12,12 @@ export default class ChannelUser extends BaseModel {
   public channel_id: number
 
   @column()
-  public joined_at: DateTime
+  public joined_at: string
 
   @column()
-  public invited_at: DateTime
+  public invited_at: string
 
   @column()
-  public kicked_at: DateTime
+  public kicked_at: string
 
 }

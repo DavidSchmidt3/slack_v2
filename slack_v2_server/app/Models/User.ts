@@ -12,6 +12,7 @@ import {
 
 import Channel from 'App/Models/Channel'
 import Message from 'App/Models/Message'
+import Channel_users from './Channel_users'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -48,12 +49,12 @@ export default class User extends BaseModel {
 
   @manyToMany(() => Channel, {
     pivotTable: 'channel_users',
+    pivotColumns: ['invited_at', 'joined_at', 'channel_id', 'user_id'],
     pivotForeignKey: 'user_id',
     pivotRelatedForeignKey: 'channel_id',
   })
   public channels: ManyToMany<typeof Channel>
   
-
   @manyToMany(() => Channel, {
     pivotTable: 'kicks_users',
     pivotForeignKey: 'user_id',

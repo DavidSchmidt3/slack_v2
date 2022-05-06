@@ -9,10 +9,17 @@ export default class AuthController {
     // if invalid, exception
     const data = await request.validate(RegisterUserValidator)
     const user = await User.create(data)
-    // join user to general channel
+    // join user to all public channels
     const channels = await Channel.query().where('type', ChannelType.PUBLIC)
+    const date = new Date().toISOString()
     for (const channel of channels) {
-      user?.related('channels').attach([channel.id])
+      user?.related('channels').attach({[channel.id]: 
+        {
+          user_id: user.id,
+          channel_id: channel.id,
+          channel_name : channel.name,
+          invited_at: `${date.slice(0, 10)} ${date.slice(11, 19)}`
+        }})
     }
     return user
   }
@@ -29,10 +36,16 @@ export default class AuthController {
   }
 
   async me({ auth }: HttpContextContract) {
+    // get only channels where joined at is null
+    const a = auth.user
     await auth.user!.load('channels')
     
-    
-    
-    return auth.user
+    if (a != undefined) {
+      a.$extras={
+        invited: await auth.user!.related('channels').pivotQuery().whereNull('joined_at'),
+        joined: await auth.user!.related('channels').pivotQuery().whereNotNull('joined_at')
+      }
+    }
+    return {user: a, data: a?.$extras}
   }
 }

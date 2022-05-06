@@ -12,9 +12,19 @@ const mutation: MutationTree<ChannelsStateInterface> = {
     if (typeof (channel) === 'string') {
       state.messages[channel] = messages
     } else {
-      state.messages[channel.name] = messages
-      state.channels[channel.name] = channel
+      if (channel) {
+        state.messages[channel.name] = messages
+        state.channels[channel.name] = channel
+      }
     }
+  },
+  SET_INVITED_CHANNEL (state, { channel }: { channel: Channel }) {
+    console.log(channel)
+    state.invitedChannels[channel.name] = channel
+  },
+  SET_JOINED_CHANNEL (state, { channel }: { channel: Channel }) {
+    console.log(channel)
+    state.joinedChannels[channel.name] = channel
   },
   LOADING_ERROR (state, error) {
     state.loading = false
@@ -45,14 +55,15 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   // eslint-disable-next-line camelcase
   IS_TYPING (state, { channel, user, message_typing }: { channel: string, user: string, message_typing: string }) {
-    console.log(state.typing)
-    console.log(user, message_typing, channel)
     state.typing[channel] = {
       user,
       // eslint-disable-next-line camelcase
       message_typing
     }
-    // eslint-disable-next-line camelcase
+  },
+  joinchannel (state, { channel }: { channel: Channel }) {
+    console.log('JEBAT')
+    state.joinedChannels[channel.name] = channel
   }
 }
 

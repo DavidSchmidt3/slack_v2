@@ -1,3 +1,4 @@
+import { arrayData } from './Custom'
 export interface ApiToken {
   type: 'bearer'
   token: string
@@ -18,6 +19,13 @@ export interface LoginCredentials {
   email: string
   password: string
   remember: boolean
+}
+
+export interface AuthmeData {
+  // eslint-disable-next-line no-use-before-define
+  user: User,
+  // eslint-disable-next-line no-use-before-define
+  data: arrayData,
 }
 
 export interface User {

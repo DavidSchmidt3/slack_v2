@@ -17,16 +17,28 @@ export default class ChannelsController {
       ownerId: user.$attributes.id,
       type: request.all()['type'] === 'private' ? ChannelType.PRIVATE : ChannelType.PUBLIC
     })
+    const date = new Date().toISOString()
+    const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
+    console.log(today)
     if (channel.type === ChannelType.PUBLIC) {
       // join all users to this channel
-      await user.related('channels').attach([channel.id])
-    }
-
-    // add user to table ChannelUser
-    await ChannelUser.create({
-      user_id: user.$attributes.id,
-      channel_id: channel.$attributes.id
+      await user.related('channels').attach({
+        [channel.id]: {
+          joined_at: today
+        }
       })
+    }
+    else {
+      await user.related('channels').attach({ 
+        [channel.id]: {
+          joined_at: today
+        }
+      })
+    }
+    
+    console.log("tu")
+    console.log(date)
+    // add user to table ChannelUser
     return channel
 
     //add all users to this channel
@@ -40,21 +52,19 @@ export default class ChannelsController {
     try
     {
       const user = await User.findByOrFail('email', emailos)
+      const date = new Date().toISOString()
+      const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
       const channelOne = await Channel.findByOrFail('name', channel)
-      await user.related('channels').attach([channelOne.id])
+      await user.related('channels').attach({
+        [channelOne.id]: {
+          invited_at: today
+        }
+      })
     }
     catch(e)
     {
       console.log(e)
     }
-
-    // add user to table ChannelUser
-    //await ChannelUser.create({
-    //  user_id: user.$attributes.id,
-    //  channel_id: channel.$attributes.id
-    //  })
-
-    // return channel
   }
 
   async leaveOrDelete({ request }): Promise<boolean> {
@@ -75,7 +85,7 @@ export default class ChannelsController {
   async getChannelUsers({ request }): Promise<User[]> {
     const params = request.all()
     const channel = await Channel.findByOrFail('name', params.channel)
-    const channelUsers = await ChannelUser.query().where('channel_id', channel.id)
+    const channelUsers = await ChannelUser.query().where('channel_id', channel.id).whereNotNull('joined_at')
     const users = await User.query().whereIn('id', channelUsers.map(channelUser => channelUser.user_id))
 
     return users

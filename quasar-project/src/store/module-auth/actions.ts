@@ -1,4 +1,4 @@
-
+/* eslint-disable camelcase */
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { AuthStateInterface } from './state'
@@ -10,20 +10,45 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
       commit('AUTH_START')
       const user = await authService.me()
       // get channels from response
-      const channels = user?.channels
+      const channels = user?.user.channels
+      const invuted_channels = user?.data.invited
+      const joined_channels = user?.data.joined
       // join user to general channel - hardcoded for now
-      if (user?.id !== state.user?.id) {
+      if (user?.user.id !== state.user?.id) {
         console.log(user)
-        // dispatch all channesl from channels
         if (channels) {
           channels.forEach((channel) => {
             dispatch('channels/join', channel, { root: true })
           })
         }
+        // eslint-disable-next-line camelcase
+        if (invuted_channels) {
+          // eslint-disable-next-line camelcase
+          invuted_channels.forEach((channel1) => {
+            channels.forEach((channel) => {
+              if (channel1.channel_id === channel.id) {
+                commit('SET_INVITED_CHANNEL', { channel })
+              }
+            })
+          })
+        }
+        if (joined_channels) {
+          console.log('SDADA')
+          // eslint-disable-next-line camelcase
+          joined_channels.forEach((channel1) => {
+            channels.forEach((channel) => {
+              console.log(channel1)
+              console.log(channel)
+              if (channel.id === channel1.channel_id) {
+                commit('SET_JOINED_CHANNEL', { channel })
+              }
+            })
+          })
+        }
       }
 
-      commit('AUTH_SUCCESS', user)
-      return user !== null
+      commit('AUTH_SUCCESS', user.user)
+      return user.user !== null
     } catch (err) {
       commit('AUTH_ERROR', err)
       throw err

@@ -1,9 +1,10 @@
+import { AuthmeData } from './../contracts/Auth'
 import type { AxiosError, AxiosRequestConfig } from 'axios'
 import type { ApiToken, LoginCredentials, RegisterData, User } from 'src/contracts'
 import { api } from 'src/boot/axios'
 
 class AuthService {
-  async me (dontTriggerLogout = false): Promise<User | null> {
+  async me (dontTriggerLogout = false): Promise<AuthmeData> {
     return api.get(
       'auth/me',
       { dontTriggerLogout } as AxiosRequestConfig

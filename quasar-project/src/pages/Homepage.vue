@@ -32,7 +32,7 @@
             text-color="white"
             color="primary"
             label="Add channel"
-            @click="createChannel()"
+            @click="createChannel(), channel = false"
           />
         </q-card-section>
       </q-card>
@@ -52,12 +52,14 @@
         <q-scroll-area style="height: 14rem; width: 100vw; display: flex">
           <div
             class="row no-wrap text-center flex justify-center items-center"
-            style="height: 9rem; margin-top: 3rem"
-          >
-            <div class="avatar">
-              <q-btn round to="/channel">
+            style="height: 9rem; margin-top: 3rem">
+              <div class="avatar"
+              v-for="( channel, index) in channelsdataInvited"
+              :key="index"
+              @click="joinChannel()">
+              <q-btn round >
                 <q-avatar
-                  class="q-p-md shadow-15"
+                  class="q-p-md"
                   size="120px"
                   font-size="40px"
                   color="blue"
@@ -65,27 +67,13 @@
                   icon="groups"
                 />
                 <q-icon
+                v-if="channel.type == 'private'"
                   name="lock"
                   style="position: absolute; top: -10px; right: -10px"
                 />
               </q-btn>
-              <h6 class="row justify-center q-mt-sm text-weight-bold">FIIT</h6>
-            </div>
 
-            <div class="avatar">
-              <q-btn round to="/channel">
-                <q-avatar
-                  class="q-p-md shadow-15"
-                  size="120px"
-                  font-size="40px"
-                  color="blue"
-                  text-color="white"
-                  icon="groups"
-                />
-              </q-btn>
-              <h6 class="row justify-center q-mt-sm text-weight-bold">
-                DBS 2022
-              </h6>
+              <h6 class="row justify-center q-mt-sm">{{ channel.name }}</h6>
             </div>
           </div>
         </q-scroll-area>
@@ -111,7 +99,7 @@
             class="row no-wrap text-center flex justify-center items-center"
             style="height: 9rem; margin-top: 3rem">
               <div class="avatar"
-              v-for="( channel, index) in channelsdata"
+              v-for="( channel, index) in channelsdataJoined"
               :key="index"
               @click="setActiveChannel(channel.name)">
               <q-btn round to="/channel">
@@ -221,6 +209,10 @@ export default defineComponent({
     countTime () {
       this.date = new Date().toLocaleString('sk-SK')
     },
+    joinChannel () {
+      this.joinChanneladd(this.channelName)
+      return null
+    },
     createChannel () {
       console.log(this.new_channel)
       const data =
@@ -235,13 +227,16 @@ export default defineComponent({
     }),
     ...mapActions('auth', ['logout']),
     ...mapActions('channels', ['addMessage']),
-    ...mapActions('channels', ['create'])
+    ...mapActions('channels', ['create']),
+    ...mapActions('channels', ['joinChanneladd'])
   },
   computed: {
     ...mapGetters('channels', {
       channels: 'joinedChannels',
       lastMessageOf: 'lastMessageOf',
-      channelsdata: 'channels'
+      chann: 'channels',
+      channelsdataInvited: 'invited',
+      channelsdataJoined: 'joined'
     }),
     activeChannel () {
       console.log(this.channels)
@@ -256,6 +251,7 @@ export default defineComponent({
     currentUserSurname () {
       return this.$store.state.auth.user?.surname
     }
+
   },
   mounted: function () {
     if (this.currentUserSurname && this.currentUserName) {

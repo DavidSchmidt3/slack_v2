@@ -1,3 +1,5 @@
+/* eslint-disable vue/no-side-effects-in-computed-properties */
+/* eslint-disable vue/no-side-effects-in-computed-properties */
 <template>
   <q-page>
     <div v-show="!drawerLeft" class="row channel_page">
@@ -62,11 +64,16 @@
             <ul
               class="q-gutter-md"
               style="list-style-type: none; padding-left: 1rem"
-              v-show="invitesExpanded"
+              v-show="channelsExpanded"
             >
-              <li class="list-item">
+
+              <li class="list-item"
+              v-for="(channel, index) in channelsdataInvited"
+              :key="index"
+              @click="setActiveChannel(channel.name)">
                 <q-btn style="padding-right: 30px" flat
-                  ># FIIT<q-icon
+                  >#   {{ channel.name }}<q-icon
+                  v-if="channel.type == 'private'"
                     name="lock"
                     style="
                       position: absolute;
@@ -74,12 +81,10 @@
                       right: 5px;
                       font-size: 20px;
                     "
-                /></q-btn>
+                />
+                </q-btn>
               </li>
-              <li class="list-item">
-                <q-btn class="text-weight-bolder" flat># DBS 2022</q-btn>
-              </li>
-            </ul>
+          </ul>
           </q-card-section>
           <q-card-section
             style="padding: 0 0 0 5px"
@@ -105,7 +110,7 @@
             >
 
               <li class="list-item"
-              v-for="(channel, index) in channelsdata"
+              v-for="(channel, index) in channelsdataJoined"
               :key="index"
               @click="setActiveChannel(channel.name)">
                 <q-btn style="padding-right: 30px" flat
@@ -228,6 +233,7 @@
                  v-model="message"
                  :disable="loading"
                  @keyup="onTyping"
+                 @keyup.enter="send"
                  rounded
                  outlined
                  dense
@@ -522,8 +528,8 @@ export default defineComponent({
       if (this.message === '') {
         return
       }
-      this.typing_user = ""
-      this.typing_message = ""
+      this.typing_user = ''
+      this.typing_message = ''
       await this.handleSpecialMessage(this.message)
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
@@ -534,8 +540,8 @@ export default defineComponent({
       this.user_pop = false
       const data = {
         channel: this.activeChannel,
-        usernum: "",
-        message_typing: ""
+        usernum: '',
+        message_typing: ''
       }
       await this.isTyping(data)
     },
@@ -567,7 +573,10 @@ export default defineComponent({
     ...mapGetters('channels', {
       channels: 'joinedChannels',
       lastMessageOf: 'lastMessageOf',
-      channelsdata: 'channels'
+      channelsdata: 'channels',
+      invited_channels: 'invitedChannels',
+      channelsdataInvited: 'invited',
+      channelsdataJoined: 'joined'
     }),
     channelsIconRotation () {
       return this.channelsExpanded
@@ -611,8 +620,6 @@ export default defineComponent({
     typingmessage (): string {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.typing_message = this.$store.getters['channels/typingmessage']
-      // eslint-disable-next-line vue/no-async-in-computed-properties
-      // eslint-disable-next-line no-undef
       if (this.$store.getters['channels/typingMessage'].message_typing === '') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.typing_pop = false
@@ -654,6 +661,7 @@ export default defineComponent({
       return this.$store.state.channels.messagesCount[this.activeChannel]
     },
     currentUser () {
+      console.log('uhihiouhoijoijhiuzgkilhzutrdestrgfhjkgf')
       return this.$store.state.auth.user?.id
     },
     currentNickname () {

@@ -33,4 +33,7 @@ export default class Channel_users extends BaseModel {
     foreignKey: 'user_id',
   })
   public user: BelongsTo<typeof User>
+
+
+  
 }

@@ -1,4 +1,4 @@
-import { User } from 'src/contracts'
+import { Channel, User } from 'src/contracts'
 import { MutationTree } from 'vuex'
 import { AuthStateInterface } from './state'
 
@@ -20,6 +20,13 @@ const mutation: MutationTree<AuthStateInterface> = {
       message = 'Internal server error'
     }
     state.errorMessage = message
+  },
+  SET_INVITED_CHANNEL (state, { channel }: { channel: Channel }) {
+    state.invitedChannels[channel.name] = channel
+  },
+  SET_JOINED_CHANNEL (state, { channel }: { channel: Channel }) {
+    console.log(channel)
+    state.joinedChannels[channel.name] = channel
   }
 }
 
