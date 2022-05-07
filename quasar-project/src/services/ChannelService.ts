@@ -66,7 +66,7 @@ class ChannelService {
     return channel
   }
 
-  public create (name: string, type: boolean): ChannelSocketManager {
+  public async create (name: string, type: boolean): Promise<Channel> {
     let typ = ''
     if (type === true) {
       typ = 'private'
@@ -79,11 +79,11 @@ class ChannelService {
       type: typ
     }
     console.log(data)
-
-    api.post<Channel>('/channels', data)
+    const datas = await api.post<Channel>('/channels', data)
+    const new_channel = datas.data
     const channel = new ChannelSocketManager(`/channels/${name}`)
     this.channels.set(name, channel)
-    return channel
+    return new_channel
   }
 
   public getChannel (name: string): ChannelSocketManager | undefined {

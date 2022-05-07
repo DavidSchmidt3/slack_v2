@@ -85,6 +85,9 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   SET_INVITED (state, channel: Channel) {
     state.invited[channel.name] = channel
     console.log(state)
+  },
+  ADD_CHANNEL_TO_JOINED (state, channel: Channel) {
+    state.joined[channel.name] = channel
   }
 }
 
