@@ -4,6 +4,7 @@ import Channel from "App/Models/Channel"
 import ChannelUser from "App/Models/ChannelUser"
 import User from "App/Models/User"
 import { ChannelType } from "Contracts/enums"
+import { DateTime } from 'luxon'
 
 export default class ChannelsController {
 
@@ -53,6 +54,43 @@ export default class ChannelsController {
     // return channel
   }
 
+  async inviteUser({ request }): Promise<void> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userName)
+
+    console.log(channel, user)
+    const potentialChannelUser = await ChannelUser.query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .first()
+
+    if (potentialChannelUser) {
+      potentialChannelUser.kicked_at = null
+      potentialChannelUser.joined_at = null
+      potentialChannelUser.invited_at = DateTime.local()
+      potentialChannelUser.save()
+      return
+    }
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: null,
+        invited_at: new Date().toISOString()
+      }
+    })
+  }
+
+  async revokeUser({ request }): Promise<void> {
+    const params = request.all()
+    console.log(params);
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userName)
+    await ChannelUser.query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .update('kicked_at', new Date().toISOString())
+  }
+
   async addUserDirectly({ request }): Promise<Channel> {
     const params = request.all()
     const channel = await Channel.findByOrFail('name', params.channel)
@@ -60,7 +98,6 @@ export default class ChannelsController {
 
     const date = new Date().toISOString()
     const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
-    console.log('pridavam', user, channel, date);
     await user.related('channels').attach({
       [channel.id]: {
         joined_at: today

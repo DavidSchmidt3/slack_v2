@@ -130,6 +130,25 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
+  // invite user to channel
+  async inviteUser ({ commit }, { channel, user }) {
+    try {
+      await channelService.inviteUser(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async revokeUser ({ commit }, { channel, user }) {
+    try {
+      await channelService.revokeUser(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
   async setActiveChannel ({ commit }, channel: string) {
     try {
       commit('SET_ACTIVE', channel)

@@ -49,7 +49,9 @@ export default class AuthController {
   }
 
   async getJoinedChannels({ auth }): Promise<Channel[]> {
-    const channels = await Channel_users.query().where('user_id', auth.user.id ).whereNotNull('joined_at')
+    const channels = await Channel_users.query().where('user_id', auth.user.id)
+      .whereNotNull('joined_at')
+      .whereNull('kicked_at')
     const channels1 = await Channel.query().whereIn('id', channels.map(channel => channel.channel_id))
     return channels1
   }

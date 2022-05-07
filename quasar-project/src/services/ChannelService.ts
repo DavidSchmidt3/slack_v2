@@ -74,7 +74,6 @@ class ChannelService {
       channel: name,
       type: typ
     }
-    console.log(data)
     const datas = await api.post<Channel>('/channels', data)
     const new_channel = datas.data
     const channel = new ChannelSocketManager(`/channels/${name}`)
@@ -140,6 +139,14 @@ class ChannelService {
   public async getInvitedChannels (): Promise<Channel[]> {
     const channels = await api.get<Channel[]>('/channels/getInvitedChannels')
     return channels.data
+  }
+
+  public async inviteUser (channel: string, user: string): Promise<void> {
+    await api.post<string>('/channels/inviteUser', { channel, userName: user })
+  }
+
+  public async revokeUser (channel: string, user: string): Promise<void> {
+    await api.post<string>('/channels/revokeUser', { channel, userName: user })
   }
 
   public async getAllChannels (): Promise<Channel[]> {

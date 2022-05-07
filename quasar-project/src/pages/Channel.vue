@@ -530,7 +530,6 @@ export default defineComponent({
         let found = false
         let isPrivate = false
         const channels : Channel[] = this.allChannels
-        console.log(channels)
         channels.forEach(channel => {
           console.log(channel.name, channelName)
           if (channel.name === channelName) {
@@ -546,6 +545,22 @@ export default defineComponent({
           await this.create(data)
         } else {
           await this.addUserDirectly({ channel: channelName, user: this.currentMail })
+        }
+        return true
+      } if ((message.match(/\/invite/) || message.match(/\/revoke/)) && this.is_owner) {
+        const joined = this.joined
+        const channels : Channel[] = Object.values(joined)
+        const channel = channels.find(channel => channel.name === this.activeChannel)
+        console.log(channel?.type)
+        if (channel && channel.type === 'private') {
+          const words = message.split(' ')
+          const user = words[1]
+          const channel = this.activeChannel
+          if (words[0] === '/invite') {
+            this.inviteUser({ channel, user })
+          } else {
+            this.revokeUser({ channel, user })
+          }
         }
         return true
       }
@@ -607,7 +622,7 @@ export default defineComponent({
     },
     ...mapActions('auth', ['logout']),
     ...mapActions('channels', ['addMessage', 'getAllChannels', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
-    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly'])
+    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly', 'inviteUser', 'revokeUser'])
   },
   computed: {
     ...mapGetters('channels', {

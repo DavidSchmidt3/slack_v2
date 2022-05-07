@@ -50,6 +50,8 @@ Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as(
 Route.post('channels/addUserDirectly', 'ChannelsController.addUserDirectly').middleware('auth').as('addUserDirectly')
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
 Route.post('channels/leave', 'ChannelsController.leave').middleware('auth').as('leave')
+Route.post('channels/inviteUser', 'ChannelsController.inviteUser').middleware('auth').as('inviteUser')
+Route.post('channels/revokeUser', 'ChannelsController.revokeUser').middleware('auth').as('revokeUser')
 Route.post('channels/delete', 'ChannelsController.delete').middleware('auth').as('delete')
 Route.get('channels/getChannelUsers', 'ChannelsController.getChannelUsers').middleware('auth').as('getChannelUsers')
 Route.get('channels/getOwner', 'AuthController.getOwner').middleware('auth').as('getOwner')
