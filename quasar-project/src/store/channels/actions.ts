@@ -9,7 +9,6 @@ import AcitivityService from 'src/services/AcitivityService'
 const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async join ({ commit }, channel: Channel) {
     try {
-      console.log(channel)
       commit('LOADING_START')
       const messagesCount = await channelService.join(channel.name).getMessagesCount()
       let messages = await channelService.getChannel(channel.name)?.loadSomeMessages(messagesCount - 20, messagesCount)
@@ -108,7 +107,6 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async addUser ({ commit }, { channel, user }) {
     try {
       commit('LOADING_START')
-      console.log(channel, user)
       await channelService.addUser(channel, user)
       commit('LOADING_SUCCESS', { channel, messages: [] })
       commit('NEW_INVITATION', { channel, user })
@@ -146,23 +144,31 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
 
   // eslint-disable-next-line camelcase
   async isTyping ({ commit }, { channel, usernum, message_typing }: { channel: string, usernum: number, message_typing: RawMessage }) {
-    console.log(channel)
-    console.log(channel, usernum, message_typing)
-    console.log('USER')
-    console.log(usernum.toString())
     // eslint-disable-next-line camelcase
     const typed_message = await channelService.in(channel)?.isTyping(message_typing, usernum.toString())
-    console.log(typed_message)
     // eslint-disable-next-line camelcase
     const user = usernum.toString()
     // eslint-disable-next-line camelcase
     commit('IS_TYPING', { channel, user, message_typing })
   },
+
   async getUsers ({ commit }) {
     try {
       commit('LOADING_START')
       const users = await ActivityService.getUsers()
       commit('LOADING_SUCCESS', { users })
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async getAllChannels ({ commit }) {
+    try {
+      commit('LOADING_START')
+      const channels = await channelService.getAllChannels()
+      commit('LOADING_SUCCESS', { channels })
+      return channels
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err
