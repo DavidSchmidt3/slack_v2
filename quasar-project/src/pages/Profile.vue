@@ -15,7 +15,7 @@
             text-color="white"
             icon="person"
           />
-          <h4 class="q-mb-md">Dávid Schmidt</h4>
+          <h4 class="q-mb-md">{{this.active_user}}</h4>
           <div class="">
             <q-btn color="primary" class="q-ma-md"> Change username</q-btn>
             <q-btn color="primary" class="q-ma-md"> Change Password</q-btn>
@@ -32,7 +32,7 @@
 
       <q-card bordered square flat class="col-xs-12 col-sm-8 col-lg-6">
         <q-card-section class="row justify-center">
-          <label class="text-center">SERVERS</label>
+          <label class="text-center">JOINED SERVERS</label>
         </q-card-section>
 
         <q-separator />
@@ -40,8 +40,12 @@
         <q-separator />
         <q-scroll-area style="height: 29rem; width: 100%">
           <div class="q-gutter-sm q-ma-xs-xs q-ma-sm-md">
-            <div class="row">
-              <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
+            <div class="row"
+              v-for="( channel, index) in joined"
+              :key="index"
+              @click="setActiveChannel(channel.name)"
+              >
+              <q-btn class="col-xs-2 col-sm-2" round flat to="/channel">
                 <div class="gt-xs">
                   <q-avatar
                     class="q-p-md"
@@ -64,18 +68,19 @@
                 </div>
               </q-btn>
               <label class="col-xs-3 col-sm-3 self-center text-center"
-                >VPWA</label
+                >{{channel.name}}</label
               >
               <div
                 class="col-xs-5 col-sm-5 text-center self-center"
                 style="margin: 0%"
               >
-                <q-btn class="" color="primary" @click="users = true"
+                <q-btn class="" color="primary" @click="showMemebers(channel)"
                   >See all members</q-btn
                 >
               </div>
 
               <q-btn
+              v-if="this.$store.state.auth.user?.id === channel.owner_id"
                 class="col-xs-2 col-sm-2"
                 flat
                 rounded
@@ -84,179 +89,7 @@
               >
               </q-btn>
             </div>
-            <q-separator></q-separator>
-            <div class="row">
-              <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
-                <div class="gt-xs">
-                  <q-avatar
-                    class="q-p-md"
-                    size="80px"
-                    font-size="30px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-                <div class="lt-sm">
-                  <q-avatar
-                    class="q-p-lg"
-                    size="60px"
-                    font-size="25px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-              </q-btn>
-              <label class="col-xs-3 col-sm-3 self-center text-center"
-                >VPWA</label
-              >
-              <div
-                class="col-xs-5 col-sm-5 text-center self-center"
-                style="margin: 0%"
-              >
-                <q-btn class="" color="primary">See all members</q-btn>
-              </div>
-
-              <q-btn
-                class="col-xs-2 col-sm-2"
-                flat
-                rounded
-                color="red"
-                icon="close"
-              >
-              </q-btn>
-            </div>
-            <q-separator></q-separator>
-            <div class="row">
-              <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
-                <div class="gt-xs">
-                  <q-avatar
-                    class="q-p-md"
-                    size="80px"
-                    font-size="30px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-                <div class="lt-sm">
-                  <q-avatar
-                    class="q-p-lg"
-                    size="60px"
-                    font-size="25px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-              </q-btn>
-              <label class="col-xs-3 col-sm-3 self-center text-center"
-                >VPWA</label
-              >
-              <div
-                class="col-xs-5 col-sm-5 text-center self-center"
-                style="margin: 0%"
-              >
-                <q-btn class="" color="primary">See all members</q-btn>
-              </div>
-
-              <q-btn
-                class="col-xs-2 col-sm-2"
-                flat
-                rounded
-                color="red"
-                icon="close"
-              >
-              </q-btn>
-            </div>
-            <q-separator></q-separator>
-            <div class="row">
-              <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
-                <div class="gt-xs">
-                  <q-avatar
-                    class="q-p-md"
-                    size="80px"
-                    font-size="30px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-                <div class="lt-sm">
-                  <q-avatar
-                    class="q-p-lg"
-                    size="60px"
-                    font-size="25px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-              </q-btn>
-              <label class="col-xs-3 col-sm-3 self-center text-center"
-                >VPWA</label
-              >
-              <div
-                class="col-xs-5 col-sm-5 text-center self-center"
-                style="margin: 0%"
-              >
-                <q-btn class="" color="primary">See all members</q-btn>
-              </div>
-
-              <q-btn
-                class="col-xs-2 col-sm-2"
-                flat
-                rounded
-                color="red"
-                icon="close"
-              >
-              </q-btn>
-            </div>
-            <q-separator></q-separator>
-            <div class="row">
-              <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
-                <div class="gt-xs">
-                  <q-avatar
-                    class="q-p-md"
-                    size="80px"
-                    font-size="30px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-                <div class="lt-sm">
-                  <q-avatar
-                    class="q-p-lg"
-                    size="60px"
-                    font-size="25px"
-                    color="blue"
-                    text-color="white"
-                    icon="group"
-                  />
-                </div>
-              </q-btn>
-              <label class="col-xs-3 col-sm-3 self-center text-center"
-                >VPWA</label
-              >
-              <div
-                class="col-xs-5 col-sm-5 text-center self-center"
-                style="margin: 0%"
-              >
-                <q-btn class="" color="primary">See all members</q-btn>
-              </div>
-
-              <q-btn
-                class="col-xs-2 col-sm-2"
-                flat
-                rounded
-                color="red"
-                icon="close"
-              >
-              </q-btn>
-            </div>
-          </div>
+                      </div>
         </q-scroll-area>
         <q-separator></q-separator>
       </q-card>
@@ -372,7 +205,7 @@
         </q-card-section>
         <q-separator />
         <q-card-section>
-          <q-dialog v-model="users">
+          <q-dialog v-model="userListModal">
             <q-card class="q-pa-md">
               <q-card-section class="row items-center q-pb-none">
                 <div class="text-h6">Members list</div>
@@ -381,7 +214,11 @@
               </q-card-section>
 
               <q-card-section class="column">
-                <q-card-section style="padding-right: 0; padding-left: 0">
+                <q-card-section style="padding-right: 0; padding-left: 0"
+                  v-for="(user, index) in this.channelUsers"
+                  :key="index"
+                  v-ripple
+                  >
                   <div class="row" style="min-width: 230px">
                     <div class="gt-xs col-3">
                       <q-avatar
@@ -403,70 +240,11 @@
                         icon="person"
                       />
                     </div>
-                    <label class="col-7 self-center text-center">Ctibor</label>
+                    <label class="col-7 self-center text-center">{{user.nickname}}</label>
                     <q-btn class="col-2" flat rounded color="red" icon="close">
                     </q-btn>
                   </div>
                 </q-card-section>
-                <q-separator />
-                <q-card-section style="padding-right: 0; padding-left: 0">
-                  <div class="row" style="min-width: 230px">
-                    <div class="gt-xs col-3">
-                      <q-avatar
-                        class="q-p-md"
-                        size="50px"
-                        font-size="20px"
-                        color="blue"
-                        text-color="white"
-                        icon="person"
-                      />
-                    </div>
-                    <div class="lt-sm col-4">
-                      <q-avatar
-                        class="q-p-lg"
-                        size="60px"
-                        font-size="25px"
-                        color="blue"
-                        text-color="white"
-                        icon="person"
-                      />
-                    </div>
-                    <label class="col-7 self-center text-center">David</label>
-                    <q-btn class="col-2" flat rounded color="red" icon="close">
-                    </q-btn>
-                  </div>
-                </q-card-section>
-                <q-separator />
-                <q-card-section style="padding-right: 0; padding-left: 0">
-                  <div class="row" style="min-width: 230px">
-                    <div class="gt-xs col-3">
-                      <q-avatar
-                        class="q-p-md"
-                        size="50px"
-                        font-size="20px"
-                        color="blue"
-                        text-color="white"
-                        icon="person"
-                      />
-                    </div>
-                    <div class="lt-sm col-4">
-                      <q-avatar
-                        class="q-p-lg"
-                        size="60px"
-                        font-size="25px"
-                        color="blue"
-                        text-color="white"
-                        icon="person"
-                      />
-                    </div>
-                    <label class="col-7 self-center text-center"
-                      >Sebastian</label
-                    >
-                    <q-btn class="col-2" flat rounded color="red" icon="close">
-                    </q-btn>
-                  </div>
-                </q-card-section>
-                <q-separator />
               </q-card-section>
             </q-card>
           </q-dialog>
@@ -478,10 +256,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapActions, mapGetters } from 'vuex'
+import { Channel } from '../contracts'
 
 interface State {
   mentionedNotifications: boolean;
-  users: boolean;
+  userListModal: boolean;
+  active_user: string;
+  active_channel: string
 }
 
 export default defineComponent({
@@ -489,7 +271,46 @@ export default defineComponent({
   data: (): State => {
     return {
       mentionedNotifications: false,
-      users: false
+      userListModal: false,
+      active_user: '',
+      active_channel: ''
+    }
+  },
+  methods: {
+    async listUsers (channel: string) {
+      await this.getChannelUsers(channel)
+      this.active_channel = channel
+      this.userListModal = true
+    },
+    showMemebers (channel: Channel) {
+      console.log(this.$store.state.channels)
+      console.log(this.$store.state.auth)
+      this.listUsers(channel.name)
+    },
+    ...mapActions('channels', ['getChannelUsers', 'isTyping', 'setActiveChannel'])
+  },
+  computed: {
+    currentUserName () {
+      return this.$store.state.auth.user?.name
+    },
+    currentUserSurname () {
+      return this.$store.state.auth.user?.surname
+    },
+    ...mapGetters('channels', {
+      channels: 'joinedChannels',
+      lastMessageOf: 'lastMessageOf',
+      channelsdata: 'channels',
+      joined: 'joined',
+      invited: 'invited'
+    }),
+    channelUsers () {
+      console.log(this.active_channel)
+      return this.$store.state.channels.channelUsers[this.active_channel]
+    }
+  },
+  mounted: function () {
+    if (this.currentUserSurname && this.currentUserName) {
+      this.active_user = this.currentUserName + ' ' + this.currentUserSurname
     }
   }
 })

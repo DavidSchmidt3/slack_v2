@@ -28,7 +28,7 @@
             <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
             </q-avatar>
 
-            <div class="text-subtitle1 q-mr-md">David</div>
+            <div class="text-subtitle1 q-mr-md">{{this.active_user}}</div>
           </q-btn>
 
           <q-dialog v-model="icon">
@@ -123,7 +123,7 @@
 </style>
 
 <script lang="ts">
-import { ref, Ref } from 'vue'
+import { ref, Ref, defineComponent } from 'vue'
 import { mapActions } from 'vuex'
 
 interface State {
@@ -132,16 +132,18 @@ interface State {
   bar2: Ref<boolean>,
   toolbar: Ref<boolean>,
   userStatus: Ref<string>,
+  active_user: Ref<string>,
 }
 
-export default {
+export default defineComponent({
   setup (): State {
     return {
       icon: ref(false),
       bar: ref(false),
       bar2: ref(false),
       toolbar: ref(false),
-      userStatus: ref('online')
+      userStatus: ref('online'),
+      active_user: ref('John Doe')
     }
   },
   methods: {
@@ -152,6 +154,20 @@ export default {
       this.logout()
     },
     ...mapActions('auth', ['logout'])
+  },
+  computed: {
+    currentUserName () {
+      return this.$store.state.auth.user?.name
+    },
+    currentUserSurname () {
+      return this.$store.state.auth.user?.surname
+    },
+    currentNickname () {
+      return this.$store.state.auth.user?.nickname
+    }
+  },
+  mounted () {
+    this.active_user = this.currentNickname + ''
   }
-}
+})
 </script>
