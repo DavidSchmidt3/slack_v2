@@ -39,8 +39,8 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async create ({ commit }, { name, type }) {
     try {
       commit('LOADING_START')
-      const messages = await channelService.create(name, type)
-      commit('LOADING_SUCCESS', { name, messages })
+      const channel = await channelService.create(name, type)
+      commit('LOADING_SUCCESS', { channel })
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

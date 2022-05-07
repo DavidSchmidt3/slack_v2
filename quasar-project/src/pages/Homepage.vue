@@ -32,7 +32,7 @@
             text-color="white"
             color="primary"
             label="Add channel"
-            @click="createChannel()"
+            @click="createChannel(), channel=false"
           />
         </q-card-section>
       </q-card>

@@ -16,7 +16,15 @@ export default class ChannelsController {
       type: request.all()['type'] === 'private' ? ChannelType.PRIVATE : ChannelType.PUBLIC
     })
 
-    await user.related('channels').attach([channel.id])
+    const date = new Date().toISOString()
+    const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
+
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: today
+      }
+    })
+    return channel
 
 
     // add user to table ChannelUser
