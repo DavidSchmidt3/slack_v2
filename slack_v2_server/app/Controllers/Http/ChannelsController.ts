@@ -26,11 +26,8 @@ export default class ChannelsController {
     })
     return channel
 
-
     // add user to table ChannelUser
-
     //add all users to this channel
-
   }
 
   async add_user({ request }) {
@@ -54,6 +51,23 @@ export default class ChannelsController {
     //  })
 
     // return channel
+  }
+
+  async addUserDirectly({ request }): Promise<Channel> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('email', params.userEmail)
+
+    const date = new Date().toISOString()
+    const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
+    console.log('pridavam', user, channel, date);
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: today
+      }
+    })
+
+    return channel
   }
 
   async leaveOrDelete({ request }): Promise<boolean> {

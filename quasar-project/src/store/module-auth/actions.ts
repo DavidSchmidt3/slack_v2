@@ -12,7 +12,6 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
       // const channels = user?.channels
       const joinedChannels = channelService.getJoinedChannels()
       const invitedChannels = channelService.getInvitedChannels()
-      console.log(joinedChannels, invitedChannels)
       // join user to general channel - hardcoded for now
       if (user?.id !== state.user?.id) {
         // dispatch all channesl from channels

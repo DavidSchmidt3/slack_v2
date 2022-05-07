@@ -117,15 +117,11 @@ export default defineComponent({
       lastMessageOf: 'lastMessageOf'
     }),
     activeChannel () {
-      console.log(this.channels)
       return this.$store.state.channels.active
     }
   },
   methods: {
     async send () {
-      console.log('send')
-      console.log(this.message)
-      console.log(this.activeChannel)
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.loading = false

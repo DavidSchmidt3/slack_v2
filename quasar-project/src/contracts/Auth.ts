@@ -39,6 +39,7 @@ export interface Channel {
   createdAt: string
   updatedAt: string
   owner_id: number
+  type: string
 }
 
 export interface UserInfo {

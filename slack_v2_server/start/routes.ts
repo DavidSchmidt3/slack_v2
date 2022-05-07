@@ -47,6 +47,7 @@ Route.group(() => {
 
 Route.post('channels', 'ChannelsController.create').middleware('auth').as('createChannel5')
 Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as('adduser5')
+Route.post('channels/addUserDirectly', 'ChannelsController.addUserDirectly').middleware('auth').as('addUserDirectly')
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
 Route.post('channels/leave', 'ChannelsController.leave').middleware('auth').as('leave')
 Route.post('channels/delete', 'ChannelsController.delete').middleware('auth').as('delete')
@@ -55,5 +56,6 @@ Route.get('channels/getOwner', 'AuthController.getOwner').middleware('auth').as(
 Route.get('channels/public', 'ChannelsController.getPublicChannels').middleware('auth').as('getPublicChannels')
 Route.get('channels/getInvitedChannels', 'AuthController.getInvitedChannels').middleware('auth').as('getInvitedChannels')
 Route.get('channels/getJoinedChannels', 'AuthController.getJoinedChannels').middleware('auth').as('getJoinedChannels')
+Route.get('channels/getAllChannels', 'AuthController.getAllChannels').middleware('auth').as('getAllChannels')
 Route.post('channels/acceptInvite', 'AuthController.acceptInvite').middleware('auth').as('invite')
 Route.get('users/all', 'ChannelsController.getAllUsers').middleware('auth').as('getAllUsers')

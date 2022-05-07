@@ -14,6 +14,7 @@ export interface ChannelsStateInterface {
   joined: { [channel: string]: Channel},
   typing: { [channel: string]: {message_typing:string, user: string} }
   invitations: { [channel: string]: Channel }
+  allChannels: Channel[]
 }
 
 function state (): ChannelsStateInterface {
@@ -30,7 +31,8 @@ function state (): ChannelsStateInterface {
     typing: {},
     invitations: {},
     invited: {},
-    joined: {}
+    joined: {},
+    allChannels: []
   }
 }
 

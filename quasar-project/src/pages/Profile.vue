@@ -246,8 +246,6 @@ export default defineComponent({
       this.userListModal = true
     },
     showMemebers (channel: Channel) {
-      console.log(this.$store.state.channels)
-      console.log(this.$store.state.auth)
       this.listUsers(channel.name)
     },
     ...mapActions('channels', ['getChannelUsers', 'isTyping', 'setActiveChannel', 'getUsers']),
@@ -271,7 +269,6 @@ export default defineComponent({
       users: 'getAllUsers'
     }),
     channelUsers () {
-      console.log(this.active_channel)
       return this.$store.state.channels.channelUsers[this.active_channel]
     }
   },

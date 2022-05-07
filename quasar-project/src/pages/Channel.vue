@@ -491,7 +491,6 @@ export default defineComponent({
         channel: this.activeChannel
       }
       this.members = false
-      console.log(data)
       this.addUser(data)
     },
     showtyping () {
@@ -518,6 +517,36 @@ export default defineComponent({
       }
       if (message.match(/\/list/)) {
         await this.listUsers(this.activeChannel)
+        return true
+      }
+      if (message.match(/\/join/)) {
+        const words = message.split(' ')
+        const channelName = words[1]
+        const data = {
+          name: channelName,
+          type: words.length === 3 && words[2] === 'private'
+        }
+        await this.getAllChannels()
+        let found = false
+        let isPrivate = false
+        const channels : Channel[] = this.allChannels
+        console.log(channels)
+        channels.forEach(channel => {
+          console.log(channel.name, channelName)
+          if (channel.name === channelName) {
+            if (channel.type === 'private') {
+              isPrivate = true
+            }
+            found = true
+          }
+        })
+        if (isPrivate) {
+          return true
+        } if (!found) {
+          await this.create(data)
+        } else {
+          await this.addUserDirectly({ channel: channelName, user: this.currentMail })
+        }
         return true
       }
       return false
@@ -577,13 +606,14 @@ export default defineComponent({
       return regex.test(message.message)
     },
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
-    ...mapActions('channels', ['addUser'])
+    ...mapActions('channels', ['addMessage', 'getAllChannels', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
+    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly'])
   },
   computed: {
     ...mapGetters('channels', {
       channels: 'invitedChannels',
       lastMessageOf: 'lastMessageOf',
+      allChannels: 'allChannels',
       channelsdata: 'channels',
       joined: 'joined',
       invited: 'invited',
@@ -606,8 +636,6 @@ export default defineComponent({
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       if (Object(a).type === 'public') {
         if (Object(a).owner_id === Object(user).id) {
-          console.log(a)
-          console.log(user)
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
         } else {
@@ -620,8 +648,6 @@ export default defineComponent({
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.private_channel = true
         if (Object(a).owner_id === Object(user).id) {
-          console.log(a)
-          console.log(user)
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
         } else {
@@ -684,11 +710,13 @@ export default defineComponent({
       return this.$store.state.channels.messagesCount[this.activeChannel]
     },
     currentUser () {
-      console.log(this.$store.state.auth.user)
       return this.$store.state.auth.user?.id
     },
     currentNickname () {
       return this.$store.state.auth.user?.nickname
+    },
+    currentMail () {
+      return this.$store.state.auth.user?.email
     },
     channelUsers () {
       return this.$store.state.channels.channelUsers[this.activeChannel]

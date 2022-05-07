@@ -117,6 +117,19 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
+  async addUserDirectly ({ commit }, { channel, user }) {
+    try {
+      commit('LOADING_START')
+      const response = await channelService.addUserDirectly(channel, user)
+      console.log(response)
+      commit('LOADING_SUCCESS', { channel: response, messages: [] })
+      await AcitivityService.add_user(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
   async setActiveChannel ({ commit }, channel: string) {
     try {
       commit('SET_ACTIVE', channel)
@@ -167,8 +180,8 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     try {
       commit('LOADING_START')
       const channels = await channelService.getAllChannels()
-      commit('LOADING_SUCCESS', { channels })
-      return channels
+      console.log('afdsfd', channels)
+      commit('SET_ALL_CHANNELS', { channels })
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err
