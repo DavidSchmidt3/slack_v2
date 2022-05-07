@@ -1,4 +1,6 @@
-import { Channel } from 'src/contracts'
+/* eslint-disable no-sequences */
+/* eslint-disable no-unused-expressions */
+import { Channel, User, UserInfo } from 'src/contracts'
 import { MutationTree } from 'vuex'
 import { UserStateInterface } from './state'
 
@@ -26,8 +28,48 @@ const mutation: MutationTree<UserStateInterface> = {
   },
   NEW_INVITATION (state, channel: Channel) {
     state.invited_channels[channel.name] = channel
+  },
+  All_USERS (state, userslist: User[]) {
+    console.log(userslist)
+    userslist.forEach((user: User) => {
+      if (!state.users[user.name]) {
+        const userInfo: UserInfo = {
+          id: user.id,
+          email: user.email,
+          nickname: user.nickname,
+          name: user.name,
+          surname: user.surname,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          status: 'offline'
+        }
+        state.users[user.name] = userInfo
+      }
+    })
+  },
+  ONLINE_USER (state, user: User) {
+    if (state.users[user.name]) {
+      state.users[user.name].status = 'online'
+    } else {
+      const userInfo: UserInfo = {
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        name: user.name,
+        surname: user.surname,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        status: 'online'
+      }
+      state.users[user.name] = userInfo
+    }
+  },
+  OFFLINE_USER (state, user: User) {
+    state.users[user.name].status = 'offline'
+  },
+  DND_USER (state, user: User) {
+    state.users[user.name].status = 'dnd'
   }
-
 }
 
 export default mutation

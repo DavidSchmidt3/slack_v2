@@ -2,7 +2,7 @@ import { Channel } from 'src/contracts/Auth'
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { ChannelsStateInterface } from './state'
-import { channelService } from 'src/services'
+import { ActivityService, channelService } from 'src/services'
 import { RawMessage } from 'src/contracts'
 import AcitivityService from 'src/services/AcitivityService'
 
@@ -157,6 +157,16 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     const user = usernum.toString()
     // eslint-disable-next-line camelcase
     commit('IS_TYPING', { channel, user, message_typing })
+  },
+  async getUsers ({ commit }) {
+    try {
+      commit('LOADING_START')
+      const users = await ActivityService.getUsers()
+      commit('LOADING_SUCCESS', { users })
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
   }
 }
 

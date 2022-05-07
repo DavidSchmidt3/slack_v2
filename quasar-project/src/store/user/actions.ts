@@ -28,6 +28,12 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
       console.log('here')
       commit('NEW_INVITATION', { channel })
     }
+  },
+  async getAllUsers ({ commit }) {
+    const users = await userService.getAllUsers()
+    console.log(users)
+    commit('All_USERS', users)
+    console.log(this.state.user)
   }
 }
 

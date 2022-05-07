@@ -8,7 +8,7 @@ import { ChannelType } from "Contracts/enums"
 export default class ChannelsController {
 
   // create channel
-  async create ({ request, params, auth }) {
+  async create ({ request, auth }) {
     const user = auth.user as User
     const channel = await Channel.create({
       name: request.all()['channel'],
@@ -106,4 +106,12 @@ export default class ChannelsController {
       }
     }
   }
+  async getAllUsers( {auth} ): Promise<User[]> {
+    // gett all users besides logged user
+    const user = auth.user as User
+    console.log(user)
+    const users = await (await User.query()).filter(user => user.id !== auth.user!.id)
+    return users
+  }
+
 }

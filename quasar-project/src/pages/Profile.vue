@@ -1,3 +1,5 @@
+/* eslint-disable vue/no-use-v-if-with-v-for */
+/* eslint-disable vue/no-parsing-error */
 <template flex>
   <q-page class="justify-center">
     <div class="text-center">
@@ -96,20 +98,17 @@
 
       <q-card bordered square flat class="col-xs-12 col-sm-12 col-lg-3">
         <q-card-section class="row justify-center">
-          <label class="text-center">FRIENDS</label>
+          <label class="text-center">USERS</label>
         </q-card-section>
 
         <q-separator />
 
         <q-separator />
 
-        <q-card-section>
-          <div class="text-center">
-            <q-btn color="green"> Add a friend </q-btn>
-          </div>
-        </q-card-section>
-        <q-separator />
-        <q-card-section>
+        <q-card-section
+              v-for="( user, index) in users"
+              :key="index"
+              >
           <div class="row">
             <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
               <div class="gt-xs">
@@ -134,57 +133,12 @@
               </div>
             </q-btn>
             <label class="col-xs-4 col-sm-4 self-center text-center"
-              >Alice</label
+              >{{user.name}}</label
             >
-            <div>
+            <div v-if="user.status == 'offline'">
               <span class="q-ma-md q-pa-sm grey-dot"></span>
             </div>
-
-            <div
-              class="col-xs-2 col-sm-2 text-center self-center"
-              style="margin: 0%"
-            ></div>
-
-            <q-btn
-              class="col-xs-1 col-sm-2 col-md-1"
-              flat
-              rounded
-              color="red"
-              icon="close"
-            >
-            </q-btn>
-          </div>
-        </q-card-section>
-
-        <q-separator />
-        <q-card-section>
-          <div class="row">
-            <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
-              <div class="gt-xs">
-                <q-avatar
-                  class="q-p-md"
-                  size="50px"
-                  font-size="20px"
-                  color="blue"
-                  text-color="white"
-                  icon="person"
-                />
-              </div>
-              <div class="lt-sm">
-                <q-avatar
-                  class="q-p-lg"
-                  size="60px"
-                  font-size="25px"
-                  color="blue"
-                  text-color="white"
-                  icon="person"
-                />
-              </div>
-            </q-btn>
-            <label class="col-xs-4 col-sm-4 self-center text-center"
-              >Ctibor Kovalčík</label
-            >
-            <div>
+            <div v-if="user.status == 'online'">
               <span class="q-ma-md q-pa-sm green-dot"></span>
             </div>
 
@@ -203,6 +157,8 @@
             </q-btn>
           </div>
         </q-card-section>
+
+        <q-separator />
         <q-separator />
         <q-card-section>
           <q-dialog v-model="userListModal">
@@ -215,7 +171,7 @@
 
               <q-card-section class="column">
                 <q-card-section style="padding-right: 0; padding-left: 0"
-                  v-for="(user, index) in this.channelUsers"
+                  v-for="(user, index) in channelUsers"
                   :key="index"
                   v-ripple
                   >
@@ -277,6 +233,10 @@ export default defineComponent({
     }
   },
   methods: {
+    async getUserss () {
+      console.log(this.getUsers())
+    },
+
     async listUsers (channel: string) {
       await this.getChannelUsers(channel)
       this.active_channel = channel
@@ -287,7 +247,8 @@ export default defineComponent({
       console.log(this.$store.state.auth)
       this.listUsers(channel.name)
     },
-    ...mapActions('channels', ['getChannelUsers', 'isTyping', 'setActiveChannel'])
+    ...mapActions('channels', ['getChannelUsers', 'isTyping', 'setActiveChannel', 'getUsers']),
+    ...mapActions('user', ['getAllUsers'])
   },
   computed: {
     currentUserName () {
@@ -303,6 +264,9 @@ export default defineComponent({
       joined: 'joined',
       invited: 'invited'
     }),
+    ...mapGetters('user', {
+      users: 'getAllUsers'
+    }),
     channelUsers () {
       console.log(this.active_channel)
       return this.$store.state.channels.channelUsers[this.active_channel]
@@ -312,6 +276,8 @@ export default defineComponent({
     if (this.currentUserSurname && this.currentUserName) {
       this.active_user = this.currentUserName + ' ' + this.currentUserSurname
     }
+    this.getUserss()
+    this.getAllUsers()
   }
 })
 </script>

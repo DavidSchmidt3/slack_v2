@@ -11,6 +11,11 @@ const getters: GetterTree<UserStateInterface, StateInterface> = {
   },
   getNewInvitations (context) {
     return context.new_invitations !== null
+  },
+  getAllUsers (context) {
+    console.log(context)
+    console.log('here')
+    return context.users
   }
 }
 

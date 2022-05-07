@@ -49,6 +49,11 @@ class AuthManager {
     }
   }
 
+  public setOffline (offline: boolean): void {
+    LocalStorage.set(this.storageKey + '_offline', offline)
+    this.notifyListeners()
+  }
+
   // this is just shortcut for adding change listener which calls callback only when token was removed
   public onLogout (listener: () => void): () => void {
     return this.onChange((token) => {

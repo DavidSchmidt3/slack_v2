@@ -72,7 +72,18 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
       commit('AUTH_ERROR', err)
       throw err
     }
+  },
+  async doNotDisturb ({ commit, dispatch }) {
+    try {
+      commit('AUTH_START')
+      await dispatch('channels/leave', null, { root: true })
+      commit('AUTH_SUCCESS', null)
+    } catch (err) {
+      commit('AUTH_ERROR', err)
+      throw err
+    }
   }
+
 }
 
 export default actions

@@ -33,6 +33,7 @@ export default class ActivityController {
     const onlineUsers = await User.findMany([...onlineIds])
 
     socket.emit('user:list', onlineUsers)
+    console.log('online users list', onlineUsers)
     logger.info('new websocket connection')
   }
 
@@ -54,5 +55,26 @@ export default class ActivityController {
     const room = this.getUserRoom(auth.user!)
     socket.broadcast.in(room).emit('user:online', user)
     logger.info('user added to room', room)
+  }
+
+  public async onDoNotDisturb({ socket, auth, logger }: WsContextContract, reason: string) {
+    const room = this.getUserRoom(auth.user!)
+    const userSockets = await socket.in(room).allSockets()
+
+    // user is disconnected
+    if (userSockets.size === 0) {
+      // notify other users
+      socket.broadcast.emit('user:dnd', auth.user)
+    }
+
+    logger.info('websocket is set to dnd', reason)
+  }
+
+  
+
+  public async getUsers({ socket, auth, logger }: WsContextContract): Promise<User[]> {
+    socket.broadcast.emit('user:dnd' , auth.user)
+    logger.info('getting all users from ws')
+    return Promise.resolve([auth.user!])
   }
 }

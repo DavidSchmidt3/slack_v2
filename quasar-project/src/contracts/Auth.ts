@@ -40,3 +40,15 @@ export interface Channel {
   updatedAt: string
   owner_id: number
 }
+
+export interface UserInfo {
+  id: number
+  email: string
+  nickname: string,
+  name: string,
+  surname: string,
+  createdAt: string,
+  updatedAt: string,
+  // eslint-disable-next-line no-undef
+  status : string
+}

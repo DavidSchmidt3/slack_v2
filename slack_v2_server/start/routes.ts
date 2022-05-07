@@ -32,6 +32,8 @@ Ws.namespace('channels/:name')
   .on('addMessage', 'MessageController.addMessage')
   .on('typing', 'MessageController.isTyping')
   .on('addUser', 'ActivityController.addUser')
+  .on('getUsers', 'ActivityController.getUsers')
+  .on('doNotDisturb', 'ActivityController.doNotDisturb')
 
 Ws.namespace('users/:name')
   .on('invite_channel', 'InvitesController.invites')
@@ -54,3 +56,4 @@ Route.get('channels/public', 'ChannelsController.getPublicChannels').middleware(
 Route.get('channels/getInvitedChannels', 'AuthController.getInvitedChannels').middleware('auth').as('getInvitedChannels')
 Route.get('channels/getJoinedChannels', 'AuthController.getJoinedChannels').middleware('auth').as('getJoinedChannels')
 Route.post('channels/acceptInvite', 'AuthController.acceptInvite').middleware('auth').as('invite')
+Route.get('users/all', 'ChannelsController.getAllUsers').middleware('auth').as('getAllUsers')

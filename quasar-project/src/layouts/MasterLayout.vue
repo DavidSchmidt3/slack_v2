@@ -47,13 +47,17 @@
                   val="online"
                   label="Online"
                   color="green"
+                  @click="foo"
                 />
                 <q-radio
                   keep-color
                   v-model="userStatus"
+                  @change="foo"
                   val="dnd"
                   label="Do not Disturb"
                   color="red"
+                  @click="foo"
+
                 />
                 <q-radio
                   keep-color
@@ -61,6 +65,7 @@
                   val="offline"
                   label="Offline"
                   color="grey"
+                  @click="foo"
                 />
               </q-card-section>
             </q-card>
@@ -150,10 +155,21 @@ export default defineComponent({
     statusColor (e: Event) {
       console.log(e)
     },
+    foo () {
+      if (this.userStatus === 'online') {
+        this.login()
+      } else if (this.userStatus === 'dnd') {
+        this.logout()
+      } else {
+        this.logout()
+      }
+    },
     logmeout () {
       this.logout()
     },
-    ...mapActions('auth', ['logout'])
+    ...mapActions('auth', ['logout']),
+    ...mapActions('auth', ['login'])
+
   },
   computed: {
     currentUserName () {
@@ -169,5 +185,6 @@ export default defineComponent({
   mounted () {
     this.active_user = this.currentNickname + ''
   }
+
 })
 </script>

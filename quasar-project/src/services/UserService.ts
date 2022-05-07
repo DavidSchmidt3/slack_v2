@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { BootParams, SocketManager } from './SocketManager'
-import type { Channel } from 'src/contracts'
+import type { Channel, User } from 'src/contracts'
 import { api } from 'src/boot/axios'
 import { AxiosError } from 'axios'
 
@@ -47,6 +47,18 @@ class UserService {
 
         return Promise.reject(error)
       })
+  }
+
+  public getAllUsers (): Promise<User[]> {
+    return api.get(
+      'users/all')
+      .then((response) => response.data)
+      .catch((error: AxiosError) => {
+        if (error.response?.status === 401) {
+          return null
+        }
+      }
+      )
   }
 
   public in (name: string): UserSocketManager | undefined {
