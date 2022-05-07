@@ -513,8 +513,7 @@ export default defineComponent({
     async handleSpecialMessage (message: string): Promise<boolean> {
       if (message.match(/\/cancel/)) {
         this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
-        window.location.reload()
-        this.activeChannel = ''
+        this.setActiveChannel('general')
         return true
       }
       if (message.match(/\/list/)) {
@@ -558,11 +557,11 @@ export default defineComponent({
     },
     handleLeavePermanent () {
       this.leavePermanent({ channel: this.activeChannel, userId: this.currentUser })
-      window.location.reload()
+      this.setActiveChannel('general')
     },
     handleDelete () {
       this.deleteChannel({ channel: this.activeChannel, userId: this.currentUser })
-      window.location.reload()
+      this.setActiveChannel('general')
     },
     scrollMessages () {
       const area = this.$refs.area as QScrollArea

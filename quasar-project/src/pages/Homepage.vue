@@ -264,7 +264,6 @@ export default defineComponent({
       invited: 'invited'
     }),
     activeChannel () {
-      console.log(this.channels)
       return this.$store.state.channels.active
     },
     messages (): SerializedMessage[] {

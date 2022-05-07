@@ -96,17 +96,38 @@ class ChannelService {
   }
 
   public async leaveOrDelete (name: string, userId: number): Promise<void> {
+    const channel = this.channels.get(name)
+    if (!channel) {
+      return
+    }
+
     await api.post<Channel>('/channels/leaveOrDelete', { channel: name, userId })
+
+    channel.destroy()
     this.channels.delete(name)
   }
 
   public async leavePermanent (name: string, userId: number): Promise<void> {
+    const channel = this.channels.get(name)
+    if (!channel) {
+      return
+    }
+
     await api.post<Channel>('/channels/leave', { channel: name, userId })
+
+    channel.destroy()
     this.channels.delete(name)
   }
 
   public async delete (name: string, userId: number): Promise<void> {
+    const channel = this.channels.get(name)
+    if (!channel) {
+      return
+    }
+
     await api.post<Channel>('/channels/delete', { channel: name, userId })
+
+    channel.destroy()
     this.channels.delete(name)
   }
 

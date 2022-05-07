@@ -52,7 +52,8 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     try {
       commit('LOADING_START')
       await channelService.leaveOrDelete(channel, userId)
-      commit('CLEAR_CHANNEL', channel)
+      commit('SET_ACTIVE', 'general')
+      commit('DELETE_CHANNEL', channel)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err
@@ -63,7 +64,8 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     try {
       commit('LOADING_START')
       await channelService.leavePermanent(channel, userId)
-      commit('CLEAR_CHANNEL', channel)
+      commit('SET_ACTIVE', 'general')
+      commit('DELETE_CHANNEL', channel)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err
@@ -74,7 +76,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     try {
       commit('LOADING_START')
       await channelService.delete(channel, userId)
-      commit('CLEAR_CHANNEL', channel)
+      commit('DELETE_CHANNEL', channel)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

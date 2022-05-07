@@ -33,6 +33,18 @@ const mutation: MutationTree<ChannelsStateInterface> = {
     state.active = ''
     delete state.messages[channel]
   },
+  DELETE_CHANNEL (state, channel) {
+    delete state.messages[channel]
+    delete state.joined[channel]
+    delete state.isOwner[channel]
+    delete state.messageIndex[channel]
+    delete state.messagesCount[channel]
+    delete state.channelUsers[channel]
+    delete state.channels[channel]
+    delete state.typing[channel]
+    delete state.invitations[channel]
+    delete state.invited[channel]
+  },
   SET_ACTIVE (state, channel: string) {
     state.active = channel
   },
