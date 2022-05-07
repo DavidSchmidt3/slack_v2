@@ -147,8 +147,8 @@
               />
             </div>
             <h5 style="margin: 0" class="font-weight-bold">{{ activeChannel }}</h5>
-            <q-btn @click="handleLeavePermanent" color="primary" style="margin-left: 50px;">Leave channel</q-btn>
-            <q-btn @click="handleDelete" v-if="isOwner" color="primary" style="margin-left: 10px;">Delete channel</q-btn>
+            <q-btn v-if="this.activeChannel !== 'general' && this.activeChannel" @click="handleLeavePermanent" color="primary" style="margin-left: 50px;">Leave channel</q-btn>
+            <q-btn v-if="isOwner && this.activeChannel !== 'general'" @click="handleDelete" color="primary" style="margin-left: 10px;">Delete channel</q-btn>
           </q-card-section>
           <q-separator size="1px" color="black" />
 

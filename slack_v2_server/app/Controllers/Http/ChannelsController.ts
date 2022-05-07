@@ -10,8 +10,6 @@ export default class ChannelsController {
   // create channel
   async create ({ request, params, auth }) {
     const user = auth.user as User
-    console.log(request.all())
-    console.log(params)
     const channel = await Channel.create({
       name: request.all()['channel'],
       ownerId: user.$attributes.id,
@@ -28,7 +26,6 @@ export default class ChannelsController {
   }
 
   async add_user({ request }) {
-    console.log(request.all()['userEmail'])
     const emailos = request.all()['userEmail']
     const channel = request.all()['channel']
     try
@@ -95,5 +92,18 @@ export default class ChannelsController {
     return channels
   }
 
-
+  async deleteOldChannels(): Promise<void> {
+    const channels = await Channel.query()
+    for (const channel of channels) {
+      const lastMessage = await channel.related('messages').query().orderBy('created_at', 'desc').first()
+      if (lastMessage) {
+        const lastMessageDate = lastMessage.createdAt.toJSDate()
+        const now = new Date()
+        const diff = now.getTime() - lastMessageDate.getTime()
+        if (diff > 30 * 24 * 60 * 60 * 1000) {
+          await channel.delete()
+        }
+      }
+    }
+  }
 }
