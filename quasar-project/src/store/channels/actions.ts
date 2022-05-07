@@ -4,7 +4,6 @@ import { StateInterface } from '../index'
 import { ChannelsStateInterface } from './state'
 import { channelService } from 'src/services'
 import { RawMessage } from 'src/contracts'
-import UserService from 'src/services/UserService'
 import AcitivityService from 'src/services/AcitivityService'
 
 const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
@@ -37,6 +36,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       throw err
     }
   },
+
   async create ({ commit }, { name, type }) {
     try {
       commit('LOADING_START')
@@ -52,6 +52,28 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     try {
       commit('LOADING_START')
       await channelService.leaveOrDelete(channel, userId)
+      commit('CLEAR_CHANNEL', channel)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async leavePermanent ({ commit }, { channel, userId } : { channel: string, userId: number }) {
+    try {
+      commit('LOADING_START')
+      await channelService.leavePermanent(channel, userId)
+      commit('CLEAR_CHANNEL', channel)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async deleteChannel ({ commit }, { channel, userId } : { channel: string, userId: number }) {
+    try {
+      commit('LOADING_START')
+      await channelService.delete(channel, userId)
       commit('CLEAR_CHANNEL', channel)
     } catch (err) {
       commit('LOADING_ERROR', err)
@@ -95,6 +117,17 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
+  async setActiveChannel ({ commit }, channel: string) {
+    try {
+      commit('SET_ACTIVE', channel)
+      const isOwner = await channelService.isOwner(channel)
+      commit('SET_IS_OWNER', { channel, isOwner })
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
   async leave ({ getters, commit }, channel: string | null) {
     const leaving: string[] = channel !== null ? [channel] : getters.joinedChannels
 
@@ -103,6 +136,7 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       commit('CLEAR_CHANNEL', c)
     })
   },
+
   async addMessage ({ commit }, { channel, message }: { channel: string, message: RawMessage }) {
     const newMessage = await channelService.in(channel)?.addMessage(message)
     commit('NEW_MESSAGE', { channel, message: newMessage })

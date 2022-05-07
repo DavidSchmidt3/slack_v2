@@ -52,6 +52,15 @@ export default class AuthController {
     return channels1
   }
 
+  async getOwner({ auth, request }: HttpContextContract) {
+    const channel = await Channel.findByOrFail('name', request.input('channel'))
+    if (channel.ownerId === auth.user!.id) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   async acceptInvite({ auth, request }: HttpContextContract) {
     const kanal = request.input('channel')
     const channel = await Channel.find(kanal.id)
@@ -59,8 +68,8 @@ export default class AuthController {
     if (!channel || !user) {
       throw new Error('Channel or user not found')
     }
-   
-    
+
+
     await Channel_users.query().where('user_id', user.id).where('channel_id', channel.id).update({ invited_at: null , joined_at: new Date()})
     return channel
   }

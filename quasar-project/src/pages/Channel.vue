@@ -63,7 +63,7 @@
            <ul
               class="q-gutter-md"
               style="list-style-type: none; padding-left: 1rem"
-              v-show="channelsExpanded"
+              v-show="invitesExpanded"
             >
 
               <li class="list-item"
@@ -107,8 +107,8 @@
               style="list-style-type: none; padding-left: 1rem"
               v-show="channelsExpanded"
             >
-
               <li class="list-item"
+              style="margin-top: 10px;"
               v-for="(channel, index) in joined"
               :key="index"
               @click="setActiveChannel(channel.name)">
@@ -147,6 +147,8 @@
               />
             </div>
             <h5 style="margin: 0" class="font-weight-bold">{{ activeChannel }}</h5>
+            <q-btn @click="handleLeavePermanent" color="primary" style="margin-left: 50px;">Leave channel</q-btn>
+            <q-btn @click="handleDelete" v-if="isOwner" color="primary" style="margin-left: 10px;">Delete channel</q-btn>
           </q-card-section>
           <q-separator size="1px" color="black" />
 
@@ -364,31 +366,30 @@
             <h6 class="q-my-sm q-mx-xs section_title">Channels</h6>
           </q-card-section>
           <q-card-section style="padding-top: 5px; padding-bottom: 0">
-            <q-list>
-            <q-item
-              v-for="(channel, index) in channels"
-              :key="index"
-              clickable
-              v-ripple
-              @click="setActiveChannel(channel)"
+             <ul
+              class="q-gutter-md"
+              style="list-style-type: none; padding-left: 1rem"
+              v-show="channelsExpanded"
             >
-              <q-item-section>
-                <q-item-label lines="1">
-                  {{ channel }}
-                </q-item-label>
-                <q-item-label class="conversation__summary" caption>
-                  {{ lastMessageOf(channel)?.content || '' }}
-                </q-item-label>
-              </q-item-section>
 
-              <q-item-section side>
-                <!--q-item-label caption>
-                  {{ channel }}
-                </q-item-label-->
-                <q-icon name="keyboard_arrow_down" />
-              </q-item-section>
-            </q-item>
-          </q-list>
+              <li class="list-item"
+              v-for="(channel, index) in joined"
+              :key="index"
+              @click="setActiveChannel(channel.name)">
+                <q-btn style="padding-right: 30px" flat
+                  >#   {{ channel.name }}<q-icon
+                  v-if="channel.type == 'private'"
+                    name="lock"
+                    style="
+                      position: absolute;
+                      top: 6px;
+                      right: 5px;
+                      font-size: 20px;
+                    "
+                />
+                </q-btn>
+              </li>
+              </ul>
           </q-card-section>
         </q-card>
       </div>
@@ -509,16 +510,18 @@ export default defineComponent({
     handleDrawer () {
       this.drawerLeft = !this.drawerLeft
     },
-    async handleSpecialMessage (message: string) {
+    async handleSpecialMessage (message: string): Promise<boolean> {
       if (message.match(/\/cancel/)) {
         this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
-        // refresh site
         window.location.reload()
         this.activeChannel = ''
+        return true
       }
       if (message.match(/\/list/)) {
         await this.listUsers(this.activeChannel)
+        return true
       }
+      return false
     },
     async listUsers (channel: string) {
       await this.getChannelUsers(channel)
@@ -530,7 +533,10 @@ export default defineComponent({
       }
       this.typing_user = ''
       this.typing_message = ''
-      await this.handleSpecialMessage(this.message)
+      if (await this.handleSpecialMessage(this.message)) {
+        this.message = ''
+        return
+      }
       this.loading = true
       await this.addMessage({ channel: this.activeChannel, message: this.message })
       this.message = ''
@@ -550,6 +556,14 @@ export default defineComponent({
       const area = this.$refs.area as QScrollArea
       area?.setScrollPosition('vertical', area.getScrollPosition().top + 1510)
     },
+    handleLeavePermanent () {
+      this.leavePermanent({ channel: this.activeChannel, userId: this.currentUser })
+      window.location.reload()
+    },
+    handleDelete () {
+      this.deleteChannel({ channel: this.activeChannel, userId: this.currentUser })
+      window.location.reload()
+    },
     scrollMessages () {
       const area = this.$refs.area as QScrollArea
       setTimeout(() => {
@@ -563,11 +577,8 @@ export default defineComponent({
       const regex = new RegExp(`@${this.currentNickname}`)
       return regex.test(message.message)
     },
-    ...mapMutations('channels', {
-      setActiveChannel: 'SET_ACTIVE'
-    }),
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'getChannelUsers', 'isTyping']),
+    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
     ...mapActions('channels', ['addUser'])
   },
   computed: {
@@ -576,7 +587,8 @@ export default defineComponent({
       lastMessageOf: 'lastMessageOf',
       channelsdata: 'channels',
       joined: 'joined',
-      invited: 'invited'
+      invited: 'invited',
+      isOwner: 'isOwner'
     }),
     channelsIconRotation () {
       return this.channelsExpanded

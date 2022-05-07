@@ -5,6 +5,7 @@ export interface ChannelsStateInterface {
   error: Error | null,
   messages: { [channel: string]: SerializedMessage[] }
   active: string,
+  isOwner: { [channel: string]: boolean },
   messageIndex: { [channel: string]: number },
   messagesCount: { [channel: string]: number },
   channelUsers: { [channel: string]: User[] },
@@ -21,6 +22,7 @@ function state (): ChannelsStateInterface {
     error: null,
     messages: {},
     active: '',
+    isOwner: {},
     messageIndex: {},
     messagesCount: {},
     channelUsers: {},

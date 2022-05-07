@@ -82,19 +82,19 @@
     </q-page-section>
 
     <q-dialog v-if="accept_invite" v-model="accept_invite">
-              <q-card class="q-pa-md">
-                <q-card-section class="row items-center q-pb-none">
-                  <q-space />
-                  <q-btn
-                    class="q-my-md"
-                    text-color="white"
-                    color="primary"
-                    label="Accept Invite"
-                    @click="joinChannel(acceptinvite())"
-                  />
-                </q-card-section>
-                </q-card>
-            </q-dialog>
+      <q-card class="q-pa-md">
+        <q-card-section class="row items-center q-pb-none">
+          <q-space />
+          <q-btn
+            class="q-my-md"
+            text-color="white"
+            color="primary"
+            label="Accept Invite"
+            @click="joinChannel(acceptinvite())"
+          />
+        </q-card-section>
+        </q-card>
+    </q-dialog>
 
     <q-page-section
       class="col-12 text-center center channels_section"
@@ -229,7 +229,6 @@ export default defineComponent({
     joinChannel (channel: Channel) {
       this.channelname_to_join = channel
       this.accept_invite = true
-      console.log("here")
     },
 
     acceptinvite () {
@@ -241,7 +240,6 @@ export default defineComponent({
       this.date = new Date().toLocaleString('sk-SK')
     },
     createChannel () {
-      console.log(this.new_channel)
       const data =
       {
         name: this.new_channel,

@@ -43,6 +43,13 @@ const mutation: MutationTree<ChannelsStateInterface> = {
       state.messageIndex[channel.name] = index
     }
   },
+  SET_IS_OWNER (state, { channel, isOwner }: { channel: Channel, isOwner: boolean }) {
+    if (typeof (channel) === 'string') {
+      state.isOwner[channel] = isOwner
+    } else {
+      state.isOwner[channel.name] = isOwner
+    }
+  },
   SET_CHANNEL_USERS (state, { channel, users }: { channel: string, users: User[] }) {
     state.channelUsers[channel] = users
   },

@@ -90,8 +90,23 @@ class ChannelService {
     return this.channels.get(name)
   }
 
+  public async isOwner (name: string): Promise<boolean> {
+    const data = await api.get<boolean>('/channels/getOwner', { params: { channel: name } })
+    return data.data
+  }
+
   public async leaveOrDelete (name: string, userId: number): Promise<void> {
     await api.post<Channel>('/channels/leaveOrDelete', { channel: name, userId })
+    this.channels.delete(name)
+  }
+
+  public async leavePermanent (name: string, userId: number): Promise<void> {
+    await api.post<Channel>('/channels/leave', { channel: name, userId })
+    this.channels.delete(name)
+  }
+
+  public async delete (name: string, userId: number): Promise<void> {
+    await api.post<Channel>('/channels/delete', { channel: name, userId })
     this.channels.delete(name)
   }
 

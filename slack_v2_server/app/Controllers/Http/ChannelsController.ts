@@ -17,9 +17,9 @@ export default class ChannelsController {
       ownerId: user.$attributes.id,
       type: request.all()['type'] === 'private' ? ChannelType.PRIVATE : ChannelType.PUBLIC
     })
-    
+
     await user.related('channels').attach([channel.id])
-    
+
 
     // add user to table ChannelUser
 
@@ -66,6 +66,21 @@ export default class ChannelsController {
     }
   }
 
+  async leave({ request }): Promise<void> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    await ChannelUser.query()
+      .where('channel_id', channel.id)
+      .where('user_id', params.userId)
+      .delete()
+  }
+
+  async delete({ request }): Promise<void> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    await channel.delete()
+  }
+
   async getChannelUsers({ request }): Promise<User[]> {
     const params = request.all()
     const channel = await Channel.findByOrFail('name', params.channel)
@@ -80,6 +95,5 @@ export default class ChannelsController {
     return channels
   }
 
-  
 
 }
