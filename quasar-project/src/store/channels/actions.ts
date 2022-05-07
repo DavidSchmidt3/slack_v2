@@ -121,9 +121,18 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     try {
       commit('LOADING_START')
       const response = await channelService.addUserDirectly(channel, user)
-      console.log(response)
       commit('LOADING_SUCCESS', { channel: response, messages: [] })
       await AcitivityService.add_user(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async addUserDirectlyByNick ({ commit }, { channel, user }) {
+    try {
+      commit('LOADING_START')
+      await channelService.addUserDirectlyByNick(channel, user)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

@@ -175,6 +175,11 @@ class ChannelService {
     return response.data
   }
 
+  public async addUserDirectlyByNick (channel: string, user: string): Promise<Channel> {
+    const response = await api.post<Channel>('/channels/addUserDirectlyByNick', { channel, userNick: user })
+    return response.data
+  }
+
   public async acceptInvite (channel: Channel): Promise<void> {
     await api.post<string>('/channels/acceptInvite', { channel })
   }

@@ -48,6 +48,7 @@ Route.group(() => {
 Route.post('channels', 'ChannelsController.create').middleware('auth').as('createChannel5')
 Route.post('channels/add', 'ChannelsController.add_user').middleware('auth').as('adduser5')
 Route.post('channels/addUserDirectly', 'ChannelsController.addUserDirectly').middleware('auth').as('addUserDirectly')
+Route.post('channels/addUserDirectlyByNick', 'ChannelsController.addUserDirectlyByNick').middleware('auth').as('addUserDirectlyByNick')
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
 Route.post('channels/leave', 'ChannelsController.leave').middleware('auth').as('leave')
 Route.post('channels/inviteUser', 'ChannelsController.inviteUser').middleware('auth').as('inviteUser')

@@ -551,7 +551,6 @@ export default defineComponent({
         const joined = this.joined
         const channels : Channel[] = Object.values(joined)
         const channel = channels.find(channel => channel.name === this.activeChannel)
-        console.log(channel?.type)
         if (channel && channel.type === 'private') {
           const words = message.split(' ')
           const user = words[1]
@@ -562,6 +561,20 @@ export default defineComponent({
             this.revokeUser({ channel, user })
           }
         }
+        return true
+      } if (message.match(/\/invite/)) {
+        const joined = this.joined
+        const channels : Channel[] = Object.values(joined)
+        const channel = channels.find(channel => channel.name === this.activeChannel)
+        if (channel && channel.type === 'public') {
+          const words = message.split(' ')
+          this.addUserDirectlyByNick({ channel: this.activeChannel, user: words[1] })
+        }
+        return true
+      }
+      if (message.match(/\/quit/) && this.is_owner) {
+        const channel = this.activeChannel
+        this.deleteChannel({ channel, userId: this.currentUser })
         return true
       }
       return false
@@ -622,7 +635,7 @@ export default defineComponent({
     },
     ...mapActions('auth', ['logout']),
     ...mapActions('channels', ['addMessage', 'getAllChannels', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
-    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly', 'inviteUser', 'revokeUser'])
+    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly', 'addUserDirectlyByNick', 'inviteUser', 'revokeUser'])
   },
   computed: {
     ...mapGetters('channels', {

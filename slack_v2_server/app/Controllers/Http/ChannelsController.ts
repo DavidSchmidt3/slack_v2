@@ -107,6 +107,22 @@ export default class ChannelsController {
     return channel
   }
 
+  async addUserDirectlyByNick({ request }): Promise<Channel> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userNick)
+
+    const date = new Date().toISOString()
+    const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: today
+      }
+    })
+
+    return channel
+  }
+
   async leaveOrDelete({ request }): Promise<boolean> {
     const params = request.all()
     const channel = await Channel.findByOrFail('name', params.channel)
