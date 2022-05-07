@@ -157,18 +157,20 @@ export default defineComponent({
     },
     foo () {
       if (this.userStatus === 'online') {
-        this.login()
+        this.onSetOnline()
       } else if (this.userStatus === 'dnd') {
-        this.logout()
+        this.doNotDisturb()
       } else {
-        this.logout()
+        this.onSetOffline()
       }
     },
     logmeout () {
       this.logout()
     },
-    ...mapActions('auth', ['logout']),
-    ...mapActions('auth', ['login'])
+    ...mapActions('auth', ['onSetOnline']),
+    ...mapActions('auth', ['doNotDisturb']),
+    ...mapActions('auth', ['onSetOffline']),
+    ...mapActions('auth', ['logout'])
 
   },
   computed: {

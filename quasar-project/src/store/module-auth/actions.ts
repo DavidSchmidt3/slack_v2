@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { AuthStateInterface } from './state'
-import { authService, authManager, channelService } from 'src/services'
+import { authService, authManager, channelService, ActivityService } from 'src/services'
 import { LoginCredentials, RegisterData } from 'src/contracts'
 const actions: ActionTree<AuthStateInterface, StateInterface> = {
   async check ({ commit, state, dispatch }) {
@@ -77,6 +77,34 @@ const actions: ActionTree<AuthStateInterface, StateInterface> = {
     try {
       commit('AUTH_START')
       await dispatch('channels/leave', null, { root: true })
+      await ActivityService.set_dnd()
+      commit('AUTH_SUCCESS', null)
+    } catch (err) {
+      commit('AUTH_ERROR', err)
+      throw err
+    }
+  },
+  async onSetOnline ({ commit, dispatch }) {
+    try {
+      commit('AUTH_START')
+      const joinedChannels = channelService.getJoinedChannels()
+      if (joinedChannels) {
+        (await joinedChannels).forEach((joinedchannel: unknown) => {
+          dispatch('channels/join', joinedchannel, { root: true })
+        })
+      }
+      await ActivityService.set_online()
+      commit('AUTH_SUCCESS', null)
+    } catch (err) {
+      commit('AUTH_ERROR', err)
+      throw err
+    }
+  },
+  async onSetOffline ({ commit, dispatch }) {
+    try {
+      commit('AUTH_START')
+      await dispatch('channels/leave', null, { root: true })
+      await ActivityService.set_offline()
       commit('AUTH_SUCCESS', null)
     } catch (err) {
       commit('AUTH_ERROR', err)

@@ -10,7 +10,6 @@ export default class ActivityController {
     // all connections for the same authenticated user will be in the room
     const room = this.getUserRoom(auth.user!)
     const userSockets = await socket.in(room).allSockets()
-    console.log(userSockets)
 
     // this is first connection for given user
     if (userSockets.size === 0) {
@@ -33,7 +32,6 @@ export default class ActivityController {
     const onlineUsers = await User.findMany([...onlineIds])
 
     socket.emit('user:list', onlineUsers)
-    console.log('online users list', onlineUsers)
     logger.info('new websocket connection')
   }
 
@@ -58,16 +56,30 @@ export default class ActivityController {
   }
 
   public async onDoNotDisturb({ socket, auth, logger }: WsContextContract, reason: string) {
+    console.log("ta co do pici")
     const room = this.getUserRoom(auth.user!)
-    const userSockets = await socket.in(room).allSockets()
+   
+    socket.broadcast.emit('user:dnd', auth.user)
+    
+    logger.info('websocket is set to dnd')
+  }
 
-    // user is disconnected
-    if (userSockets.size === 0) {
-      // notify other users
-      socket.broadcast.emit('user:dnd', auth.user)
-    }
+  public async OnSetOffline ({ socket, auth, logger }: WsContextContract, reason: string) {
+    console.log("ta co do pici")
+    const room = this.getUserRoom(auth.user!)
 
-    logger.info('websocket is set to dnd', reason)
+    socket.broadcast.emit('user:setoffline', auth.user)
+
+    logger.info('websocket is set to offline')
+  }
+
+  public async OnSetOnline ({ socket, auth, logger }: WsContextContract, reason: string) {
+    console.log("ta co do pici")
+    const room = this.getUserRoom(auth.user!)
+
+    socket.broadcast.emit('user:setonline', auth.user)
+
+    logger.info('websocket is set to online')
   }
 
   

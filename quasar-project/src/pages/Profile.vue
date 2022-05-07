@@ -141,6 +141,9 @@
             <div v-if="user.status == 'online'">
               <span class="q-ma-md q-pa-sm green-dot"></span>
             </div>
+            <div v-if="user.status == 'dnd'">
+              <span class="q-ma-md q-pa-sm red-dot"></span>
+            </div>
 
             <div
               class="col-xs-2 col-sm-2 text-center self-center"

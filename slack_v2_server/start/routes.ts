@@ -33,7 +33,7 @@ Ws.namespace('channels/:name')
   .on('typing', 'MessageController.isTyping')
   .on('addUser', 'ActivityController.addUser')
   .on('getUsers', 'ActivityController.getUsers')
-  .on('doNotDisturb', 'ActivityController.doNotDisturb')
+
 
 Ws.namespace('users/:name')
   .on('invite_channel', 'InvitesController.invites')

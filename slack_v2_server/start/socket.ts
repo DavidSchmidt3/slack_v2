@@ -16,3 +16,7 @@ Ws.namespace('/')
   .on('getUsers', ({ socket }, user: User) => {
     console.log('getting all users from ws',socket,user)
   })
+  .on('setDnd', 'ActivityController.onDoNotDisturb')
+  .on('setOnline', 'ActivityController.OnSetOnline')
+  .on('setOffline', 'ActivityController.OnSetOffline')
+
