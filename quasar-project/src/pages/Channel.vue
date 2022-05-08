@@ -559,6 +559,10 @@ export default defineComponent({
             this.revokeUser({ channel, user })
           }
         }
+        if (channel && channel.type === 'public') {
+          const words = message.split(' ')
+          this.addUserDirectlyByNick({ channel: this.activeChannel, user: words[1] })
+        }
         return true
       } if (message.match(/\/invite/)) {
         const joined = this.joined
