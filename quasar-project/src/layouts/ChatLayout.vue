@@ -151,7 +151,7 @@ export default defineComponent({
           return
         }
         this.disableNotifications()
-        const notifyString = `Channel: ${this.getNotification.channel}, Author: ${this.getNotification.author}, Message: ${this.getNotification.message}`
+        const notifyString = `Channel: ${this.getNotification.channel}, Author: ${this.getNotification.author}, Message: ${this.getNotification.message.substring(0, 10)}`
         this.$q.notify({
           message: notifyString,
           position: 'top'
