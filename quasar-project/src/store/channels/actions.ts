@@ -187,9 +187,14 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     })
   },
 
-  async addMessage ({ commit }, { channel, message }: { channel: string, message: RawMessage }) {
+  async disableNofitications ({ commit }) {
+    console.log('vypinaaam')
+    commit('DISABLE_NOTIFICATION')
+  },
+
+  async addMessage ({ commit, rootState }, { channel, message }: { channel: string, message: RawMessage }) {
     const newMessage = await channelService.in(channel)?.addMessage(message)
-    commit('NEW_MESSAGE', { channel, message: newMessage })
+    commit('NEW_MESSAGE', { channel, message: newMessage, currentUser: rootState?.auth?.user?.id })
   },
 
   // eslint-disable-next-line camelcase

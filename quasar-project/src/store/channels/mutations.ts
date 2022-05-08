@@ -73,11 +73,16 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   SET_MESSAGES_COUNT (state, { channel, count }: { channel: Channel, count: number }) {
     state.messagesCount[channel.name] = count
   },
-  NEW_MESSAGE (state, { channel, message }: { channel: string, message: SerializedMessage }) {
+  NEW_MESSAGE (state, { channel, message, currentUser }: { channel: string, message: SerializedMessage, currentUser: number }) {
     state.messages[channel].push(message)
-    console.log('new message accepted')
-    state.notification[channel] = message.message
-    console.log(state)
+    if (message.author.id !== currentUser) {
+      console.log('dostavaaam')
+      state.notification = { channel, message: message.message, author: message.author.name }
+      state.showNotification = true
+    }
+  },
+  DISABLE_NOTIFICATION (state) {
+    state.showNotification = false
   },
   // eslint-disable-next-line camelcase
   IS_TYPING (state, { channel, user, message_typing }: { channel: string, user: string, message_typing: string }) {

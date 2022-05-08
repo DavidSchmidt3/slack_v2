@@ -28,7 +28,7 @@
             <q-avatar class="q-ma-sm" size="50px" color="blue" icon="person">
             </q-avatar>
 
-            <div class="text-subtitle1 q-mr-md">David</div>
+            <div class="text-subtitle1 q-mr-md">{{ this.currentUser }}</div>
           </q-btn>
 
           <q-dialog v-model="icon">
@@ -114,10 +114,15 @@ export default defineComponent({
   computed: {
     ...mapGetters('channels', {
       channels: 'joinedChannels',
-      lastMessageOf: 'lastMessageOf'
+      lastMessageOf: 'lastMessageOf',
+      getNotification: 'getNotification',
+      showNotification: 'showNotification'
     }),
     activeChannel () {
       return this.$store.state.channels.active
+    },
+    currentUser () {
+      return this.$store.state.auth.user?.nickname
     }
   },
   methods: {
@@ -132,9 +137,29 @@ export default defineComponent({
     ...mapMutations('channels', {
       setActiveChannel: 'SET_ACTIVE'
     }),
+    disableNotifications () {
+      this.$store.commit('channels/DISABLE_NOTIFICATION')
+    },
     ...mapActions('auth', ['logout']),
     ...mapActions('channels', ['addMessage'])
+  },
+  watch: {
+    showNotification: {
+      deep: true,
+      handler (showNotification) {
+        if ((this.activeChannel === this.getNotification.channel) || showNotification === false) {
+          return
+        }
+        this.disableNotifications()
+        const notifyString = `Channel: ${this.getNotification.channel}, Author: ${this.getNotification.author}, Message: ${this.getNotification.message}`
+        this.$q.notify({
+          message: notifyString,
+          position: 'top'
+        })
+      }
+    }
   }
+
 })
 </script>
 

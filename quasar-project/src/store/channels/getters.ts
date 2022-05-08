@@ -27,6 +27,10 @@ const getters: GetterTree<ChannelsStateInterface, StateInterface> = {
     return context.notification
   },
 
+  showNotification (context) {
+    return context.showNotification
+  },
+
   currentMessages (context) {
     return context.active !== null ? context.messages[context.active] : []
   },
