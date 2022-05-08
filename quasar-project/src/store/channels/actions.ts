@@ -202,17 +202,6 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     commit('IS_TYPING', { channel, user, message_typing })
   },
 
-  async getUsers ({ commit }) {
-    try {
-      commit('LOADING_START')
-      const users = await ActivityService.getUsers()
-      commit('LOADING_SUCCESS', { users })
-    } catch (err) {
-      commit('LOADING_ERROR', err)
-      throw err
-    }
-  },
-
   async getAllChannels ({ commit }) {
     try {
       commit('LOADING_START')

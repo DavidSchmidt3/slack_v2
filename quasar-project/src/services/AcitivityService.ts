@@ -1,3 +1,4 @@
+import { authService } from 'src/services'
 import { Channel, User } from 'src/contracts'
 import { authManager } from '.'
 import { BootParams, SocketManager } from './SocketManager'
@@ -6,6 +7,11 @@ class ActivitySocketManager extends SocketManager {
   public subscribe ({ store }: BootParams): void {
     this.socket.on('user:list', (onlineUsers: User[]) => {
       console.log('Online users list', onlineUsers)
+      // cycle for online users
+      for (const user of onlineUsers) {
+        // if user is not in store, add him
+        store.commit('user/ONLINE_USER', user)
+      }
     })
 
     this.socket.on('user:online', (user: User) => {
@@ -19,14 +25,16 @@ class ActivitySocketManager extends SocketManager {
       store.commit('user/OFFLINE_USER', user)
     })
 
-    this.socket.on('user:dnd', (user: User) => {
-      console.log('User is dnd', user)
+    this.socket.on('user:setdnd', (user: User) => {
+      console.log('User is set dnd', user)
       store.commit('user/DND_USER', user)
     })
 
-    this.socket.on('user:setonline', (user: User) => {
+    this.socket.on('user:setonline', async (user: User) => {
       console.log('User is set online', user)
-      store.commit('user/ONLINE_USER', user)
+      if (user !== await authService.me()) {
+        store.commit('user/ONLINE_USER', user)
+      }
     })
 
     this.socket.on('user:setoffline', (user: User) => {
@@ -45,11 +53,6 @@ class ActivitySocketManager extends SocketManager {
 
   public add_user (channel: Channel, user: User): void {
     this.socket.emit('addUser', user)
-  }
-
-  public getUsers (): Promise<User[]> {
-    console.log('getting all users from ws')
-    return this.emitAsync('getUsers')
   }
 
   public set_dnd (): void {

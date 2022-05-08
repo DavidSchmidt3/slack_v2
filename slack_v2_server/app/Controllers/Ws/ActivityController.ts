@@ -52,19 +52,40 @@ export default class ActivityController {
 
   public async addUser({ socket, auth, logger }: WsContextContract, user: User) {
     const room = this.getUserRoom(auth.user!)
+    console.log("tu ? ")
     socket.broadcast.in(room).emit('user:online', user)
     logger.info('user added to room', room)
   }
 
   public async onDoNotDisturb({ socket, auth, logger }: WsContextContract, reason: string) {
     const room = this.getUserRoom(auth.user!)
-    socket.broadcast.emit('user:dnd', auth.user)
+    const allSockets = await socket.nsp.except(room).fetchSockets()
+    const onlineIds = new Set<number>()
+
+    for (const remoteSocket of allSockets) {
+      onlineIds.add(remoteSocket.data.userId)
+    }
+    
+
+    const onlineUsers = await User.findMany([...onlineIds])
+
+    socket.broadcast.emit('user:setdnd', auth.user)
 
     logger.info('websocket is set to dnd')
   }
 
   public async OnSetOffline ({ socket, auth, logger }: WsContextContract, reason: string) {
     const room = this.getUserRoom(auth.user!)
+    const allSockets = await socket.nsp.except(room).fetchSockets()
+    const onlineIds = new Set<number>()
+
+    for (const remoteSocket of allSockets) {
+      onlineIds.add(remoteSocket.data.userId)
+    }
+    
+
+    const onlineUsers = await User.findMany([...onlineIds])
+
     socket.broadcast.emit('user:setoffline', auth.user)
 
     logger.info('websocket is set to offline')
@@ -72,16 +93,36 @@ export default class ActivityController {
 
   public async OnSetOnline ({ socket, auth, logger }: WsContextContract, reason: string) {
     const room = this.getUserRoom(auth.user!)
+    const allSockets = await socket.nsp.except(room).fetchSockets()
+    const onlineIds = new Set<number>()
+
+    for (const remoteSocket of allSockets) {
+      onlineIds.add(remoteSocket.data.userId)
+    }
+    
+
+    const onlineUsers = await User.findMany([...onlineIds])
+
     socket.broadcast.emit('user:setonline', auth.user)
 
-    logger.info('websocket is set to online')
+    logger.info('websocket is set to online', auth.user)
   }
 
 
 
   public async getUsers({ socket, auth, logger }: WsContextContract): Promise<User[]> {
-    socket.broadcast.emit('user:dnd' , auth.user)
+    const room = this.getUserRoom(auth.user!)
+    const allSockets = await socket.nsp.except(room).fetchSockets()
+    const onlineIds = new Set<number>()
+
+    for (const remoteSocket of allSockets) {
+      onlineIds.add(remoteSocket.data.userId)
+    }
+    
+
+    const onlineUsers = await User.findMany([...onlineIds])
     logger.info('getting all users from ws')
+    socket.emit('user:list', onlineUsers)
     return Promise.resolve([auth.user!])
   }
 }

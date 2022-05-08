@@ -106,7 +106,7 @@
         <q-separator />
 
         <q-card-section
-              v-for="( user, index) in users"
+              v-for="( user, index) in usersglobal"
               :key="index"
               >
           <div class="row">
@@ -221,7 +221,7 @@ export default defineComponent({
     }
   },
   methods: {
-    async getUserss () {
+    getUserss () {
       console.log(this.getUsers())
     },
 
@@ -255,13 +255,16 @@ export default defineComponent({
     }),
     channelUsers () {
       return this.$store.state.channels.channelUsers[this.active_channel]
+    },
+    usersglobal () {
+      console.log("AKO")
+      return this.$store.state.user.users
     }
   },
   mounted: function () {
     if (this.currentUserSurname && this.currentUserName) {
       this.active_user = this.currentUserName + ' ' + this.currentUserSurname
     }
-    this.getUserss()
     this.getAllUsers()
   }
 })

@@ -25,9 +25,11 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
     }
   },
   async getAllUsers ({ commit }) {
-    const users = await userService.getAllUsers()
-    console.log(users)
-    commit('All_USERS', users)
+    const all_users = await userService.getAllUsers()
+    const users = this.state.user.users
+    console.log(all_users)
+    commit('All_USERS', all_users)
+
     console.log(this.state.user)
   }
 }
