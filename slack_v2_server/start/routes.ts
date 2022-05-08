@@ -52,6 +52,7 @@ Route.post('channels/addUserDirectlyByNick', 'ChannelsController.addUserDirectly
 Route.post('channels/leaveOrDelete', 'ChannelsController.leaveOrDelete').middleware('auth').as('leaveOrDelete')
 Route.post('channels/leave', 'ChannelsController.leave').middleware('auth').as('leave')
 Route.post('channels/inviteUser', 'ChannelsController.inviteUser').middleware('auth').as('inviteUser')
+Route.post('channels/voteKick', 'ChannelsController.voteKick').middleware('auth').as('voteKick')
 Route.post('channels/revokeUser', 'ChannelsController.revokeUser').middleware('auth').as('revokeUser')
 Route.post('channels/delete', 'ChannelsController.delete').middleware('auth').as('delete')
 Route.get('channels/getChannelUsers', 'ChannelsController.getChannelUsers').middleware('auth').as('getChannelUsers')

@@ -69,7 +69,7 @@
               <li class="list-item"
               v-for="(channel, index) in invited"
               :key="index"
-              @click="setActiveChannel(channel.name)">
+              >
                 <q-btn style="padding-right: 30px" flat
                   >#   {{ channel.name }}<q-icon
                   v-if="channel.type == 'private'"
@@ -514,12 +514,10 @@ export default defineComponent({
         this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
         this.setActiveChannel('general')
         return true
-      }
-      if (message.match(/\/list/)) {
+      } if (message.match(/\/list/)) {
         await this.listUsers(this.activeChannel)
         return true
-      }
-      if (message.match(/\/join/)) {
+      } if (message.match(/\/join/)) {
         const words = message.split(' ')
         const channelName = words[1]
         const data = {
@@ -571,10 +569,18 @@ export default defineComponent({
           this.addUserDirectlyByNick({ channel: this.activeChannel, user: words[1] })
         }
         return true
-      }
-      if (message.match(/\/quit/) && this.is_owner) {
+      } if (message.match(/\/quit/) && this.is_owner) {
         const channel = this.activeChannel
         this.deleteChannel({ channel, userId: this.currentUser })
+        return true
+      } if (message.match(/\/kick/) && !this.is_owner) {
+        const joined = this.joined
+        const channels : Channel[] = Object.values(joined)
+        const channel = channels.find(channel => channel.name === this.activeChannel)
+        if (channel && channel.type === 'public') {
+          const words = message.split(' ')
+          this.voteKick({ channel: this.activeChannel, user: words[1] })
+        }
         return true
       }
       return false
@@ -635,7 +641,7 @@ export default defineComponent({
     },
     ...mapActions('auth', ['logout']),
     ...mapActions('channels', ['addMessage', 'getAllChannels', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
-    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly', 'addUserDirectlyByNick', 'inviteUser', 'revokeUser'])
+    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly', 'addUserDirectlyByNick', 'inviteUser', 'revokeUser', 'voteKick'])
   },
   computed: {
     ...mapGetters('channels', {

@@ -170,6 +170,10 @@ class ChannelService {
     await api.post<string>('/channels/add', { channel, userEmail: user })
   }
 
+  public async voteKick (channel: string, user: string): Promise<void> {
+    await api.post<string>('/channels/voteKick', { channel, userName: user })
+  }
+
   public async addUserDirectly (channel: string, user: string): Promise<Channel> {
     const response = await api.post<Channel>('/channels/addUserDirectly', { channel, userEmail: user })
     return response.data

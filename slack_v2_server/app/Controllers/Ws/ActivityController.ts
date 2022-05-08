@@ -56,33 +56,27 @@ export default class ActivityController {
   }
 
   public async onDoNotDisturb({ socket, auth, logger }: WsContextContract, reason: string) {
-    console.log("ta co do pici")
     const room = this.getUserRoom(auth.user!)
-   
     socket.broadcast.emit('user:dnd', auth.user)
-    
+
     logger.info('websocket is set to dnd')
   }
 
   public async OnSetOffline ({ socket, auth, logger }: WsContextContract, reason: string) {
-    console.log("ta co do pici")
     const room = this.getUserRoom(auth.user!)
-
     socket.broadcast.emit('user:setoffline', auth.user)
 
     logger.info('websocket is set to offline')
   }
 
   public async OnSetOnline ({ socket, auth, logger }: WsContextContract, reason: string) {
-    console.log("ta co do pici")
     const room = this.getUserRoom(auth.user!)
-
     socket.broadcast.emit('user:setonline', auth.user)
 
     logger.info('websocket is set to online')
   }
 
-  
+
 
   public async getUsers({ socket, auth, logger }: WsContextContract): Promise<User[]> {
     socket.broadcast.emit('user:dnd' , auth.user)

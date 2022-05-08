@@ -139,7 +139,6 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
-  // invite user to channel
   async inviteUser ({ commit }, { channel, user }) {
     try {
       await channelService.inviteUser(channel, user)
@@ -152,6 +151,16 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
   async revokeUser ({ commit }, { channel, user }) {
     try {
       await channelService.revokeUser(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  // vote kick user
+  async voteKick ({ commit }, { channel, user }) {
+    try {
+      await channelService.voteKick(channel, user)
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

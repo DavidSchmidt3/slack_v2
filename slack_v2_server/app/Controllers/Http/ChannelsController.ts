@@ -2,6 +2,7 @@
 
 import Channel from "App/Models/Channel"
 import ChannelUser from "App/Models/ChannelUser"
+import KickUser from "App/Models/KickUser"
 import User from "App/Models/User"
 import { ChannelType } from "Contracts/enums"
 import { DateTime } from 'luxon'
@@ -88,7 +89,7 @@ export default class ChannelsController {
     await ChannelUser.query()
       .where('channel_id', channel.id)
       .where('user_id', user.id)
-      .update('kicked_at', new Date().toISOString())
+      .update('kicked_at', DateTime.local())
   }
 
   async addUserDirectly({ request }): Promise<Channel> {
@@ -181,11 +182,45 @@ export default class ChannelsController {
       }
     }
   }
-  async getAllUsers( {auth} ): Promise<User[]> {
+
+  async voteKick({ request, auth }): Promise<void> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userName)
+    const potentialKick = await KickUser
+      .query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .where('kicker_id', auth.user.id)
+      .first()
+
+    if (!potentialKick) {
+      await KickUser.create({
+        channel_id: channel.id,
+        user_id: user.id,
+        kicker_id: auth.user.id,
+        kicked_at: DateTime.local()
+      })
+
+      const allUserKicks = await KickUser.query()
+        .where('channel_id', channel.id)
+        .where('user_id', user.id)
+
+      if (allUserKicks.length === 3) {
+        await ChannelUser.query()
+          .where('channel_id', channel.id)
+          .where('user_id', user.id)
+          .update('kicked_at', DateTime.local())
+      }
+    }
+  }
+
+
+  async getAllUsers({ auth }): Promise<User[]> {
     // gett all users besides logged user
     const user = auth.user as User
     console.log(user)
-    const users = await (await User.query()).filter(user => user.id !== auth.user!.id)
+    const users = (await User.query()).filter(user => user.id !== auth.user!.id)
     return users
   }
 
