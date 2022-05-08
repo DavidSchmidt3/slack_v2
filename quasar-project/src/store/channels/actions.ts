@@ -117,6 +117,56 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
     }
   },
 
+  async addUserDirectly ({ commit }, { channel, user }) {
+    try {
+      commit('LOADING_START')
+      const response = await channelService.addUserDirectly(channel, user)
+      commit('LOADING_SUCCESS', { channel: response, messages: [] })
+      await AcitivityService.add_user(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async addUserDirectlyByNick ({ commit }, { channel, user }) {
+    try {
+      commit('LOADING_START')
+      await channelService.addUserDirectlyByNick(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async inviteUser ({ commit }, { channel, user }) {
+    try {
+      await channelService.inviteUser(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async revokeUser ({ commit }, { channel, user }) {
+    try {
+      await channelService.revokeUser(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  // vote kick user
+  async voteKick ({ commit }, { channel, user }) {
+    try {
+      await channelService.voteKick(channel, user)
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
   async setActiveChannel ({ commit }, channel: string) {
     try {
       commit('SET_ACTIVE', channel)
@@ -157,6 +207,18 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       commit('LOADING_START')
       const users = await ActivityService.getUsers()
       commit('LOADING_SUCCESS', { users })
+    } catch (err) {
+      commit('LOADING_ERROR', err)
+      throw err
+    }
+  },
+
+  async getAllChannels ({ commit }) {
+    try {
+      commit('LOADING_START')
+      const channels = await channelService.getAllChannels()
+      console.log('afdsfd', channels)
+      commit('SET_ALL_CHANNELS', { channels })
     } catch (err) {
       commit('LOADING_ERROR', err)
       throw err

@@ -230,11 +230,9 @@ export default defineComponent({
       this.channelname_to_join = channel
       this.accept_invite = true
     },
-
     acceptinvite () {
       this.join(this.channelname_to_join)
       this.accept_invite = false
-      console.log(this.accept_invite)
     },
     countTime () {
       this.date = new Date().toLocaleString('sk-SK')

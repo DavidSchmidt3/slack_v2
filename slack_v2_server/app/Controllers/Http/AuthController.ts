@@ -49,9 +49,16 @@ export default class AuthController {
   }
 
   async getJoinedChannels({ auth }): Promise<Channel[]> {
-    const channels = await Channel_users.query().where('user_id', auth.user.id ).whereNotNull('joined_at')
+    const channels = await Channel_users.query().where('user_id', auth.user.id)
+      .whereNotNull('joined_at')
+      .whereNull('kicked_at')
     const channels1 = await Channel.query().whereIn('id', channels.map(channel => channel.channel_id))
     return channels1
+  }
+
+  async getAllChannels(): Promise<Channel[]> {
+    const channels = await Channel.query()
+    return channels
   }
 
   async getOwner({ auth, request }: HttpContextContract) {
@@ -70,7 +77,6 @@ export default class AuthController {
     if (!channel || !user) {
       throw new Error('Channel or user not found')
     }
-
 
     await Channel_users.query().where('user_id', user.id).where('channel_id', channel.id).update({ invited_at: null , joined_at: new Date()})
     return channel

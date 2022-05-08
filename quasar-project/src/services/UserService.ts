@@ -16,7 +16,6 @@ class UserSocketManager extends SocketManager {
   }
 
   public invitation (channel: Channel): Promise<Channel> {
-    console.log(this.socket)
     this.socket.emit('invite_channel', { channel })
     return this.emitAsync('invite_channel', channel)
   }

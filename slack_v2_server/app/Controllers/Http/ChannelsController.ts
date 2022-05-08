@@ -2,8 +2,10 @@
 
 import Channel from "App/Models/Channel"
 import ChannelUser from "App/Models/ChannelUser"
+import KickUser from "App/Models/KickUser"
 import User from "App/Models/User"
 import { ChannelType } from "Contracts/enums"
+import { DateTime } from 'luxon'
 
 export default class ChannelsController {
 
@@ -26,11 +28,8 @@ export default class ChannelsController {
     })
     return channel
 
-
     // add user to table ChannelUser
-
     //add all users to this channel
-
   }
 
   async add_user({ request }) {
@@ -54,6 +53,75 @@ export default class ChannelsController {
     //  })
 
     // return channel
+  }
+
+  async inviteUser({ request }): Promise<void> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userName)
+
+    console.log(channel, user)
+    const potentialChannelUser = await ChannelUser.query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .first()
+
+    if (potentialChannelUser) {
+      potentialChannelUser.kicked_at = null
+      potentialChannelUser.joined_at = null
+      potentialChannelUser.invited_at = DateTime.local()
+      potentialChannelUser.save()
+      return
+    }
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: null,
+        invited_at: new Date().toISOString()
+      }
+    })
+  }
+
+  async revokeUser({ request }): Promise<void> {
+    const params = request.all()
+    console.log(params);
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userName)
+    await ChannelUser.query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .update('kicked_at', DateTime.local())
+  }
+
+  async addUserDirectly({ request }): Promise<Channel> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('email', params.userEmail)
+
+    const date = new Date().toISOString()
+    const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: today
+      }
+    })
+
+    return channel
+  }
+
+  async addUserDirectlyByNick({ request }): Promise<Channel> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userNick)
+
+    const date = new Date().toISOString()
+    const today = `${date.slice(0, 10)} ${date.slice(11, 19)}`
+    await user.related('channels').attach({
+      [channel.id]: {
+        joined_at: today
+      }
+    })
+
+    return channel
   }
 
   async leaveOrDelete({ request }): Promise<boolean> {
@@ -114,11 +182,45 @@ export default class ChannelsController {
       }
     }
   }
-  async getAllUsers( {auth} ): Promise<User[]> {
+
+  async voteKick({ request, auth }): Promise<void> {
+    const params = request.all()
+    const channel = await Channel.findByOrFail('name', params.channel)
+    const user = await User.findByOrFail('nickname', params.userName)
+    const potentialKick = await KickUser
+      .query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .where('kicker_id', auth.user.id)
+      .first()
+
+    if (!potentialKick) {
+      await KickUser.create({
+        channel_id: channel.id,
+        user_id: user.id,
+        kicker_id: auth.user.id,
+        kicked_at: DateTime.local()
+      })
+
+      const allUserKicks = await KickUser.query()
+        .where('channel_id', channel.id)
+        .where('user_id', user.id)
+
+      if (allUserKicks.length === 3) {
+        await ChannelUser.query()
+          .where('channel_id', channel.id)
+          .where('user_id', user.id)
+          .update('kicked_at', DateTime.local())
+      }
+    }
+  }
+
+
+  async getAllUsers({ auth }): Promise<User[]> {
     // gett all users besides logged user
     const user = auth.user as User
     console.log(user)
-    const users = await (await User.query()).filter(user => user.id !== auth.user!.id)
+    const users = (await User.query()).filter(user => user.id !== auth.user!.id)
     return users
   }
 

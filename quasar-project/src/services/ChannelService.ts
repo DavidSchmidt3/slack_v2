@@ -17,7 +17,6 @@ class ChannelSocketManager extends SocketManager {
     // eslint-disable-next-line camelcase
     this.socket.on('typing', (user: string, message_typing: string) => {
       store.commit('channels/IS_TYPING', { channel, user, message_typing })
-      console.log(user)
     })
     this.socket.on('invite_channel', (channel: Channel, user: string) => {
       store.commit('channels/NEW_INVITATION', { channel, user })
@@ -25,17 +24,14 @@ class ChannelSocketManager extends SocketManager {
   }
 
   public addMessage (message: RawMessage): Promise<SerializedMessage> {
-    console.log(this.socket)
     return this.emitAsync('addMessage', message)
   }
 
   public isTyping (message: RawMessage, user: string): Promise<SerializedMessage> {
-    console.log(user, message)
     return this.emitAsync('typing', message, user)
   }
 
   public invitation (channel: Channel, user: User): Promise<Channel> {
-    console.log(channel, user)
     return this.emitAsync('invite_channel', channel, user.name)
   }
 
@@ -78,7 +74,6 @@ class ChannelService {
       channel: name,
       type: typ
     }
-    console.log(data)
     const datas = await api.post<Channel>('/channels', data)
     const new_channel = datas.data
     const channel = new ChannelSocketManager(`/channels/${name}`)
@@ -138,13 +133,24 @@ class ChannelService {
 
   public async getJoinedChannels (): Promise<Channel[]> {
     const channels = await api.get<Channel[]>('/channels/getJoinedChannels')
-    console.log(channels.data)
     return channels.data
   }
 
   public async getInvitedChannels (): Promise<Channel[]> {
     const channels = await api.get<Channel[]>('/channels/getInvitedChannels')
-    console.log(channels.data)
+    return channels.data
+  }
+
+  public async inviteUser (channel: string, user: string): Promise<void> {
+    await api.post<string>('/channels/inviteUser', { channel, userName: user })
+  }
+
+  public async revokeUser (channel: string, user: string): Promise<void> {
+    await api.post<string>('/channels/revokeUser', { channel, userName: user })
+  }
+
+  public async getAllChannels (): Promise<Channel[]> {
+    const channels = await api.get<Channel[]>('/channels/getAllChannels')
     return channels.data
   }
 
@@ -161,12 +167,24 @@ class ChannelService {
   }
 
   public async addUser (channel: string, user: string): Promise<void> {
-    console.log(channel, user)
     await api.post<string>('/channels/add', { channel, userEmail: user })
   }
 
+  public async voteKick (channel: string, user: string): Promise<void> {
+    await api.post<string>('/channels/voteKick', { channel, userName: user })
+  }
+
+  public async addUserDirectly (channel: string, user: string): Promise<Channel> {
+    const response = await api.post<Channel>('/channels/addUserDirectly', { channel, userEmail: user })
+    return response.data
+  }
+
+  public async addUserDirectlyByNick (channel: string, user: string): Promise<Channel> {
+    const response = await api.post<Channel>('/channels/addUserDirectlyByNick', { channel, userNick: user })
+    return response.data
+  }
+
   public async acceptInvite (channel: Channel): Promise<void> {
-    console.log(channel)
     await api.post<string>('/channels/acceptInvite', { channel })
   }
 

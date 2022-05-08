@@ -13,7 +13,8 @@ export interface ChannelsStateInterface {
   invited: { [channel: string]: Channel},
   joined: { [channel: string]: Channel},
   typing: { [channel: string]: {message_typing:string, user: string} }
-  invitations: { [channel: string]: Channel }
+  invitations: { [channel: string]: Channel },
+  allChannels: Channel[],
   notification: { [channel: string]: string }
 }
 
@@ -32,7 +33,8 @@ function state (): ChannelsStateInterface {
     invitations: {},
     invited: {},
     joined: {},
-    notification: {}
+    notification: {},
+    allChannels: []
   }
 }
 

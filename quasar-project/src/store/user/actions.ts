@@ -19,13 +19,8 @@ const actions: ActionTree<UserStateInterface, StateInterface> = {
     }
   },
   async addUser ({ commit }, { channel, user }) {
-    console.log(channel)
-    console.log('here')
-    console.log(user)
     const invite = await UserService.in(user)?.invitation(user)
-    console.log(invite)
     if (invite) {
-      console.log('here')
       commit('NEW_INVITATION', { channel })
     }
   },

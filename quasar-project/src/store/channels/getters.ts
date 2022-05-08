@@ -39,6 +39,10 @@ const getters: GetterTree<ChannelsStateInterface, StateInterface> = {
     return context.typing[context.active] || ' '
   },
 
+  allChannels (context) {
+    return context.allChannels
+  },
+
   lastMessageOf (context) {
     return (channel: string) => {
       const messages = context.messages[channel]

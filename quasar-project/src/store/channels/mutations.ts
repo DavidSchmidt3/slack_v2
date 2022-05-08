@@ -9,7 +9,6 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   LOADING_SUCCESS (state, { channel, messages }: { channel: Channel, messages: SerializedMessage[] }) {
     state.loading = false
-    console.log(channel)
     if (typeof (channel) === 'string') {
       state.messages[channel] = messages
       state.joined[channel] = channel
@@ -24,6 +23,12 @@ const mutation: MutationTree<ChannelsStateInterface> = {
         delete state.invited[channel.name]
       }
     }
+  },
+  ADD_CHANNEL (state, { channel }: { channel: Channel }) {
+    state.channels[channel.name] = channel
+    state.messageIndex[channel.name] = 0
+    state.messagesCount[channel.name] = 0
+    state.channelUsers[channel.name] = []
   },
   LOADING_ERROR (state, error) {
     state.loading = false
@@ -76,8 +81,6 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   // eslint-disable-next-line camelcase
   IS_TYPING (state, { channel, user, message_typing }: { channel: string, user: string, message_typing: string }) {
-    console.log(state.typing)
-    console.log(user, message_typing, channel)
     state.typing[channel] = {
       user,
       // eslint-disable-next-line camelcase
@@ -91,6 +94,9 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   ADD_CHANNEL_TO_JOINED (state, channel: Channel) {
     state.joined[channel.name] = channel
+  },
+  SET_ALL_CHANNELS (state, { channels } : { channels: Channel[]}) {
+    state.allChannels = channels
   }
 }
 

@@ -69,7 +69,7 @@
               <li class="list-item"
               v-for="(channel, index) in invited"
               :key="index"
-              @click="setActiveChannel(channel.name)">
+              >
                 <q-btn style="padding-right: 30px" flat
                   >#   {{ channel.name }}<q-icon
                   v-if="channel.type == 'private'"
@@ -491,7 +491,6 @@ export default defineComponent({
         channel: this.activeChannel
       }
       this.members = false
-      console.log(data)
       this.addUser(data)
     },
     showtyping () {
@@ -515,9 +514,73 @@ export default defineComponent({
         this.leaveOrDelete({ channel: this.activeChannel, userId: this.currentUser })
         this.setActiveChannel('general')
         return true
-      }
-      if (message.match(/\/list/)) {
+      } if (message.match(/\/list/)) {
         await this.listUsers(this.activeChannel)
+        return true
+      } if (message.match(/\/join/)) {
+        const words = message.split(' ')
+        const channelName = words[1]
+        const data = {
+          name: channelName,
+          type: words.length === 3 && words[2] === 'private'
+        }
+        await this.getAllChannels()
+        let found = false
+        let isPrivate = false
+        const channels : Channel[] = this.allChannels
+        channels.forEach(channel => {
+          console.log(channel.name, channelName)
+          if (channel.name === channelName) {
+            if (channel.type === 'private') {
+              isPrivate = true
+            }
+            found = true
+          }
+        })
+        if (isPrivate) {
+          return true
+        } if (!found) {
+          await this.create(data)
+        } else {
+          await this.addUserDirectly({ channel: channelName, user: this.currentMail })
+        }
+        return true
+      } if ((message.match(/\/invite/) || message.match(/\/revoke/)) && this.is_owner) {
+        const joined = this.joined
+        const channels : Channel[] = Object.values(joined)
+        const channel = channels.find(channel => channel.name === this.activeChannel)
+        if (channel && channel.type === 'private') {
+          const words = message.split(' ')
+          const user = words[1]
+          const channel = this.activeChannel
+          if (words[0] === '/invite') {
+            this.inviteUser({ channel, user })
+          } else {
+            this.revokeUser({ channel, user })
+          }
+        }
+        return true
+      } if (message.match(/\/invite/)) {
+        const joined = this.joined
+        const channels : Channel[] = Object.values(joined)
+        const channel = channels.find(channel => channel.name === this.activeChannel)
+        if (channel && channel.type === 'public') {
+          const words = message.split(' ')
+          this.addUserDirectlyByNick({ channel: this.activeChannel, user: words[1] })
+        }
+        return true
+      } if (message.match(/\/quit/) && this.is_owner) {
+        const channel = this.activeChannel
+        this.deleteChannel({ channel, userId: this.currentUser })
+        return true
+      } if (message.match(/\/kick/) && !this.is_owner) {
+        const joined = this.joined
+        const channels : Channel[] = Object.values(joined)
+        const channel = channels.find(channel => channel.name === this.activeChannel)
+        if (channel && channel.type === 'public') {
+          const words = message.split(' ')
+          this.voteKick({ channel: this.activeChannel, user: words[1] })
+        }
         return true
       }
       return false
@@ -577,13 +640,14 @@ export default defineComponent({
       return regex.test(message.message)
     },
     ...mapActions('auth', ['logout']),
-    ...mapActions('channels', ['addMessage', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
-    ...mapActions('channels', ['addUser'])
+    ...mapActions('channels', ['addMessage', 'getAllChannels', 'loadMoreMessages', 'join', 'leaveOrDelete', 'leavePermanent', 'deleteChannel', 'getChannelUsers', 'isTyping', 'setActiveChannel']),
+    ...mapActions('channels', ['addUser', 'create', 'addUserDirectly', 'addUserDirectlyByNick', 'inviteUser', 'revokeUser', 'voteKick'])
   },
   computed: {
     ...mapGetters('channels', {
       channels: 'invitedChannels',
       lastMessageOf: 'lastMessageOf',
+      allChannels: 'allChannels',
       channelsdata: 'channels',
       joined: 'joined',
       invited: 'invited',
@@ -606,8 +670,6 @@ export default defineComponent({
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       if (Object(a).type === 'public') {
         if (Object(a).owner_id === Object(user).id) {
-          console.log(a)
-          console.log(user)
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
         } else {
@@ -620,8 +682,6 @@ export default defineComponent({
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.private_channel = true
         if (Object(a).owner_id === Object(user).id) {
-          console.log(a)
-          console.log(user)
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.is_owner = true
         } else {
@@ -684,11 +744,13 @@ export default defineComponent({
       return this.$store.state.channels.messagesCount[this.activeChannel]
     },
     currentUser () {
-      console.log(this.$store.state.auth.user)
       return this.$store.state.auth.user?.id
     },
     currentNickname () {
       return this.$store.state.auth.user?.nickname
+    },
+    currentMail () {
+      return this.$store.state.auth.user?.email
     },
     channelUsers () {
       return this.$store.state.channels.channelUsers[this.activeChannel]
