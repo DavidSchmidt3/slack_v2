@@ -23,6 +23,10 @@ const getters: GetterTree<ChannelsStateInterface, StateInterface> = {
     return context.isOwner[context.active]
   },
 
+  getNotification (context) {
+    return context.notification
+  },
+
   currentMessages (context) {
     return context.active !== null ? context.messages[context.active] : []
   },

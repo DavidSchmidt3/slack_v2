@@ -161,18 +161,6 @@ const actions: ActionTree<ChannelsStateInterface, StateInterface> = {
       commit('LOADING_ERROR', err)
       throw err
     }
-  },
-
-  async getAllChannels ({ commit }) {
-    try {
-      commit('LOADING_START')
-      const channels = await channelService.getAllChannels()
-      commit('LOADING_SUCCESS', { channels })
-      return channels
-    } catch (err) {
-      commit('LOADING_ERROR', err)
-      throw err
-    }
   }
 }
 

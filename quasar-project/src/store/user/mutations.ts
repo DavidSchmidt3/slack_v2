@@ -65,10 +65,38 @@ const mutation: MutationTree<UserStateInterface> = {
     }
   },
   OFFLINE_USER (state, user: User) {
-    state.users[user.name].status = 'offline'
+    if (state.users[user.name]) {
+      state.users[user.name].status = 'offline'
+    } else {
+      const userInfo: UserInfo = {
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        name: user.name,
+        surname: user.surname,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        status: 'offline'
+      }
+      state.users[user.name] = userInfo
+    }
   },
   DND_USER (state, user: User) {
-    state.users[user.name].status = 'dnd'
+    if (state.users[user.name]) {
+      state.users[user.name].status = 'dnd'
+    } else {
+      const userInfo: UserInfo = {
+        id: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        name: user.name,
+        surname: user.surname,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        status: 'dnd'
+      }
+      state.users[user.name] = userInfo
+    }
   }
 }
 

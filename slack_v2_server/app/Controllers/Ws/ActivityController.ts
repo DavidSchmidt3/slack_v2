@@ -28,6 +28,7 @@ export default class ActivityController {
     for (const remoteSocket of allSockets) {
       onlineIds.add(remoteSocket.data.userId)
     }
+    
 
     const onlineUsers = await User.findMany([...onlineIds])
 

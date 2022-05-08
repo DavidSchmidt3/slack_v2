@@ -110,7 +110,7 @@
               :key="index"
               >
           <div class="row">
-            <q-btn class="col-xs-2 col-sm-2" round flat to="/server">
+            <q-btn class="col-xs-4 col-sm-4" round flat>
               <div class="gt-xs">
                 <q-avatar
                   class="q-p-md"
@@ -135,29 +135,16 @@
             <label class="col-xs-4 col-sm-4 self-center text-center"
               >{{user.name}}</label
             >
-            <div v-if="user.status == 'offline'">
+            <div v-if="user.status == 'offline'" class="col-xs-4 col-sm-4 text-center self-center">
               <span class="q-ma-md q-pa-sm grey-dot"></span>
             </div>
-            <div v-if="user.status == 'online'">
+            <div v-if="user.status == 'online'" class="col-xs-4 col-sm-4 text-center self-center">
               <span class="q-ma-md q-pa-sm green-dot"></span>
             </div>
-            <div v-if="user.status == 'dnd'">
+            <div v-if="user.status == 'dnd'" class="col-xs-4 col-sm-4 text-center self-center">
               <span class="q-ma-md q-pa-sm red-dot"></span>
             </div>
 
-            <div
-              class="col-xs-2 col-sm-2 text-center self-center"
-              style="margin: 0%"
-            ></div>
-
-            <q-btn
-              class="col-xs-1 col-sm-2 col-md-1"
-              flat
-              rounded
-              color="red"
-              icon="close"
-            >
-            </q-btn>
           </div>
         </q-card-section>
 
@@ -200,8 +187,6 @@
                       />
                     </div>
                     <label class="col-7 self-center text-center">{{user.nickname}}</label>
-                    <q-btn class="col-2" flat rounded color="red" icon="close">
-                    </q-btn>
                   </div>
                 </q-card-section>
               </q-card-section>

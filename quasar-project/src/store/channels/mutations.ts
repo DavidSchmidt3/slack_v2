@@ -70,6 +70,9 @@ const mutation: MutationTree<ChannelsStateInterface> = {
   },
   NEW_MESSAGE (state, { channel, message }: { channel: string, message: SerializedMessage }) {
     state.messages[channel].push(message)
+    console.log('new message accepted')
+    state.notification[channel] = message.message
+    console.log(state)
   },
   // eslint-disable-next-line camelcase
   IS_TYPING (state, { channel, user, message_typing }: { channel: string, user: string, message_typing: string }) {
